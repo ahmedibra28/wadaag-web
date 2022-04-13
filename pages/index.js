@@ -1,32 +1,28 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Countdown from 'react-countdown'
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className='container'>
       <Head>
         <title>Wadaag App</title>
         <meta name='description' content='Wadaag App for web-based' />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/favicon.png' />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#a5a4a4' }}>
-          web-based <span style={{ color: '#FFF' }}> wadaag app</span>
-        </h1>
-        <h3 style={{ color: '#a5a4a4' }}>coming soon</h3>
-      </main>
+      <div className='d-flex justify-content-center align-items-center vh-100 flex-column'>
+        <div>
+          <p className='border p-3'>
+            web-based{' '}
+            <span className='fw-bold fs-5 font-monospace'>wadaag app</span>{' '}
+            coming soon!
+          </p>
+        </div>
 
-      <footer className={styles.footer}>
-        <a
-          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Powered by websom.dev
-        </a>
-      </footer>
+        <div className='display-1 fw-bold font-monospace'>
+          <Countdown date={Date.now() + 745600000} />
+        </div>
+      </div>
     </div>
   )
 }
