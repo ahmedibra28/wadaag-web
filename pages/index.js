@@ -14,13 +14,18 @@ export default function Home() {
         <div>
           <p className='border p-3'>
             web-based{' '}
-            <span className='fw-bold fs-5 font-monospace'>wadaag app</span>{' '}
+            <span
+              className='fw-bold fs-5 font-monospace'
+              style={{ color: 'yellow' }}
+            >
+              wadaag app
+            </span>{' '}
             coming soon!
           </p>
         </div>
 
         <div className='display-1 fw-bold font-monospace'>
-          <Countdown date={Date.now() + 745600000} />
+          <Countdown date={Date.now() + 8640000} />
         </div>
       </div>
     </div>
