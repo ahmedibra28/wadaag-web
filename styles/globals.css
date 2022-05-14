@@ -1,18 +1,55 @@
-html,
+/* create variables */
+:root {
+  --color-primary: #5c1a67;
+  --color-secondary: #e5e5e5;
+  --color-primary-websom: #f2f6fc;
+  --color-secondary-websom: #2b2b2b;
+}
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: #5c1a67 !important;
-  color: #fff !important;
+  background-color: var(--color-primary-websom) !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 0.9rem !important;
+  color: var(--color-secondary-websom) !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+button,
+a,
+link,
+input,
+select,
+textarea {
+  border-radius: 0px !important;
 }
 
-* {
-  box-sizing: border-box;
+.table > :not(:first-child) {
+  border-top: 0 !important;
+}
+
+/* CopyRight */
+
+footer {
+  position: fixed;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  bottom: -45px;
+  right: -480px;
+  z-index: 999;
+  transform: rotate(-90deg);
+}
+
+#watermark::after {
+  position: absolute;
+  background-image: url('/logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 22px;
+  content: ' ';
 }
