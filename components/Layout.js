@@ -6,8 +6,8 @@ export default function Layout({ children }) {
   return (
     <>
       <Head>
-        <title>NEXT.js Boilerplate</title>
-        <meta property='og:title' content='NEXT.js Boilerplate' key='title' />
+        <title>Wadaag APP</title>
+        <meta property='og:title' content='Wadaag APP' key='title' />
       </Head>
       <Navigation />
       <main className='container py-2'>{children}</main>

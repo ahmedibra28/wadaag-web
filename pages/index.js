@@ -4,7 +4,7 @@ import withAuth from '../HOC/withAuth'
 const Home = () => {
   return (
     <div className='container'>
-      <h1 className='text-center text-success'>NEXT.js Boilerplate</h1>
+      <h1 className='text-center text-success'>wadaag.app</h1>
     </div>
   )
 }
