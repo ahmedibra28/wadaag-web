@@ -38,7 +38,7 @@ const Navigation = () => {
       <>
         <ul className='navbar-nav ms-auto'>
           <li className='nav-item'>
-            <Link href='/auth/register'>
+            <Link href='/auth/login'>
               <a className='nav-link' aria-current='page'>
                 <FaUserPlus className='mb-1' /> Register
               </a>
