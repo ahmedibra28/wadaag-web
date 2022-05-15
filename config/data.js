@@ -26,6 +26,16 @@ const roles = [
     description: 'Default role given to authenticated user.',
     type: 'AUTHENTICATED',
   },
+  {
+    name: 'Rider',
+    description: 'Riders can find other riders and travel.',
+    type: 'RIDER',
+  },
+  {
+    name: 'Driver',
+    description: 'Drivers can monitor his/her points.',
+    type: 'DRIVER',
+  },
 ]
 
 const users = {
@@ -99,6 +109,13 @@ const clientPermissions = [
     menu: 'admin',
     auth: true,
     description: 'User Profiles page',
+  },
+  {
+    name: 'Mobile Users',
+    path: '/admin/mobile/users',
+    menu: 'admin',
+    auth: true,
+    description: 'Mobile Users page',
   },
 ]
 
@@ -298,6 +315,34 @@ const permissions = [
     auth: true,
     name: 'ClientPermissions',
     method: 'DELETE',
+  },
+  {
+    description: 'Get All Mobile Users',
+    route: '/api/mobile/users',
+    auth: true,
+    name: 'Mobile Users',
+    method: 'GET',
+  },
+  {
+    description: 'Create Mobile User',
+    route: '/api/mobile/users',
+    auth: false,
+    name: 'Mobile Users',
+    method: 'POST',
+  },
+  {
+    description: 'Delete Mobile User',
+    route: '/api/mobile/users/:id',
+    auth: true,
+    name: 'Mobile Users',
+    method: 'DELETE',
+  },
+  {
+    description: 'Update OTP',
+    route: '/api/mobile/otp/:id',
+    auth: true,
+    name: 'OTP',
+    method: 'PUT',
   },
 ]
 
