@@ -29,7 +29,6 @@ const ViewMobileUsers = ({
       <table className='table table-sm table-border'>
         <thead className='border-0'>
           <tr>
-            <th>Image</th>
             <th>Name</th>
             <th>Phone</th>
             <th>Active</th>
@@ -41,19 +40,6 @@ const ViewMobileUsers = ({
           {data &&
             data.data.map((mobileUser) => (
               <tr key={mobileUser._id}>
-                <td>
-                  {mobileUser.image ? (
-                    <Image
-                      width='30'
-                      height='30'
-                      src={mobileUser.image}
-                      alt={mobileUser.name}
-                      className='img-fluid rounded-pill'
-                    />
-                  ) : (
-                    'No Image'
-                  )}
-                </td>
                 <td>
                   {mobileUser.name ? (
                     mobileUser.name

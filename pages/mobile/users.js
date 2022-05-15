@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import withAuth from '../../../HOC/withAuth'
-import useMobileUsersHook from '../../../utils/api/mobileUsers'
+import withAuth from '../../HOC/withAuth'
+import useMobileUsersHook from '../../utils/api/mobileUsers'
 import {
   Spinner,
   ViewMobileUsers,
   Pagination,
   Message,
   Confirm,
-} from '../../../components'
+} from '../../components'
 import { confirmAlert } from 'react-confirm-alert'
 
 const MobileUsers = () => {

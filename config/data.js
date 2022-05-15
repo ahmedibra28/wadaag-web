@@ -110,10 +110,18 @@ const clientPermissions = [
     auth: true,
     description: 'User Profiles page',
   },
+  // mobile ==============================>
+  {
+    name: 'Mobile User Profiles',
+    path: '/mobile/user-profiles',
+    menu: 'mobile',
+    auth: true,
+    description: 'User Profiles page',
+  },
   {
     name: 'Mobile Users',
-    path: '/admin/mobile/users',
-    menu: 'admin',
+    path: '/mobile/users',
+    menu: 'mobile',
     auth: true,
     description: 'Mobile Users page',
   },
@@ -316,6 +324,7 @@ const permissions = [
     name: 'ClientPermissions',
     method: 'DELETE',
   },
+  // mobile ==============================>
   {
     description: 'Get All Mobile Users',
     route: '/api/mobile/users',
@@ -338,11 +347,32 @@ const permissions = [
     method: 'DELETE',
   },
   {
-    description: 'Update OTP',
+    description: 'Update Mobile OTP',
     route: '/api/mobile/otp/:id',
     auth: true,
     name: 'OTP',
     method: 'PUT',
+  },
+  {
+    description: 'Get All Mobile User Profiles',
+    route: '/api/mobile/user-profiles',
+    auth: true,
+    name: 'Mobile User Profiles',
+    method: 'GET',
+  },
+  {
+    description: 'Get Mobile Profile',
+    route: '/api/mobile/profile',
+    auth: true,
+    name: 'Mobile User Profile',
+    method: 'GET',
+  },
+  {
+    description: 'Update Mobile Profile',
+    route: '/api/mobile/profile',
+    auth: true,
+    name: 'Mobile User Profile',
+    method: 'POST',
   },
 ]
 

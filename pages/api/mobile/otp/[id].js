@@ -1,6 +1,10 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import MobileUser from '../../../../models/MobileUser'
+import MobileProfile from '../../../../models/MobileProfile'
+import { generateToken } from '../../../../utils/auth'
+import UserRole from '../../../../models/UserRole'
+import Role from '../../../../models/Role'
 
 const schemaName = MobileUser
 
@@ -27,7 +31,28 @@ handler.put(async (req, res) => {
 
     await object.save()
 
-    res.status(200).json({ message: 'OTP has been confirmed' })
+    // create user profile
+    const profile = await MobileProfile.findOne({ user: object._id })
+    if (!profile) {
+      await MobileProfile.create({
+        user: object._id,
+        type: 'rider',
+        image: `https://ui-avatars.com/api/?uppercase=true&name=wadaag&background=random&color=random&size=128`,
+      })
+    }
+
+    const role = await Role.findOne({ type: 'AUTHENTICATED' }).lean()
+    if (role) {
+      const userRole = await UserRole.findOne({ user: object._id })
+      if (!userRole) {
+        await UserRole.create({ user: object._id, role: role._id })
+      }
+    }
+
+    res.status(200).send({
+      token: generateToken(object._id),
+      mobile: object.mobile,
+    })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

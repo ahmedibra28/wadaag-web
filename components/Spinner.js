@@ -1,7 +1,7 @@
 import LoadingIcons from 'react-loading-icons'
 
 export const Spinner = (props) => {
-  const { height = '3em', stroke = '#06bcee' } = props
+  const { height = '3em', stroke = '#5c1a67' } = props
   return (
     <div className='text-center'>
       <LoadingIcons.ThreeDots
@@ -9,7 +9,7 @@ export const Spinner = (props) => {
         height={height}
         fill='transparent'
       />
-      <p style={{ color: '#06bcee' }}>Loading...</p>
+      <p style={{ color: '#5c1a67' }}>Loading...</p>
     </div>
   )
 }

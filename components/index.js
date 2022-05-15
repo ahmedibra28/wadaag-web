@@ -9,6 +9,7 @@ import FormUserRoles from './screens/user-roles/FormUserRoles'
 import ViewUserProfiles from './screens/user-profiles/ViewUserProfiles'
 import ViewRoles from './screens/roles/ViewRoles'
 import ViewMobileUsers from './screens/mobile-users/ViewMobileUsers'
+import ViewMobileUserProfiles from './screens/mobile-user-profiles/ViewMobileUserProfiles'
 import FormRoles from './screens/roles/FormRoles'
 import { Spinner } from './Spinner'
 import Pagination from './Pagination'
@@ -32,6 +33,7 @@ export {
   ViewUserRoles,
   FormUserRoles,
   ViewMobileUsers,
+  ViewMobileUserProfiles,
   Spinner,
   Pagination,
   Message,

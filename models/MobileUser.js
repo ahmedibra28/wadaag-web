@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 const mobileUserScheme = mongoose.Schema(
   {
+    name: String,
     mobile: { type: String, required: true, unique: true },
     otp: String,
     otpExpire: Date,
