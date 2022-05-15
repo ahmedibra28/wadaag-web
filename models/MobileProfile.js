@@ -9,10 +9,14 @@ const mobileProfileScheme = mongoose.Schema(
     plate: String,
     license: String,
     owner: String,
+    approved: { type: Boolean, default: false },
+    profileCompleted: { type: Boolean, default: false },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: MobileUser,
     },
+    points: { type: Number, default: 0 },
+    expiration: { type: Number, default: 0 },
   },
   { timestamps: true }
 )

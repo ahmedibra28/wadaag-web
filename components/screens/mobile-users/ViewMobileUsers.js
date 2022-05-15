@@ -41,10 +41,8 @@ const ViewMobileUsers = ({
             data.data.map((mobileUser) => (
               <tr key={mobileUser._id}>
                 <td>
-                  {mobileUser.name ? (
-                    mobileUser.name
-                  ) : (
-                    <span className='text-danger'>Waiting profile update</span>
+                  {mobileUser.name || (
+                    <span className='badge bg-danger'>ERROR!</span>
                   )}
                 </td>
                 <td>{mobileUser.mobile}</td>

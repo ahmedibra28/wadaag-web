@@ -1,8 +1,14 @@
 import { Search } from '../..'
 import Image from 'next/image'
-import moment from 'moment'
 
-const ViewMobileUserProfiles = ({ data, setQ, q, searchHandler }) => {
+const ViewMobileUserProfiles = ({
+  data,
+  setQ,
+  q,
+  searchHandler,
+  isLoadingUpdate,
+  mutateAsyncUpdate,
+}) => {
   return (
     <div className='table-responsive bg-light p-3 mt-2'>
       <div className='d-flex align-items-center flex-column mb-2'>
@@ -25,9 +31,15 @@ const ViewMobileUserProfiles = ({ data, setQ, q, searchHandler }) => {
           <tr>
             <th>Image</th>
             <th>Name</th>
-            <th>Type</th>
             <th>Mobile</th>
-            <th>Joined Date</th>
+            <th>Points</th>
+            <th>Expiration</th>
+            <th>Type</th>
+            <th>Approved</th>
+            <th>Completed</th>
+            <th>Plate</th>
+            <th>License</th>
+            <th>Owner</th>
           </tr>
         </thead>
 
@@ -46,12 +58,81 @@ const ViewMobileUserProfiles = ({ data, setQ, q, searchHandler }) => {
                 </td>
                 <td>
                   {userProfile.name || (
-                    <span className='text-danger'>Waiting profile update</span>
+                    <span className='badge bg-danger'>ERROR!</span>
                   )}
                 </td>
-                <td>{userProfile.type}</td>
                 <td>{userProfile.user && userProfile.user.mobile}</td>
-                <td>{moment(userProfile.createdAt).format('ll')}</td>
+                <td>
+                  <span className='text-info'>{userProfile.points}</span>
+                </td>
+                <td>
+                  {userProfile.type === 'rider' ? (
+                    userProfile.expiration < 10 ? (
+                      <span className='text-danger'>
+                        {userProfile.expiration}
+                      </span>
+                    ) : (
+                      <span className='text-info'>
+                        {userProfile.expiration}
+                      </span>
+                    )
+                  ) : (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.type === 'driver' ? (
+                    <span className='bg-success badge'>DRIVER</span>
+                  ) : userProfile.type === 'rider' ? (
+                    <span className='bg-primary badge'>RIDER</span>
+                  ) : (
+                    <span className='bg-danger badge'>ERROR!</span>
+                  )}
+                </td>
+
+                <td>
+                  <button
+                    className='btn btn-sm p-0'
+                    disabled={isLoadingUpdate}
+                    onClick={() => mutateAsyncUpdate(userProfile)}
+                  >
+                    {isLoadingUpdate ? (
+                      <span className='spinner-border spinner-border-sm mx-auto' />
+                    ) : userProfile.approved ? (
+                      <span className='badge bg-success'>APPROVED</span>
+                    ) : (
+                      <span className='badge bg-danger'>PENDING</span>
+                    )}
+                  </button>
+                </td>
+                <td>
+                  {userProfile.profileCompleted ? (
+                    <span className='badge bg-success'>COMPLETED</span>
+                  ) : (
+                    <span className='badge bg-danger'>PENDING</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.type === 'driver' ? (
+                    userProfile.plate
+                  ) : (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.type === 'driver' ? (
+                    userProfile.license
+                  ) : (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.type === 'driver' ? (
+                    userProfile.owner
+                  ) : (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
               </tr>
             ))}
         </tbody>

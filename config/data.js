@@ -374,6 +374,13 @@ const permissions = [
     name: 'Mobile User Profile',
     method: 'POST',
   },
+  {
+    description: 'Approve Mobile Profile',
+    route: '/api/mobile/user-profiles/:id',
+    auth: true,
+    name: 'Mobile User Profile',
+    method: 'PUT',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

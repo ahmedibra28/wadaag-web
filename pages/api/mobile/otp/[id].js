@@ -36,8 +36,10 @@ handler.put(async (req, res) => {
     if (!profile) {
       await MobileProfile.create({
         user: object._id,
-        type: 'rider',
+        type: 'driver',
         image: `https://ui-avatars.com/api/?uppercase=true&name=wadaag&background=random&color=random&size=128`,
+        approved: false,
+        profileCompleted: false,
       })
     }
 

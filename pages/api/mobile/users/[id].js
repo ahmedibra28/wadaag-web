@@ -1,6 +1,6 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
-import Profile from '../../../../models/Profile'
+import MobileProfile from '../../../../models/MobileProfile'
 import MobileUser from '../../../../models/MobileUser'
 import UserRole from '../../../../models/UserRole'
 import { isAuth } from '../../../../utils/auth'
@@ -19,7 +19,7 @@ handler.delete(async (req, res) => {
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })
 
-    const profile = await Profile.findOne({ user: object._id })
+    const profile = await MobileProfile.findOne({ user: object._id })
     profile && (await profile.remove())
 
     const userRole = await UserRole.findOne({ user: object._id })

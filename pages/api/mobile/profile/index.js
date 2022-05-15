@@ -56,9 +56,20 @@ handler.post(async (req, res) => {
       object.license = undefined
       object.owner = undefined
 
-      // here implement payment logic
+      // @TODO: here implement payment logic
+      // if rider is paid, then set approved to true
     }
 
+    if (object.type === 'rider' && type === 'driver') object.approved = false
+    if (type === 'rider') object.approved = true
+    if (
+      object.type === 'driver' &&
+      type === 'driver' &&
+      object.approved === true
+    )
+      object.approved = true
+
+    object.profileCompleted = true
     object.type = type ? type : object.type
     object.image = image ? image : object.image
     object.name = name ? name : object.name

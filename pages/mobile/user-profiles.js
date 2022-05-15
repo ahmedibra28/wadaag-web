@@ -14,12 +14,21 @@ const MobileUserProfiles = () => {
   const [page, setPage] = useState(1)
   const [q, setQ] = useState('')
 
-  const { getMobileUserProfiles } = useMobileProfilesHook({
-    page,
-    q,
-  })
+  const { getMobileUserProfiles, updateMobileUserProfileToApprove } =
+    useMobileProfilesHook({
+      page,
+      q,
+    })
 
   const { data, isLoading, isError, error, refetch } = getMobileUserProfiles
+
+  const {
+    isLoading: isLoadingUpdate,
+    isError: isErrorUpdate,
+    error: errorUpdate,
+    isSuccess: isSuccessUpdate,
+    mutateAsync: mutateAsyncUpdate,
+  } = updateMobileUserProfileToApprove
 
   useEffect(() => {
     refetch()
@@ -44,6 +53,13 @@ const MobileUserProfiles = () => {
         <meta property='og:title' content='User Profiles' key='title' />
       </Head>
 
+      {isSuccessUpdate && (
+        <Message variant='success'>
+          User Profile has been approved successfully.
+        </Message>
+      )}
+      {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+
       <div className='ms-auto text-end'>
         <Pagination data={data} setPage={setPage} />
       </div>
@@ -58,6 +74,8 @@ const MobileUserProfiles = () => {
           setQ={setQ}
           q={q}
           searchHandler={searchHandler}
+          mutateAsyncUpdate={mutateAsyncUpdate}
+          isLoadingUpdate={isLoadingUpdate}
         />
       )}
     </>
