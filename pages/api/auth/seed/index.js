@@ -37,20 +37,20 @@ handler.get(async (req, res) => {
 
     // Create users
     const userObject = await User.create({
+      mobileNumber: users.mobileNumber,
       name: users.name,
-      email: users.email,
-      password: users.password,
-      confirmed: true,
+      otp: users.otp,
+      otpExpire: users.otpExpire,
       blocked: false,
     })
 
     // Create profiles for users
     await Profile.create({
       user: userObject._id,
-      name: userObject.name,
-      address: profile.address,
-      phone: profile.phone,
-      bio: profile.bio,
+      name: profile.name,
+      type: profile.type,
+      approved: profile.approved,
+      profileCompleted: profile.profileCompleted,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${userObject.name}&background=random&color=random&size=128`,
     })
 

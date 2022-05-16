@@ -1,25 +1,25 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
-import MobileUser from '../../../../models/MobileUser'
-import MobileProfile from '../../../../models/MobileProfile'
+import User from '../../../../models/User'
+import Profile from '../../../../models/Profile'
 import { generateToken } from '../../../../utils/auth'
 import UserRole from '../../../../models/UserRole'
 import Role from '../../../../models/Role'
 
-const schemaName = MobileUser
+const schemaName = User
 
 const handler = nc()
 
-handler.put(async (req, res) => {
+handler.post(async (req, res) => {
   await db()
   try {
-    const { id } = req.query
-    const { otp } = req.body
+    const { otp, userId } = req.body
 
     if (!otp) return res.status(400).json({ error: 'Please enter your OTP' })
+    if (!userId) return res.status(400).json({ error: 'User not found' })
 
     const object = await schemaName.findOne({
-      _id: id,
+      _id: userId,
       otp,
       otpExpire: { $gt: Date.now() },
     })
@@ -32,11 +32,12 @@ handler.put(async (req, res) => {
     await object.save()
 
     // create user profile
-    const profile = await MobileProfile.findOne({ user: object._id })
+    const profile = await Profile.findOne({ user: object._id })
+
     if (!profile) {
-      await MobileProfile.create({
+      await Profile.create({
         user: object._id,
-        type: 'driver',
+        type: 'temporary',
         image: `https://ui-avatars.com/api/?uppercase=true&name=wadaag&background=random&color=random&size=128`,
         approved: false,
         profileCompleted: false,
@@ -52,8 +53,10 @@ handler.put(async (req, res) => {
     }
 
     res.status(200).send({
+      _id: object._id,
+      name: object.name || 'Profile',
       token: generateToken(object._id),
-      mobile: object.mobile,
+      mobileNumber: object.mobileNumber,
     })
   } catch (error) {
     res.status(500).json({ error: error.message })

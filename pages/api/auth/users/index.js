@@ -14,24 +14,19 @@ handler.get(async (req, res) => {
     const q = req.query && req.query.q
 
     let query = schemaName.find(
-      q ? { email: { $regex: q, $options: 'i' } } : {}
+      q ? { mobileNumber: { $regex: q, $options: 'i' } } : {}
     )
 
     const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 25
     const skip = (page - 1) * pageSize
     const total = await schemaName.countDocuments(
-      q ? { email: { $regex: q, $options: 'i' } } : {}
+      q ? { mobileNumber: { $regex: q, $options: 'i' } } : {}
     )
 
     const pages = Math.ceil(total / pageSize)
 
-    query = query
-      .skip(skip)
-      .limit(pageSize)
-      .sort({ createdAt: -1 })
-      .select('-password')
-      .lean()
+    query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 }).lean()
 
     const result = await query
 

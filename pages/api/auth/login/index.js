@@ -1,37 +1,40 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import User from '../../../../models/User'
-import { generateToken } from '../../../../utils/auth'
 
 const handler = nc()
 
+const schemaName = User
+
 handler.post(async (req, res) => {
+  await db()
   try {
-    await db()
+    let mobileNumber = req.body.mobileNumber
+      ? Number(req.body.mobileNumber)
+      : ''
 
-    const email = req.body.email.toLowerCase()
-    const password = req.body.password
+    if (!mobileNumber || mobileNumber.toString().length !== 9)
+      return res.status(400).json({ error: 'Invalid mobile number' })
 
-    const user = await User.findOne({ email })
+    mobileNumber = `252${mobileNumber}`
 
-    if (user && (await user.matchPassword(password))) {
-      if (user.blocked)
-        return res.status(401).send({ error: 'User is blocked' })
+    const user = await schemaName.findOne({ mobileNumber })
 
-      if (!user.confirmed)
-        return res.status(401).send({ error: 'User is not confirmed' })
+    if (user && user.blocked)
+      return res.status(401).json({ error: 'User is blocked' })
 
-      return res.send({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        blocked: user.blocked,
-        confirmed: user.confirmed,
-        token: generateToken(user._id),
-      })
-    } else {
-      return res.status(401).send({ error: 'Invalid credentials' })
+    if (!user) {
+      const object = await schemaName.create({ mobileNumber })
+
+      object.getRandomOtp()
+      await object.save()
+      return res.status(200).send(object)
     }
+
+    user.getRandomOtp()
+    await user.save()
+
+    res.status(200).send(user)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

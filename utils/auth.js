@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
-import MobileUser from '../models/MobileUser'
 import UserRole from '../models/UserRole'
 import db from '../config/db'
 
@@ -14,85 +13,6 @@ export const isAuth = async (req, res, next) => {
   await db()
   let token
 
-  const isReqFromMobile = req.query && req.query.type === 'm' ? true : false
-
-  // only apple for mobile requests
-  if (isReqFromMobile) {
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      try {
-        token = req.headers.authorization.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        req.user = await MobileUser.findById(decoded.id)
-        const userRole = await UserRole.findOne(
-          { user: req.user._id },
-          { role: 1 }
-        ).populate({
-          path: 'role',
-          populate: {
-            path: 'permission',
-          },
-        })
-
-        let { url, method } = req
-
-        const urlArray = url.split('/')
-        const lastIndex = urlArray.pop()
-
-        if (lastIndex.length > 18 && !lastIndex.includes('q')) {
-          const queryKey = Object.keys(req.query)
-          url = urlArray.join('/') + '/' + `:${queryKey[0]}`
-        }
-
-        if (url.includes('page')) {
-          url = url.split('page')[0]
-
-          if (url.includes('?')) {
-            url = url.split('?')[0]
-          }
-        }
-
-        if (url.includes('type')) {
-          url = url.split('type')[0]
-
-          if (url.includes('?')) {
-            url = url.split('?')[0]
-          }
-        }
-
-        if (
-          userRole.role.permission.find(
-            (permission) =>
-              permission.route === url &&
-              permission.method === method &&
-              permission.auth === false
-          )
-        ) {
-          return next()
-        }
-        if (
-          !userRole.role.permission.find(
-            (permission) =>
-              permission.route === url &&
-              permission.method === method &&
-              permission.auth === true
-          )
-        ) {
-          return res
-            .status(403)
-            .send({ error: 'You do not have permission to access this route' })
-        }
-
-        return next()
-      } catch (error) {
-        return res.status(401).json({ error: 'Unauthorized' })
-      }
-    }
-  }
-
-  // only apple for non mobile requests
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')

@@ -5,8 +5,10 @@ import withAuth from '../../HOC/withAuth'
 import { FormContainer, Message } from '../../components'
 import { useForm } from 'react-hook-form'
 import useProfilesHook from '../../utils/api/profiles'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import useUploadHook from '../../utils/api/upload'
 import {
+  inputCheckRadio,
   inputFile,
   inputPassword,
   inputTel,
@@ -54,27 +56,28 @@ const Profile = () => {
 
   useEffect(() => {
     setValue('name', !isLoading ? data && data.name : '')
-    setValue('address', !isLoading ? data && data.address : '')
-    setValue('phone', !isLoading ? data && data.phone : '')
-    setValue('bio', !isLoading ? data && data.bio : '')
+    setValue('license', !isLoading ? data && data.license : '')
+    setValue('plate', !isLoading ? data && data.plate : '')
+    setValue('owner', !isLoading ? data && data.owner : '')
+    setValue('type', !isLoading ? data && data.type : '')
   }, [isLoading, setValue, data])
 
   const submitHandler = (data) => {
     if (!file && !fileLink) {
       mutateAsync({
         name: data.name,
-        phone: data.phone,
-        address: data.address,
-        bio: data.bio,
-        password: data.password,
+        license: data.license,
+        plate: data.plate,
+        type: data.type,
+        owner: data.owner,
       })
     } else {
       mutateAsync({
         name: data.name,
-        phone: data.phone,
-        address: data.address,
-        bio: data.bio,
-        password: data.password,
+        license: data.license,
+        plate: data.plate,
+        type: data.type,
+        owner: data.owner,
         image: fileLink,
       })
     }
@@ -107,7 +110,6 @@ const Profile = () => {
         <title>Profile</title>
         <meta property='og:title' content='Profile' key='title' />
       </Head>
-      <h3 className='fw-light font-monospace text-center'>User Profile</h3>
 
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
       {isErrorUpload && <Message variant='danger'>{errorUpload}</Message>}
@@ -118,8 +120,21 @@ const Profile = () => {
 
       {isLoading && <Spinner />}
       <form onSubmit={handleSubmit(submitHandler)}>
+        {(data && !data.profileCompleted) ||
+          (data && !data.approved && (
+            <div className='alert alert-warning pb-1 border-0'>
+              <ul>
+                {data && !data.profileCompleted && (
+                  <li> Please complete your profile. </li>
+                )}
+                {data && !data.approved && (
+                  <li> Please wait until you get approved </li>
+                )}
+              </ul>
+            </div>
+          ))}
         {data && data.image && (
-          <div className='d-flex justify-content-center'>
+          <div className='d-flex justify-content-center position-relative'>
             <Image
               src={data && data.image}
               alt='avatar'
@@ -127,10 +142,27 @@ const Profile = () => {
               width='200'
               height='200'
             />
+            {data.approved ? (
+              <FaCheckCircle className='text-success position-absolute bottom-0 fs-1' />
+            ) : (
+              <FaTimesCircle className='text-danger position-absolute bottom-0 fs-1' />
+            )}
           </div>
         )}
 
         <div className='row'>
+          <div className='col-12'>
+            {inputCheckRadio({
+              register,
+              errors,
+              label: 'User type',
+              name: 'type',
+              data: [
+                { _id: 'driver', name: 'Driver' },
+                { _id: 'rider', name: 'Rider' },
+              ],
+            })}
+          </div>
           <div className='col-12'>
             {inputText({
               register,
@@ -138,33 +170,6 @@ const Profile = () => {
               label: 'Name',
               name: 'name',
               placeholder: 'Name',
-            })}
-          </div>
-          <div className='col-md-6 col-12'>
-            {inputText({
-              register,
-              errors,
-              label: 'Address',
-              name: 'address',
-              placeholder: 'Address',
-            })}
-          </div>
-          <div className='col-md-6 col-12'>
-            {inputTel({
-              register,
-              errors,
-              label: 'Phone',
-              name: 'phone',
-              placeholder: '+252 (61) 530-1507',
-            })}
-          </div>
-          <div className='col-12'>
-            {inputTextArea({
-              register,
-              errors,
-              label: 'Bio',
-              name: 'bio',
-              placeholder: 'Tell us about yourself',
             })}
           </div>
 
@@ -179,30 +184,43 @@ const Profile = () => {
               placeholder: 'Choose an image',
             })}
           </div>
-          <div className='col-md-6 col-12'>
-            {inputPassword({
-              register,
-              errors,
-              label: 'Password',
-              name: 'password',
-              minLength: true,
-              isRequired: false,
-              placeholder: "Leave blank if you don't want to change",
-            })}
-          </div>
-          <div className='col-md-6 col-12'>
-            {inputPassword({
-              register,
-              errors,
-              watch,
-              name: 'confirmPassword',
-              label: 'Confirm Password',
-              validate: true,
-              minLength: true,
-              isRequired: false,
-              placeholder: 'Confirm Password',
-            })}
-          </div>
+
+          {watch().type === 'rider' && (
+            <label className='text-danger text-center my-2'>
+              Implement monthly payment here
+            </label>
+          )}
+          {watch().type === 'driver' && (
+            <>
+              <div className='col-12'>
+                {inputText({
+                  register,
+                  errors,
+                  label: 'Owner name',
+                  name: 'owner',
+                  placeholder: 'Owner name',
+                })}
+              </div>
+              <div className='col-12'>
+                {inputText({
+                  register,
+                  errors,
+                  label: 'Plate',
+                  name: 'plate',
+                  placeholder: 'Plate',
+                })}
+              </div>
+              <div className='col-12'>
+                {inputText({
+                  register,
+                  errors,
+                  label: 'License',
+                  name: 'license',
+                  placeholder: 'License',
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         <button

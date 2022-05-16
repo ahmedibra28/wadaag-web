@@ -2,7 +2,6 @@ import nc from 'next-connect'
 import db from '../../../../config/db'
 import Role from '../../../../models/Role'
 import User from '../../../../models/User'
-import MobileUser from '../../../../models/MobileUser'
 import UserRole from '../../../../models/UserRole'
 import { isAuth } from '../../../../utils/auth'
 

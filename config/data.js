@@ -40,17 +40,17 @@ const roles = [
 
 const users = {
   name: 'Ahmed Ibrahim',
-  email: 'ahmed@websom.dev',
-  password: '123456',
-  confirmed: true,
-  blocked: false,
+  mobileNumber: 252615301507,
+  otp: '123456',
+  otpExpire: Date.now() + 10 * (60 * 1000), // Ten Minutes
 }
 
 const profile = {
-  phone: '+252615301507',
-  address: 'Mogadishu',
+  name: 'Ahmed Ibrahim',
+  type: 'administrator',
+  approved: true,
+  profileCompleted: true,
   image: 'https://github.com/ahmaat19.png',
-  bio: 'Full Stack Developer',
 }
 
 const clientPermissions = [
@@ -110,21 +110,6 @@ const clientPermissions = [
     auth: true,
     description: 'User Profiles page',
   },
-  // mobile ==============================>
-  {
-    name: 'Mobile User Profiles',
-    path: '/mobile/user-profiles',
-    menu: 'mobile',
-    auth: true,
-    description: 'User Profiles page',
-  },
-  {
-    name: 'Mobile Users',
-    path: '/mobile/users',
-    menu: 'mobile',
-    auth: true,
-    description: 'Mobile Users page',
-  },
 ]
 
 const permissions = [
@@ -168,6 +153,13 @@ const permissions = [
     route: '/api/auth/login',
     auth: false,
     name: 'Login',
+    method: 'POST',
+  },
+  {
+    description: 'Login',
+    route: '/api/auth/login/otp',
+    auth: false,
+    name: 'OTP',
     method: 'POST',
   },
   {
@@ -323,63 +315,6 @@ const permissions = [
     auth: true,
     name: 'ClientPermissions',
     method: 'DELETE',
-  },
-  // mobile ==============================>
-  {
-    description: 'Get All Mobile Users',
-    route: '/api/mobile/users',
-    auth: true,
-    name: 'Mobile Users',
-    method: 'GET',
-  },
-  {
-    description: 'Create Mobile User',
-    route: '/api/mobile/users',
-    auth: false,
-    name: 'Mobile Users',
-    method: 'POST',
-  },
-  {
-    description: 'Delete Mobile User',
-    route: '/api/mobile/users/:id',
-    auth: true,
-    name: 'Mobile Users',
-    method: 'DELETE',
-  },
-  {
-    description: 'Update Mobile OTP',
-    route: '/api/mobile/otp/:id',
-    auth: true,
-    name: 'OTP',
-    method: 'PUT',
-  },
-  {
-    description: 'Get All Mobile User Profiles',
-    route: '/api/mobile/user-profiles',
-    auth: true,
-    name: 'Mobile User Profiles',
-    method: 'GET',
-  },
-  {
-    description: 'Get Mobile Profile',
-    route: '/api/mobile/profile',
-    auth: true,
-    name: 'Mobile User Profile',
-    method: 'GET',
-  },
-  {
-    description: 'Update Mobile Profile',
-    route: '/api/mobile/profile',
-    auth: true,
-    name: 'Mobile User Profile',
-    method: 'POST',
-  },
-  {
-    description: 'Approve Mobile Profile',
-    route: '/api/mobile/user-profiles/:id',
-    auth: true,
-    name: 'Mobile User Profile',
-    method: 'PUT',
   },
 ]
 

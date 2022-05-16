@@ -29,36 +29,54 @@ handler.post(async (req, res) => {
   await db()
   try {
     const { _id } = req.user
-    const { name, address, phone, bio, image, password } = req.body
+    const { type, name, image, plate, license, owner } = req.body
 
     const object = await schemaName.findOne({ user: _id }).populate('user')
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })
 
     if (name) await User.findOneAndUpdate({ _id }, { name })
-    if (password) {
-      const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-      if (!regex.test(password))
-        return res.status(400).json({
-          error:
-            'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one number and one special character',
-        })
 
-      await User.findOneAndUpdate(
-        { _id },
-        { password: await object.user.encryptPassword(password) }
-      )
+    const typeOptions = ['rider', 'driver']
+
+    if (type && !typeOptions.includes(type)) {
+      return res
+        .status(400)
+        .json({ error: `${schemaNameString} type is invalid` })
     }
 
-    object.name = name ? name : object.name
-    object.phone = phone ? phone : object.phone
-    object.address = address ? address : object.address
+    if (type === 'driver') {
+      object.plate = plate ? plate : object.plate
+      object.license = license ? license : object.license
+      object.owner = owner ? owner : object.owner
+    }
+
+    if (type === 'rider') {
+      object.plate = undefined
+      object.license = undefined
+      object.owner = undefined
+
+      // @TODO: here implement payment logic
+      // if rider is paid, then set approved to true
+    }
+
+    if (object.type !== 'driver' && type === 'driver') object.approved = false
+    if (type !== 'driver') object.approved = true
+    if (
+      object.type === 'driver' &&
+      type === 'driver' &&
+      object.approved === true
+    )
+      object.approved = true
+
+    object.profileCompleted = true
+    object.type = type ? type : object.type
     object.image = image ? image : object.image
-    object.bio = bio ? bio : object.bio
+    object.name = name ? name : object.name
     object.user = _id
+
     await object.save()
-    res.status(200).json({ message: `${schemaNameString} updated` })
+    res.status(200).send(`${schemaNameString} updated`)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

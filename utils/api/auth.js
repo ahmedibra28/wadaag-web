@@ -14,6 +14,14 @@ export default function useAuthHook() {
     }
   )
 
+  const postOTP = useMutation(
+    async (obj) => await dynamicAPI('post', `${url}/login/otp`, obj),
+    {
+      retry: 0,
+      onSuccess: () => queryClient.invalidateQueries(['otp']),
+    }
+  )
+
   const postLogout = () => {
     typeof window !== undefined && localStorage.removeItem('userRole')
     return typeof window !== undefined && localStorage.removeItem('userInfo')
@@ -35,5 +43,11 @@ export default function useAuthHook() {
     }
   )
 
-  return { postLogin, postLogout, postForgotPassword, postResetPassword }
+  return {
+    postLogin,
+    postLogout,
+    postForgotPassword,
+    postResetPassword,
+    postOTP,
+  }
 }
