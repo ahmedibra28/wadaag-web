@@ -1,13 +1,12 @@
 import Link from 'next/link'
-// import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { FaSignInAlt, FaUserPlus, FaPowerOff, FaBars } from 'react-icons/fa'
+import { FaPowerOff } from 'react-icons/fa'
 import useAuthHook from '../utils/api/auth'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import { customLocalStorage } from '../utils/customLocalStorage'
 
-const Navigation = () => {
+const OffCanvas = () => {
   const router = useRouter()
   const { postLogout } = useAuthHook()
 
@@ -17,36 +16,6 @@ const Navigation = () => {
 
   const logoutHandler = () => {
     mutateAsync({})
-  }
-
-  const userInfo =
-    typeof window !== 'undefined' && localStorage.getItem('userInfo')
-      ? JSON.parse(
-          typeof window !== 'undefined' && localStorage.getItem('userInfo')
-        )
-      : null
-
-  const guestItems = () => {
-    return (
-      <>
-        <ul className='navbar-nav ms-auto'>
-          <li className='nav-item'>
-            <Link href='/auth/login'>
-              <a className='nav-link' aria-current='page'>
-                <FaUserPlus className='mb-1' /> Register
-              </a>
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link href='/auth/login'>
-              <a className='nav-link' aria-current='page'>
-                <FaSignInAlt className='mb-1' /> Login
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </>
-    )
   }
 
   const user = () => {
@@ -83,8 +52,6 @@ const Navigation = () => {
 
     return { uniqueDropdowns, menuItems }
   }
-
-  menus()
 
   const authItems = () => {
     return (
@@ -156,47 +123,26 @@ const Navigation = () => {
   }
 
   return (
-    <nav className='navbar navbar-expand-sm navbar-light bg-light'>
-      <div className='container'>
-        {/* <Link href='/'>
-          <a>
-            <Image
-              priority
-              width='40'
-              height='40'
-              src='/favicon.png'
-              className='img-fluid brand-logos'
-              alt='logo'
-            />
-          </a>
-        </Link> */}
+    <div
+      className='offcanvas offcanvas-start'
+      tabIndex='-1'
+      id='offcanvasExample'
+      aria-labelledby='offcanvasExampleLabel'
+    >
+      <div className='offcanvas-header'>
+        <h5 className='offcanvas-title' id='offcanvasExampleLabel'>
+          Offcanvas
+        </h5>
         <button
-          className='btn btn-primary shadow-none'
           type='button'
-          data-bs-toggle='offcanvas'
-          data-bs-target='#offcanvasExample'
-          aria-controls='offcanvasExample'
-        >
-          <FaBars className='fs-3' />
-        </button>
-
-        <button
-          className='navbar-toggler'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#navbarNav'
-          aria-controls='navbarNav'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
-        >
-          <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse' id='navbarNav'>
-          {userInfo ? authItems() : guestItems()}
-        </div>
+          className='btn-close'
+          data-bs-dismiss='offcanvas'
+          aria-label='Close'
+        ></button>
       </div>
-    </nav>
+      <div className='offcanvas-body'>{authItems()}</div>
+    </div>
   )
 }
 
-export default dynamic(() => Promise.resolve(Navigation), { ssr: false })
+export default dynamic(() => Promise.resolve(OffCanvas), { ssr: false })

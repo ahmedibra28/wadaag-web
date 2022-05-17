@@ -1,5 +1,6 @@
 import Navigation from './Navigation'
 import Head from 'next/head'
+import OffCanvas from './OffCanvas'
 // import Footer from './Footer'
 
 export default function Layout({ children }) {
@@ -16,7 +17,14 @@ export default function Layout({ children }) {
         <title>Wadaag APP</title>
         <meta property='og:title' content='Wadaag APP' key='title' />
       </Head>
-      {userInfo && <Navigation />}
+
+      {userInfo && (
+        <>
+          <Navigation />
+          <OffCanvas />
+        </>
+      )}
+
       <main className='container py-2'>{children}</main>
       {/* <Footer /> */}
     </>
