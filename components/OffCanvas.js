@@ -3,9 +3,9 @@ import dynamic from 'next/dynamic'
 import { FaTimesCircle, FaCheckCircle, FaLevelUpAlt } from 'react-icons/fa'
 import useProfilesHook from '../utils/api/profiles'
 import { customLocalStorage } from '../utils/customLocalStorage'
-import Image from 'next/image'
 import { Spinner } from './Spinner'
 import Message from './Message'
+import LazyLoad from 'react-lazyload'
 
 const OffCanvas = () => {
   const { getProfile } = useProfilesHook({
@@ -136,14 +136,15 @@ const OffCanvas = () => {
           <div className='text-center mx-auto' id='offcanvasExampleLabel'>
             <Link href='/account/profile'>
               <a>
-                <Image
-                  priority
-                  width='60'
-                  height='60'
-                  src={data.image}
-                  className='img-fluid rounded-pill text-center'
-                  alt='logo'
-                />
+                <LazyLoad height={60} once>
+                  <img
+                    src={data.image}
+                    alt='avatar'
+                    className='img-fluid rounded-pill text-center'
+                    width={60}
+                    height={60}
+                  />
+                </LazyLoad>
               </a>
             </Link>
 

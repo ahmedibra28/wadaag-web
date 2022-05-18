@@ -8,7 +8,7 @@ import useProfilesHook from '../../utils/api/profiles'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import useUploadHook from '../../utils/api/upload'
 import { inputCheckRadio, inputFile, inputText } from '../../utils/dynamicForm'
-import Image from 'next/image'
+import LazyLoad from 'react-lazyload'
 import { Spinner } from '../../components'
 
 const Profile = () => {
@@ -128,13 +128,16 @@ const Profile = () => {
           ))}
         {data && data.image && (
           <div className='d-flex justify-content-center position-relative'>
-            <Image
-              src={data && data.image}
-              alt='avatar'
-              className='rounded-circle'
-              width='200'
-              height='200'
-            />
+            <LazyLoad height={200} once>
+              <img
+                src={data && data.image}
+                alt='avatar'
+                className='img-fluid rounded-circle'
+                width={200}
+                height={200}
+              />
+            </LazyLoad>
+
             {data.approved ? (
               <FaCheckCircle className='text-success position-absolute bottom-0 fs-1' />
             ) : (
