@@ -1,11 +1,15 @@
 import Link from 'next/link'
-// import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { FaSignInAlt, FaUserPlus, FaPowerOff, FaBars } from 'react-icons/fa'
+import {
+  FaSignInAlt,
+  FaUserPlus,
+  FaPowerOff,
+  FaBars,
+  FaBell,
+} from 'react-icons/fa'
 import useAuthHook from '../utils/api/auth'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
-import { customLocalStorage } from '../utils/customLocalStorage'
 
 const Navigation = () => {
   const router = useRouter()
@@ -49,104 +53,26 @@ const Navigation = () => {
     )
   }
 
-  const user = () => {
-    const userInfo =
-      customLocalStorage() &&
-      customLocalStorage().userInfo &&
-      customLocalStorage().userInfo
-
-    return userInfo
-  }
-
-  const menus = () => {
-    const dropdownItems =
-      customLocalStorage() &&
-      customLocalStorage().userAccessRoutes &&
-      customLocalStorage().userAccessRoutes.clientPermission &&
-      customLocalStorage().userAccessRoutes.clientPermission.map(
-        (route) => route.menu
-      )
-
-    const menuItems =
-      customLocalStorage() &&
-      customLocalStorage().userAccessRoutes &&
-      customLocalStorage().userAccessRoutes.clientPermission &&
-      customLocalStorage().userAccessRoutes.clientPermission.map(
-        (route) => route
-      )
-
-    const dropdownArray =
-      dropdownItems &&
-      dropdownItems.filter((item) => item !== 'hidden' && item !== 'normal')
-
-    const uniqueDropdowns = [...new Set(dropdownArray)]
-
-    return { uniqueDropdowns, menuItems }
-  }
-
-  menus()
-
   const authItems = () => {
     return (
       <>
-        <ul className='navbar-nav ms-auto'>
-          {menus() &&
-            menus().menuItems.map(
-              (menu) =>
-                menu.menu === 'normal' &&
-                menu.auth === true && (
-                  <li key={menu._id} className='nav-item'>
-                    <Link href={menu.path}>
-                      <a className='nav-link' aria-current='page'>
-                        {menu.name}
-                      </a>
-                    </Link>
-                  </li>
-                )
-            )}
+        <ul className='navbar-nav ms-auto flex-row'>
+          <li className='nav-item ms-3'>
+            <Link href='/'>
+              <a className='nav-link' aria-current='page'>
+                <FaBell className='fs-6' />
+              </a>
+            </Link>
+          </li>
 
-          {menus() &&
-            menus().uniqueDropdowns.map((item) => (
-              <li key={item} className='nav-item dropdown'>
-                <a
-                  className='nav-link dropdown-toggle'
-                  href='#'
-                  id='navbarDropdownMenuLink'
-                  role='button'
-                  data-bs-toggle='dropdown'
-                  aria-expanded='false'
-                >
-                  {item === 'profile'
-                    ? user() && user().name
-                    : item.charAt(0).toUpperCase() + item.substring(1)}
-                </a>
-                <ul
-                  className='dropdown-menu border-0'
-                  aria-labelledby='navbarDropdownMenuLink'
-                >
-                  {menus() &&
-                    menus().menuItems.map(
-                      (menu) =>
-                        menu.menu === item && (
-                          <li key={menu._id}>
-                            <Link href={menu.path}>
-                              <a className='dropdown-item'>{menu.name}</a>
-                            </Link>
-                          </li>
-                        )
-                    )}
-                </ul>
-              </li>
-            ))}
-
-          <li className='nav-item'>
+          <li className='nav-item ms-3'>
             <Link href='/auth/login'>
               <a
                 className='nav-link'
                 aria-current='page'
                 onClick={logoutHandler}
               >
-                <FaPowerOff className='mb-1' /> Logout
+                <FaPowerOff className='fs-6' />
               </a>
             </Link>
           </li>
@@ -156,44 +82,16 @@ const Navigation = () => {
   }
 
   return (
-    <nav className='navbar navbar-expand-sm navbar-light bg-light'>
-      <div className='container'>
-        {/* <Link href='/'>
-          <a>
-            <Image
-              priority
-              width='40'
-              height='40'
-              src='/favicon.png'
-              className='img-fluid brand-logos'
-              alt='logo'
-            />
-          </a>
-        </Link> */}
-        <button
-          className='btn btn-primary shadow-none'
-          type='button'
+    <nav className='navbar navbar-light bg-light'>
+      <div className='container py-0'>
+        <FaBars
+          className='fs-3 shadow-none text-primary'
           data-bs-toggle='offcanvas'
           data-bs-target='#offcanvasExample'
           aria-controls='offcanvasExample'
-        >
-          <FaBars className='fs-3' />
-        </button>
+        />
 
-        <button
-          className='navbar-toggler'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#navbarNav'
-          aria-controls='navbarNav'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
-        >
-          <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse' id='navbarNav'>
-          {userInfo ? authItems() : guestItems()}
-        </div>
+        {userInfo ? authItems() : guestItems()}
       </div>
     </nav>
   )

@@ -17,6 +17,10 @@ body {
   -moz-osx-font-smoothing: grayscale !important;
 }
 
+.gray-color {
+  background: var(--color-primary-websom) !important;
+}
+
 button,
 a,
 link,

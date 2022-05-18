@@ -1,6 +1,7 @@
 import Navigation from './Navigation'
 import Head from 'next/head'
 import OffCanvas from './OffCanvas'
+import BottomTab from './BottomTab'
 // import Footer from './Footer'
 
 export default function Layout({ children }) {
@@ -26,6 +27,7 @@ export default function Layout({ children }) {
       )}
 
       <main className='container py-2'>{children}</main>
+      {userInfo && <BottomTab />}
       {/* <Footer /> */}
     </>
   )

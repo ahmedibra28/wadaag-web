@@ -1,22 +1,20 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { FaPowerOff } from 'react-icons/fa'
-import useAuthHook from '../utils/api/auth'
-import { useMutation } from 'react-query'
-import { useRouter } from 'next/router'
+import { FaTimesCircle, FaCheckCircle, FaLevelUpAlt } from 'react-icons/fa'
+import useProfilesHook from '../utils/api/profiles'
 import { customLocalStorage } from '../utils/customLocalStorage'
+import Image from 'next/image'
+import { Spinner } from './Spinner'
+import Message from './Message'
 
 const OffCanvas = () => {
-  const router = useRouter()
-  const { postLogout } = useAuthHook()
-
-  const { mutateAsync } = useMutation(postLogout, {
-    onSuccess: () => router.push('/auth/login'),
+  const { getProfile } = useProfilesHook({
+    page: 1,
+    q: '',
+    limit: 25,
   })
 
-  const logoutHandler = () => {
-    mutateAsync({})
-  }
+  const { data, isLoading, isError, error } = getProfile
 
   const user = () => {
     const userInfo =
@@ -62,7 +60,12 @@ const OffCanvas = () => {
               (menu) =>
                 menu.menu === 'normal' &&
                 menu.auth === true && (
-                  <li key={menu._id} className='nav-item'>
+                  <li
+                    key={menu._id}
+                    className='nav-item'
+                    data-bs-dismiss='offcanvas'
+                    aria-label='Close'
+                  >
                     <Link href={menu.path}>
                       <a className='nav-link' aria-current='page'>
                         {menu.name}
@@ -95,9 +98,18 @@ const OffCanvas = () => {
                     menus().menuItems.map(
                       (menu) =>
                         menu.menu === item && (
-                          <li key={menu._id}>
+                          <li
+                            key={menu._id}
+                            data-bs-dismiss='offcanvas'
+                            aria-label='Close'
+                          >
                             <Link href={menu.path}>
-                              <a className='dropdown-item'>{menu.name}</a>
+                              <a
+                                className='dropdown-item'
+                                style={{ fontSize: '0.9rem' }}
+                              >
+                                {menu.name}
+                              </a>
                             </Link>
                           </li>
                         )
@@ -105,18 +117,6 @@ const OffCanvas = () => {
                 </ul>
               </li>
             ))}
-
-          <li className='nav-item'>
-            <Link href='/auth/login'>
-              <a
-                className='nav-link'
-                aria-current='page'
-                onClick={logoutHandler}
-              >
-                <FaPowerOff className='mb-1' /> Logout
-              </a>
-            </Link>
-          </li>
         </ul>
       </>
     )
@@ -124,21 +124,70 @@ const OffCanvas = () => {
 
   return (
     <div
-      className='offcanvas offcanvas-start'
+      className='offcanvas offcanvas-start border-0'
       tabIndex='-1'
       id='offcanvasExample'
       aria-labelledby='offcanvasExampleLabel'
     >
-      <div className='offcanvas-header'>
-        <h5 className='offcanvas-title' id='offcanvasExampleLabel'>
-          Offcanvas
-        </h5>
-        <button
-          type='button'
-          className='btn-close'
+      <div className='offcanvas-header bg-primary py-1 h-25'>
+        {isLoading && <Spinner />}
+        {isError && <Message variant='danger'>{error}</Message>}
+        {data && (
+          <div className='text-center mx-auto' id='offcanvasExampleLabel'>
+            <Link href='/account/profile'>
+              <a>
+                <Image
+                  priority
+                  width='60'
+                  height='60'
+                  src={data.image}
+                  className='img-fluid rounded-pill text-center'
+                  alt='logo'
+                />
+              </a>
+            </Link>
+
+            <div className='info'>
+              <span className='text-white'>
+                {data.name || 'User'}
+                <FaCheckCircle className='text-success mb-1 ms-1' />
+              </span>
+              <div className='text-white'>
+                <span className='text-muted'>{data.type}</span> <br />
+                {data.type === 'driver' && (
+                  <div className='btn-group'>
+                    <button className='btn btn-sm btn-outline-light'>
+                      Points: {data.points}
+                    </button>
+                    <button className='btn btn-sm btn-outline-light'>
+                      Level {data.level || 1}
+                      <FaLevelUpAlt className='mb-1 text-success' />
+                    </button>
+                  </div>
+                )}
+                {data.type === 'rider' && (
+                  <button
+                    className={`btn btn-sm mt-1 w-100 ${
+                      data.expiration < 10
+                        ? 'btn-outline-danger'
+                        : data.expiration < 20
+                        ? 'btn-outline-warning'
+                        : 'btn-outline-light'
+                    }`}
+                  >
+                    Expiration: {data.expiration} days
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <FaTimesCircle
+          className='text-light fs-4 position-absolute top-0 end-0 m-2'
           data-bs-dismiss='offcanvas'
           aria-label='Close'
-        ></button>
+          id='offcanvas-toggle'
+        />
       </div>
       <div className='offcanvas-body'>{authItems()}</div>
     </div>

@@ -7,14 +7,7 @@ import { useForm } from 'react-hook-form'
 import useProfilesHook from '../../utils/api/profiles'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import useUploadHook from '../../utils/api/upload'
-import {
-  inputCheckRadio,
-  inputFile,
-  inputPassword,
-  inputTel,
-  inputText,
-  inputTextArea,
-} from '../../utils/dynamicForm'
+import { inputCheckRadio, inputFile, inputText } from '../../utils/dynamicForm'
 import Image from 'next/image'
 import { Spinner } from '../../components'
 
