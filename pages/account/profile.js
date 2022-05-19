@@ -5,7 +5,6 @@ import withAuth from '../../HOC/withAuth'
 import { FormContainer, Message } from '../../components'
 import { useForm } from 'react-hook-form'
 import useProfilesHook from '../../utils/api/profiles'
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import useUploadHook from '../../utils/api/upload'
 import { inputCheckRadio, inputFile, inputText } from '../../utils/dynamicForm'
 import LazyLoad from 'react-lazyload'
@@ -137,12 +136,6 @@ const Profile = () => {
                 height={200}
               />
             </LazyLoad>
-
-            {data.approved ? (
-              <FaCheckCircle className='text-success position-absolute bottom-0 fs-1' />
-            ) : (
-              <FaTimesCircle className='text-danger position-absolute bottom-0 fs-1' />
-            )}
           </div>
         )}
 

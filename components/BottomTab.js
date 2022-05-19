@@ -38,7 +38,7 @@ function BottomTab() {
                 className={`nav-link active bg-light ${
                   currentPath === item.link && 'shadow rounded-pill p-3'
                 } `}
-                style={{ marginTop: currentPath === item.link ? -20 : 0 }}
+                style={{ marginTop: currentPath === item.link ? -15 : 0 }}
                 aria-current='page'
               >
                 {item.icon}

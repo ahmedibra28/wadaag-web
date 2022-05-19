@@ -128,6 +128,7 @@ const OffCanvas = () => {
       tabIndex='-1'
       id='offcanvasExample'
       aria-labelledby='offcanvasExampleLabel'
+      style={{ width: '250px' }}
     >
       <div className='offcanvas-header bg-primary py-1 h-25'>
         {isLoading && <Spinner />}

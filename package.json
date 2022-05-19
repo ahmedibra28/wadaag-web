@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "set NODE_ENV=production&&nodemon server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -21,7 +21,6 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.2",
     "mongoose": "^6.2.10",
-    "multer": "^1.4.4",
     "next": "12.1.4",
     "next-connect": "^0.12.2",
     "nodemailer": "^6.7.3",
