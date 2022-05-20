@@ -1,9 +1,8 @@
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
 import Head from 'next/head'
-import { FormContainer, Message, Spinner } from '../components'
+import { Message, Spinner } from '../components'
 import { useForm } from 'react-hook-form'
-import { inputText } from '../utils/dynamicForm'
 import { useEffect, useState, useRef } from 'react'
 import {
   useJsApiLoader,
@@ -26,14 +25,13 @@ const Home = () => {
   const [duration, setDuration] = useState('')
   const [libraries] = useState(['places'])
   const [message, setMessage] = useState('')
+  const [currentLocation, setCurrentLocation] = useState('')
 
   /** @type React.MutableRefObject<HTMLDivElement> */
   const originRef = useRef()
 
   /** @type React.MutableRefObject<HTMLDivElement> */
   const destinationRef = useRef()
-
-  const routePolyline = useRef()
 
   const {
     register,
@@ -43,9 +41,33 @@ const Home = () => {
     formState: { errors },
   } = useForm()
 
-  const position = {
-    lat: 2.023543,
-    lng: 45.3312573,
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+      })
+
+      return
+    } else {
+      setMessage('Geolocation is not supported by this browser.')
+      alert('Geolocation is not supported by this browser.')
+    }
+  }
+
+  useEffect(() => {
+    getLocation()
+  }, [])
+
+  useEffect(() => {
+    if (!currentLocation) setMessage('We are unable to get your location.')
+  }, [])
+
+  const center = {
+    lat: 2.037,
+    lng: 45.32,
   }
 
   const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
@@ -58,11 +80,6 @@ const Home = () => {
 
   if (!isLoaded) {
     return <Spinner />
-  }
-
-  const center = {
-    lat: 2.0213184,
-    lng: 45.3272868,
   }
 
   async function submitHandler() {
@@ -164,7 +181,7 @@ const Home = () => {
       </div>
 
       <GoogleMap
-        center={center}
+        center={currentLocation ? currentLocation : center}
         zoom={15}
         mapContainerStyle={{
           width: '100%',
@@ -174,8 +191,7 @@ const Home = () => {
           disableDefaultUI: true,
         }}
       >
-        <Marker position={center} />
-        <Marker position={position} />
+        <Marker position={currentLocation ? currentLocation : center} />
         {directionsResponse && (
           <DirectionsRenderer
             directions={directionsResponse}
