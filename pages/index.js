@@ -179,7 +179,7 @@ const Home = () => {
         zoom={15}
         mapContainerStyle={{
           width: '100%',
-          height: 'calc(55vh )',
+          height: 'calc(63vh )',
         }}
         options={{
           disableDefaultUI: true,
