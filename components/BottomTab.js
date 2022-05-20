@@ -15,12 +15,12 @@ function BottomTab() {
       icon: <FaHome className='fs-3' />,
       link: '/',
     },
-    {
-      id: 2,
-      title: 'Map',
-      icon: <FaMap className='fs-3' />,
-      link: '/map',
-    },
+    // {
+    //   id: 2,
+    //   title: 'Map',
+    //   icon: <FaMap className='fs-3' />,
+    //   link: '/map',
+    // },
     {
       id: 3,
       title: 'Profile',

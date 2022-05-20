@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
 import Head from 'next/head'
+import Link from 'next/link'
 import { Message, Spinner } from '../components'
-import { useForm } from 'react-hook-form'
-import { useEffect, useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   useJsApiLoader,
   GoogleMap,
@@ -17,53 +17,24 @@ import {
   FaTimesCircle,
   FaPaperPlane,
   FaClock,
+  FaArrowAltCircleRight,
 } from 'react-icons/fa'
+import { useSelector, useDispatch } from 'react-redux'
+import { startTrip } from '../redux/slice/trip'
 
 const Home = () => {
-  const [directionsResponse, setDirectionsResponse] = useState(null)
-  const [distance, setDistance] = useState('')
-  const [duration, setDuration] = useState('')
   const [libraries] = useState(['places'])
   const [message, setMessage] = useState('')
-  const [currentLocation, setCurrentLocation] = useState('')
-
   /** @type React.MutableRefObject<HTMLDivElement> */
   const originRef = useRef()
 
   /** @type React.MutableRefObject<HTMLDivElement> */
   const destinationRef = useRef()
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm()
+  const tripString = useSelector((state) => state.trip)
+  const dispatch = useDispatch()
 
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        })
-      })
-
-      return
-    } else {
-      setMessage('Geolocation is not supported by this browser.')
-      alert('Geolocation is not supported by this browser.')
-    }
-  }
-
-  useEffect(() => {
-    getLocation()
-  }, [])
-
-  useEffect(() => {
-    if (!currentLocation) setMessage('We are unable to get your location.')
-  }, [])
+  const trip = JSON.parse(JSON.stringify(tripString))
 
   const center = {
     lat: 2.037,
@@ -92,13 +63,18 @@ const Home = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       })
 
+      dispatch(
+        startTrip({
+          from: originRef.current.value,
+          to: destinationRef.current.value,
+          distance: results.routes[0].legs[0].distance.text,
+          duration: results.routes[0].legs[0].duration.text,
+          directionsResponse: JSON.stringify(results),
+        })
+      )
       setMessage('')
-      setDirectionsResponse(results)
-      setDistance(results.routes[0].legs[0].distance.text)
-      setDuration(results.routes[0].legs[0].duration.text)
     } catch (error) {
       setMessage('No route could be found between the origin and destination.')
-      console.log(error)
     }
     if (originRef.current.value === '' || destinationRef.current.value === '') {
       return
@@ -106,10 +82,16 @@ const Home = () => {
   }
 
   function clearRoute() {
+    dispatch(
+      startTrip({
+        from: '',
+        to: '',
+        distance: '',
+        duration: '',
+        directionsResponse: null,
+      })
+    )
     setMessage('')
-    setDirectionsResponse(null)
-    setDistance('')
-    setDuration('')
     originRef.current.value = ''
     destinationRef.current.value = ''
   }
@@ -124,77 +106,89 @@ const Home = () => {
 
       {message && <Message variant='danger'>{message}</Message>}
 
-      <div>
-        <div className='row my-2'>
-          <div className='col-4 px-2'>
-            <Autocomplete>
+      <div className='row my-2'>
+        <div className='col-lg-4 col-md-6 col-12'>
+          <Autocomplete>
+            <div className='mb-2'>
               <input
                 ref={originRef}
+                defaultValue={trip.from}
                 type='text'
                 className='form-control'
                 placeholder='From where?'
               />
-            </Autocomplete>
-          </div>
-
-          <div className='col-4 px-2'>
-            <Autocomplete>
+            </div>
+          </Autocomplete>
+        </div>
+        <div className='col-lg-4 col-md-6 col-12'>
+          <Autocomplete>
+            <div className='mb-2'>
               <input
                 ref={destinationRef}
+                defaultValue={trip.to}
                 type='text'
                 className='form-control'
                 placeholder='To where?'
               />
-            </Autocomplete>
-          </div>
-
-          <div className='col-4 px-2 btn-group'>
+            </div>
+          </Autocomplete>
+        </div>
+        <div className='col-lg-4 col-md-6 col-12'>
+          <div className='mb-2'>
             <button
               type='submit'
               onClick={submitHandler}
-              className='btn btn-primary shadow-none'
+              className='btn btn-sm btn-primary shadow-none'
             >
               <FaPaperPlane className='mb-1' />
             </button>
-            <button
-              className='btn btn-danger ms-2 shadow-none'
-              onClick={clearRoute}
-            >
-              <FaTimesCircle className='mb-1' />
-            </button>
-          </div>
-          <div className='col-12 mt-1'>
-            <div className='d-flex justify-content-start'>
-              {duration && (
-                <div>
-                  <FaClock className='mb-1 text-primary' /> {duration}
-                </div>
-              )}
-              {distance && (
-                <div className='ms-5'>
-                  <FaTachometerAlt className='mb-1 text-primary' /> {distance}
-                </div>
-              )}
-            </div>
+            {trip.directionsResponse && (
+              <button
+                className='btn btn-sm btn-danger ms-2 shadow-none'
+                onClick={clearRoute}
+              >
+                <FaTimesCircle className='mb-1' />
+              </button>
+            )}
+
+            {trip.duration && (
+              <button className='btn btn-sm btn-light ms-2'>
+                <FaClock className='mb-1 text-primary' /> {trip.duration}
+              </button>
+            )}
+
+            {trip.distance && (
+              <button className='btn btn-sm btn-light ms-2'>
+                <FaTachometerAlt className='mb-1 text-primary' />{' '}
+                {trip.distance}
+              </button>
+            )}
+            {trip.directionsResponse && (
+              <Link href='plate-confirmation'>
+                <a className='btn btn-sm btn-success ms-2 shadow-none float-end'>
+                  <FaArrowAltCircleRight className='mb-1' /> NEXT
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       </div>
 
       <GoogleMap
-        center={currentLocation ? currentLocation : center}
+        center={center}
         zoom={15}
         mapContainerStyle={{
           width: '100%',
-          height: 'calc(100vh - 145px)',
+          height: 'calc(55vh )',
         }}
         options={{
           disableDefaultUI: true,
         }}
       >
-        <Marker position={currentLocation ? currentLocation : center} />
-        {directionsResponse && (
+        <Marker position={center} />
+        {trip.directionsResponse && (
           <DirectionsRenderer
-            directions={directionsResponse}
+            directions={JSON.parse(trip.directionsResponse)}
             options={{
               polylineOptions: {
                 strokeColor: '#5c1a67',
