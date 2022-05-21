@@ -110,6 +110,13 @@ const clientPermissions = [
     auth: true,
     description: 'User Profiles page',
   },
+  {
+    name: 'Plate Confirmation',
+    path: '/plate-confirmation',
+    menu: 'hidden',
+    auth: true,
+    description: 'Plate Confirmation page',
+  },
 ]
 
 const permissions = [
@@ -314,6 +321,27 @@ const permissions = [
     route: '/api/auth/client-permissions/:id',
     auth: true,
     name: 'ClientPermissions',
+    method: 'DELETE',
+  },
+  {
+    description: 'Get All Rider',
+    route: '/api/rides',
+    auth: true,
+    name: 'Rides',
+    method: 'GET',
+  },
+  {
+    description: 'Create New Ride',
+    route: '/api/rides',
+    auth: true,
+    name: 'Rides',
+    method: 'POST',
+  },
+  {
+    description: 'Delete Ride',
+    route: '/api/rides/:id',
+    auth: true,
+    name: 'Rides',
     method: 'DELETE',
   },
 ]

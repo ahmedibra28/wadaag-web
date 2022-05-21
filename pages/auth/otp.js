@@ -79,7 +79,7 @@ const OTP = () => {
         />
         <hr />
       </div>
-      <h3 className='fw-light font-monospace text-center'>OTP Confirmation</h3>
+      {/* <h3 className='fw-light font-monospace text-center'>OTP Confirmation</h3> */}
       {isError && <Message variant='danger'>{error}</Message>}
       {isErrorUserRole && <Message variant='danger'>{errorUserRole}</Message>}
 
@@ -100,7 +100,7 @@ const OTP = () => {
           {isLoading ? (
             <span className='spinner-border spinner-border-sm' />
           ) : (
-            'Sign In'
+            'Confirm'
           )}
         </button>
 

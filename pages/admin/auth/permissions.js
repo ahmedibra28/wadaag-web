@@ -103,17 +103,20 @@ const Permissions = () => {
           method: data.method,
           route: data.route,
           auth: data.auth,
+          description: data.description,
         })
       : mutateAsyncPost(data)
   }
 
   const editHandler = (permission) => {
+    console.log(permission)
     setId(permission._id)
     setEdit(true)
     setValue('name', permission.name)
     setValue('method', permission.method)
     setValue('route', permission.route)
     setValue('auth', permission.auth)
+    setValue('description', permission.description)
   }
 
   return (

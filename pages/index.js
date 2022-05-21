@@ -21,8 +21,11 @@ import {
 } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { startTrip } from '../redux/slice/trip'
+import { useRouter } from 'next/router'
 
 const Home = () => {
+  const router = useRouter()
+
   const [libraries] = useState(['places'])
   const [message, setMessage] = useState('')
   /** @type React.MutableRefObject<HTMLDivElement> */
@@ -31,10 +34,15 @@ const Home = () => {
   /** @type React.MutableRefObject<HTMLDivElement> */
   const destinationRef = useRef()
 
-  const tripString = useSelector((state) => state.trip)
+  const trip = useSelector((state) => JSON.parse(JSON.stringify(state.trip)))
   const dispatch = useDispatch()
 
-  const trip = JSON.parse(JSON.stringify(tripString))
+  useEffect(() => {
+    if (trip.waitRideTwo) {
+      router.push('/wait-for-rider-two')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trip.waitRideTwo, router])
 
   const center = {
     lat: 2.037,
@@ -106,7 +114,7 @@ const Home = () => {
 
       {message && <Message variant='danger'>{message}</Message>}
 
-      <div className='row my-2'>
+      <div className='row gx-1 my-2'>
         <div className='col-lg-4 col-md-6 col-12'>
           <Autocomplete>
             <div className='mb-2'>
@@ -133,8 +141,8 @@ const Home = () => {
             </div>
           </Autocomplete>
         </div>
-        <div className='col-lg-4 col-md-6 col-12'>
-          <div className='mb-2'>
+        <div className='col-lg-4 col-12'>
+          <div className='mb-2 mt-1'>
             <button
               type='submit'
               onClick={submitHandler}
@@ -144,7 +152,7 @@ const Home = () => {
             </button>
             {trip.directionsResponse && (
               <button
-                className='btn btn-sm btn-danger ms-2 shadow-none'
+                className='btn btn-sm btn-danger shadow-none'
                 onClick={clearRoute}
               >
                 <FaTimesCircle className='mb-1' />
@@ -152,20 +160,20 @@ const Home = () => {
             )}
 
             {trip.duration && (
-              <button className='btn btn-sm btn-light ms-2'>
+              <button className='btn btn-sm btn-light ms-1'>
                 <FaClock className='mb-1 text-primary' /> {trip.duration}
               </button>
             )}
 
             {trip.distance && (
-              <button className='btn btn-sm btn-light ms-2'>
+              <button className='btn btn-sm btn-light ms-1'>
                 <FaTachometerAlt className='mb-1 text-primary' />{' '}
                 {trip.distance}
               </button>
             )}
             {trip.directionsResponse && (
               <Link href='plate-confirmation'>
-                <a className='btn btn-sm btn-success ms-2 shadow-none float-end'>
+                <a className='btn btn-sm btn-success ms- shadow-none float-end'>
                   <FaArrowAltCircleRight className='mb-1' /> NEXT
                 </a>
               </Link>

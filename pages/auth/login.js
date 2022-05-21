@@ -51,7 +51,7 @@ const Login = () => {
         />
         <hr />
       </div>
-      <h3 className='fw-light font-monospace text-center'>Sign In / Sign Up</h3>
+      {/* <h3 className='fw-light font-monospace text-center'>Sign In / Sign Up</h3> */}
       {isError && <Message variant='danger'>{error}</Message>}
 
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -71,7 +71,7 @@ const Login = () => {
           {isLoading ? (
             <span className='spinner-border spinner-border-sm' />
           ) : (
-            'Sign In'
+            'Sign In / Sign Up'
           )}
         </button>
       </form>

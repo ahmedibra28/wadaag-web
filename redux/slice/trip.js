@@ -6,6 +6,9 @@ const initialState = {
   distance: '',
   duration: '',
   directionsResponse: null,
+  plate: '',
+  waitRideTwo: false,
+  _id: '',
 }
 
 export const trip = createSlice({
@@ -19,9 +22,24 @@ export const trip = createSlice({
       state.duration = payload.duration
       state.directionsResponse = payload.directionsResponse
     },
+    plateConfirmation: (state, { payload }) => {
+      state.plate = payload.plate
+      state.waitRideTwo = payload.waitRideTwo
+      state._id = payload._id
+    },
+    cancelTrip: (state) => {
+      state.from = ''
+      state.to = ''
+      state.distance = ''
+      state.duration = ''
+      state.directionsResponse = null
+      state.plate = ''
+      state.waitRideTwo = false
+      state._id = ''
+    },
   },
 })
 
-export const { startTrip } = trip.actions
+export const { startTrip, plateConfirmation, cancelTrip } = trip.actions
 
 export default trip.reducer

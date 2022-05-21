@@ -2,6 +2,7 @@ import { Spinner, Message } from '../../'
 import {
   inputCheckBox,
   inputText,
+  inputTextArea,
   staticInputSelect,
 } from '../../../utils/dynamicForm'
 
@@ -77,6 +78,15 @@ const FormPermissions = ({
                   label: 'Route',
                   name: 'route',
                   placeholder: 'Route',
+                })}
+
+                {inputTextArea({
+                  register,
+                  errors,
+                  label: 'Description',
+                  name: 'description',
+                  placeholder: 'Description',
+                  isRequired: false,
                 })}
 
                 {inputCheckBox({
