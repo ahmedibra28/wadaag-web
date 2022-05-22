@@ -44,25 +44,23 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db()
   try {
-    const { from, to, distance, duration, plate } = req.body
+    const { from, to, distance, duration, plate, directionsResponse } = req.body
     const rider = req.user._id
 
-    if (!from || !to || !distance || !duration || !plate)
+    if (!from || !to || !distance || !duration || !plate || !directionsResponse)
       return res.status(400).json({ error: 'Please fill all the fields' })
 
-    const riderOne = [
-      {
+    const object = await schemaName.create({
+      riderOne: {
         rider,
         from,
         to,
         distance,
         duration,
         plate,
+        directionsResponse,
       },
-    ]
-
-    const object = await schemaName.create({
-      riderOne,
+      riderTow: undefined,
     })
     res.status(200).send(object)
   } catch (error) {

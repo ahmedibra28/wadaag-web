@@ -109,7 +109,6 @@ const Permissions = () => {
   }
 
   const editHandler = (permission) => {
-    console.log(permission)
     setId(permission._id)
     setEdit(true)
     setValue('name', permission.name)

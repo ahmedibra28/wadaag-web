@@ -22,6 +22,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 import { startTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
+import useRidesHook from '../utils/api/rides'
 
 const Home = () => {
   const router = useRouter()
@@ -37,12 +38,19 @@ const Home = () => {
   const trip = useSelector((state) => JSON.parse(JSON.stringify(state.trip)))
   const dispatch = useDispatch()
 
+  const { getPendingRider } = useRidesHook({
+    page: 1,
+    limit: 25,
+  })
+
+  const { data } = getPendingRider
+
+
   useEffect(() => {
-    if (trip.waitRideTwo) {
-      router.push('/wait-for-rider-two')
+    if (data && data._id) {
+      router.push(`/wait-for-rider-two`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trip.waitRideTwo, router])
+  }, [data, router])
 
   const center = {
     lat: 2.037,

@@ -33,11 +33,24 @@ export const isAuth = async (req, res, next) => {
 
       let { url, method } = req
 
+      if (url.includes('?')) {
+        const queryNoStatus = url.split('?')[0]
+        const queryStatus = url.split('?')[1]
+
+        if (queryStatus.includes('status')) {
+          url = queryNoStatus
+        }
+      }
+
       const urlArray = url.split('/')
       const lastIndex = urlArray.pop()
 
       if (lastIndex.length > 18 && !lastIndex.includes('q')) {
         const queryKey = Object.keys(req.query)
+
+        if (queryKey.includes('status')) {
+          queryKey.splice(queryKey.indexOf('status'), 1)
+        }
         url = urlArray.join('/') + '/' + `:${queryKey[0]}`
       }
 
@@ -71,6 +84,7 @@ export const isAuth = async (req, res, next) => {
           .send({ error: 'You do not have permission to access this route' })
       }
 
+      url = req.url
       next()
     } catch (error) {
       res.status(401).json({ error: 'Unauthorized' })

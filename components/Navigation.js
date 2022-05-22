@@ -60,7 +60,7 @@ const Navigation = () => {
           <li className='nav-item ms-3'>
             <Link href='/'>
               <a className='nav-link' aria-current='page'>
-                <FaBell className='fs-6' />
+                <FaBell className='fs-5' />
               </a>
             </Link>
           </li>
@@ -72,7 +72,7 @@ const Navigation = () => {
                 aria-current='page'
                 onClick={logoutHandler}
               >
-                <FaPowerOff className='fs-6' />
+                <FaPowerOff className='fs-5' />
               </a>
             </Link>
           </li>

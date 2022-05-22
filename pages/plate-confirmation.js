@@ -41,14 +41,12 @@ const PlateConfirmation = () => {
   const submitHandler = async (data) => {
     dispatch(plateConfirmation({ plate: data.plate }))
 
-    console.log('Check error', isErrorRide)
-
     setShowConfirmation(true)
   }
 
   useEffect(() => {
     if (isSuccessRide) {
-      dispatch(plateConfirmation({ waitRideTwo: true, _id: dataRide._id }))
+      dispatch(plateConfirmation({ id: dataRide._id }))
       router.push('/wait-for-rider-two')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,6 +55,13 @@ const PlateConfirmation = () => {
   const confirmRideHandler = () => {
     rideMutateAsync(trip)
   }
+
+  useEffect(() => {
+    if (!trip || !trip.from || !trip.to) {
+      router.push('/')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const cancelRideHandler = () => {
     dispatch(plateConfirmation({ plate: '' }))

@@ -25,11 +25,18 @@ export default function useRidesHook(props) {
   )
 
   const deleteRide = useMutation(
-    async (id) => await dynamicAPI('delete', `${url}/${id}`, {}),
+    async ({ id, status }) =>
+      await dynamicAPI('delete', `${url}/${id}?status=${status}`, {}),
     {
       retry: 0,
-      onSuccess: () => queryClient.invalidateQueries([queryKey]),
+      onSuccess: () => queryClient.invalidateQueries('pending-rider-by-id'),
     }
+  )
+
+  const getPendingRider = useQuery(
+    'pending-rider-by-id',
+    async () => await dynamicAPI('get', `${url}/pending`, {}),
+    { retry: 0 }
   )
 
   const postRide = useMutation(
@@ -45,5 +52,6 @@ export default function useRidesHook(props) {
     updateRide,
     deleteRide,
     postRide,
+    getPendingRider,
   }
 }

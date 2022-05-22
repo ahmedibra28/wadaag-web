@@ -7,19 +7,40 @@ const schemaName = Ride
 const schemaNameString = 'Ride'
 
 const handler = nc()
+
 handler.use(isAuth)
-handler.put(async (req, res) => {})
 
 handler.delete(async (req, res) => {
   await db()
   try {
-    const { id } = req.query
+    const { id, status } = req.query
+
     const object = await schemaName.findById(id)
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })
 
-    await object.remove()
-    res.status(200).json({ message: `${schemaNameString} removed` })
+    if (status === 'cancelled') {
+      object.status = 'cancelled'
+      await object.save()
+      return res.status(200).json({ message: `${schemaNameString} cancelled` })
+    }
+
+    if (status === 'confirmed') {
+      object.status = 'confirmed'
+      await object.save()
+      return res.status(200).json({ message: `${schemaNameString} confirmed` })
+    }
+
+    if (status === 'pending') {
+      object.status = 'pending'
+      await object.save()
+      return res.status(200).json({ message: `${schemaNameString} pending` })
+    }
+
+    if (status === 'delete') {
+      await object.remove()
+      return res.status(200).json({ message: `${schemaNameString} deleted` })
+    }
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

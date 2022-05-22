@@ -344,6 +344,13 @@ const permissions = [
     name: 'Rides',
     method: 'DELETE',
   },
+  {
+    description: 'Get Pending Rider',
+    route: '/api/rides/pending',
+    auth: true,
+    name: 'Rides',
+    method: 'GET',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

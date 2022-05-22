@@ -1,18 +1,21 @@
+import { useEffect } from 'react'
 import useRidesHook from '../utils/api/rides'
 import { confirmAlert } from 'react-confirm-alert'
-import { Confirm } from '../components'
+import { Confirm, Message } from '../components'
 import { FaTrash } from 'react-icons/fa'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { cancelTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
 
 const WaitingForRiderTwo = () => {
   const router = useRouter()
 
-  const { deleteRide } = useRidesHook({
+  const { deleteRide, getPendingRider } = useRidesHook({
     page: 1,
     limit: 25,
   })
+
+  const { data } = getPendingRider
 
   const {
     isLoading: isLoadingDelete,
@@ -22,28 +25,36 @@ const WaitingForRiderTwo = () => {
     mutateAsync: mutateAsyncDelete,
   } = deleteRide
 
-  const trip = useSelector((state) => JSON.parse(JSON.stringify(state.trip)))
   const dispatch = useDispatch()
 
   const deleteHandler = (id) => {
+    const dataId = id ? id : data._id
     confirmAlert(
       Confirm(() => {
-        mutateAsyncDelete(id)
-        dispatch(cancelTrip())
-        router.push('/')
+        mutateAsyncDelete({ id: dataId, status: 'cancelled' })
       })
     )
   }
 
+  useEffect(() => {
+    if (isSuccessDelete) {
+      router.push('/')
+      dispatch(cancelTrip())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessDelete])
+
   return (
     <div className='text-center'>
+      {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
+
       <div className='text-center alert alert-success'>
         Your ride has been confirmed. Thank you for using our service.
       </div>
 
       <button
         className='btn btn-danger btn-sm'
-        onClick={() => deleteHandler(trip._id)}
+        onClick={() => deleteHandler(data && data._id)}
         disabled={isLoadingDelete}
       >
         {isLoadingDelete ? (
