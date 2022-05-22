@@ -25,10 +25,10 @@ handler.delete(async (req, res) => {
       return res.status(200).json({ message: `${schemaNameString} cancelled` })
     }
 
-    if (status === 'confirmed') {
-      object.status = 'confirmed'
+    if (status === 'completed') {
+      object.status = 'completed'
       await object.save()
-      return res.status(200).json({ message: `${schemaNameString} confirmed` })
+      return res.status(200).json({ message: `${schemaNameString} completed` })
     }
 
     if (status === 'pending') {

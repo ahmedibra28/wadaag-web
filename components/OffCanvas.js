@@ -56,6 +56,7 @@ const OffCanvas = () => {
       <>
         <ul className='navbar-nav ms-auto'>
           {menus() &&
+            menus().menuItems &&
             menus().menuItems.map(
               (menu) =>
                 menu.menu === 'normal' &&

@@ -47,7 +47,7 @@ const PlateConfirmation = () => {
   useEffect(() => {
     if (isSuccessRide) {
       dispatch(plateConfirmation({ id: dataRide._id }))
-      router.push('/wait-for-rider-two')
+      router.replace('/wait-for-rider-two')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessRide])
@@ -58,14 +58,14 @@ const PlateConfirmation = () => {
 
   useEffect(() => {
     if (!trip || !trip.from || !trip.to) {
-      router.push('/')
+      router.replace('/')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const cancelRideHandler = () => {
     dispatch(plateConfirmation({ plate: '' }))
-    router.push('/')
+    router.replace('/')
   }
 
   return (
@@ -79,7 +79,10 @@ const PlateConfirmation = () => {
 
       {showConfirmation ? (
         <div className='text-center'>
-          <p>Please, click on the button below to confirm your ride.</p>
+          <p>
+            Please, click <strong>Confirm Ride</strong> to continue or{' '}
+            <strong>Cancel ride</strong> to go back!
+          </p>
 
           <div className='btn-group'>
             <button

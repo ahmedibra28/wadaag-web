@@ -32,7 +32,7 @@ const rideScheme = mongoose.Schema(
 
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'cancelled'],
+      enum: ['pending', 'completed', 'cancelled'],
       default: 'pending',
     },
   },

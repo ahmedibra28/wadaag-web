@@ -43,13 +43,13 @@ const Home = () => {
     limit: 25,
   })
 
-  const { data } = getPendingRider
-
+  const { data, isLoading } = getPendingRider
 
   useEffect(() => {
-    if (data && data._id) {
-      router.push(`/wait-for-rider-two`)
+    if (!isLoading && data && data._id) {
+      router.replace(`/wait-for-rider-two`)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, router])
 
   const center = {
