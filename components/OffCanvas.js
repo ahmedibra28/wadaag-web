@@ -141,9 +141,12 @@ const OffCanvas = () => {
                   <img
                     src={data.image}
                     alt='avatar'
-                    className='img-fluid rounded-pill text-center'
-                    width={60}
-                    height={60}
+                    className='img-fluid rounded-circle text-center'
+                    style={{
+                      objectFit: 'cover',
+                      height: '60px',
+                      width: '60px',
+                    }}
                   />
                 </LazyLoad>
               </a>

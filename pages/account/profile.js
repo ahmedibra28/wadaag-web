@@ -127,13 +127,16 @@ const Profile = () => {
           ))}
         {data && data.image && (
           <div className='d-flex justify-content-center position-relative'>
-            <LazyLoad height={200} once>
+            <LazyLoad height={150} once>
               <img
                 src={data && data.image}
                 alt='avatar'
-                className='img-fluid rounded-circle'
-                width={200}
-                height={200}
+                className='img-fluid img-thumbnail rounded-circle'
+                style={{
+                  objectFit: 'cover',
+                  height: '150px',
+                  width: '150px',
+                }}
               />
             </LazyLoad>
           </div>
