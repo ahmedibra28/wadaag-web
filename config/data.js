@@ -124,6 +124,13 @@ const clientPermissions = [
     auth: true,
     description: 'Ride waiting page',
   },
+  {
+    name: 'Riders',
+    path: '/riders',
+    menu: 'hidden',
+    auth: true,
+    description: 'Near Riders page',
+  },
 ]
 
 const permissions = [
@@ -357,6 +364,13 @@ const permissions = [
     auth: true,
     name: 'Rides',
     method: 'GET',
+  },
+  {
+    description: 'Get Near Riders',
+    route: '/api/rides/near-riders',
+    auth: true,
+    name: 'Rides',
+    method: 'POST',
   },
 ]
 

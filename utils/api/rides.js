@@ -47,11 +47,20 @@ export default function useRidesHook(props) {
     }
   )
 
+  const postNearRiders = useMutation(
+    async (obj) => await dynamicAPI('post', `${url}/near-riders`, obj),
+    {
+      retry: 0,
+      onSuccess: () => queryClient.invalidateQueries(['near riders']),
+    }
+  )
+
   return {
     getPendingRider,
     getRides,
     updateRide,
     deleteRide,
     postRide,
+    postNearRiders,
   }
 }

@@ -11,7 +11,7 @@ import useAuthHook from '../utils/api/auth'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
-import { cancelTrip } from '../redux/slice/trip'
+import { cancelRiderTwoTrip, cancelTrip } from '../redux/slice/trip'
 
 const Navigation = () => {
   const router = useRouter()
@@ -26,6 +26,7 @@ const Navigation = () => {
   const logoutHandler = () => {
     mutateAsync({})
     dispatch(cancelTrip())
+    dispatch(cancelRiderTwoTrip())
   }
 
   const userInfo =

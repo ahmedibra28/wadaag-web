@@ -13,7 +13,8 @@ const rideScheme = mongoose.Schema(
       to: { type: String, required: true },
       distance: { type: String, required: true },
       duration: { type: String, required: true },
-      directionsResponse: { type: Object, required: true },
+      originLatLng: { type: String, required: true },
+      destinationLatLng: { type: String, required: true },
       plate: { type: String, required: true },
     },
 
@@ -26,7 +27,8 @@ const rideScheme = mongoose.Schema(
       to: String,
       distance: String,
       duration: String,
-      directionsResponse: Object,
+      originLatLng: String,
+      destinationLatLng: String,
       plate: String,
     },
 

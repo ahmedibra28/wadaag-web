@@ -8,6 +8,8 @@ const initialState = {
   directionsResponse: null,
   plate: '',
   _id: '',
+  originLatLng: null,
+  destinationLatLng: null,
   riderTwo: {
     from: '',
     to: '',
@@ -16,6 +18,8 @@ const initialState = {
     directionsResponse: null,
     plate: '',
     _id: '',
+    originLatLng: null,
+    destinationLatLng: null,
   },
 }
 
@@ -29,6 +33,8 @@ export const trip = createSlice({
       state.distance = payload.distance
       state.duration = payload.duration
       state.directionsResponse = payload.directionsResponse
+      state.originLatLng = payload.originLatLng
+      state.destinationLatLng = payload.destinationLatLng
     },
     plateConfirmation: (state, { payload }) => {
       state.plate = payload.plate
@@ -42,6 +48,8 @@ export const trip = createSlice({
       state.directionsResponse = null
       state.plate = ''
       state._id = ''
+      state.originLatLng = null
+      state.destinationLatLng = null
     },
     startRiderTwoTrip: (state, { payload }) => {
       state.riderTwo.from = payload.from
@@ -51,6 +59,8 @@ export const trip = createSlice({
       state.riderTwo.directionsResponse = payload.directionsResponse
       state.riderTwo.plate = payload.plate
       state.riderTwo._id = payload._id
+      state.riderTwo.originLatLng = payload.originLatLng
+      state.riderTwo.destinationLatLng = payload.destinationLatLng
     },
     cancelRiderTwoTrip: (state) => {
       state.riderTwo.from = ''
@@ -60,6 +70,8 @@ export const trip = createSlice({
       state.riderTwo.directionsResponse = null
       state.riderTwo.plate = ''
       state.riderTwo._id = ''
+      state.riderTwo.originLatLng = null
+      state.riderTwo.destinationLatLng = null
     },
   },
 })

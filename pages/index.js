@@ -20,7 +20,7 @@ import {
   FaArrowAltCircleRight,
 } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
-import { startTrip } from '../redux/slice/trip'
+import { cancelTrip, startTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
 import useRidesHook from '../utils/api/rides'
 
@@ -85,6 +85,14 @@ const Home = () => {
           distance: results.routes[0].legs[0].distance.text,
           duration: results.routes[0].legs[0].duration.text,
           directionsResponse: JSON.stringify(results),
+          originLatLng:
+            results.routes[0].legs[0].start_location.lat() +
+            ',' +
+            results.routes[0].legs[0].start_location.lng(),
+          destinationLatLng:
+            results.routes[0].legs[0].end_location.lat() +
+            ',' +
+            results.routes[0].legs[0].end_location.lng(),
         })
       )
       setMessage('')
@@ -97,15 +105,7 @@ const Home = () => {
   }
 
   function clearRoute() {
-    dispatch(
-      startTrip({
-        from: '',
-        to: '',
-        distance: '',
-        duration: '',
-        directionsResponse: null,
-      })
-    )
+    dispatch(cancelTrip())
     setMessage('')
     originRef.current.value = ''
     destinationRef.current.value = ''
