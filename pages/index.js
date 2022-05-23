@@ -15,7 +15,7 @@ import {
 import {
   FaTachometerAlt,
   FaTimesCircle,
-  FaPaperPlane,
+  FaSearchLocation,
   FaClock,
   FaArrowAltCircleRight,
 } from 'react-icons/fa'
@@ -43,13 +43,12 @@ const Home = () => {
     limit: 25,
   })
 
-  const { data, isLoading } = getPendingRider
+  const { data } = getPendingRider
 
   useEffect(() => {
-    if (!isLoading && data && data._id) {
-      router.replace(`/wait-for-rider-two`)
+    if (data) {
+      router.push('/ride-waiting')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, router])
 
   const center = {
@@ -156,7 +155,7 @@ const Home = () => {
               onClick={submitHandler}
               className='btn btn-sm btn-primary shadow-none'
             >
-              <FaPaperPlane className='mb-1' />
+              <FaSearchLocation className='mb-1' />
             </button>
             {trip.directionsResponse && (
               <button

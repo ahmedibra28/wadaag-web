@@ -117,6 +117,13 @@ const clientPermissions = [
     auth: true,
     description: 'Plate Confirmation page',
   },
+  {
+    name: 'Ride Waiting',
+    path: '/ride-waiting',
+    menu: 'hidden',
+    auth: true,
+    description: 'Ride waiting page',
+  },
 ]
 
 const permissions = [

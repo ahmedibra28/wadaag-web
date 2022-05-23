@@ -8,6 +8,15 @@ const initialState = {
   directionsResponse: null,
   plate: '',
   _id: '',
+  riderTwo: {
+    from: '',
+    to: '',
+    duration: '',
+    distance: '',
+    directionsResponse: null,
+    plate: '',
+    _id: '',
+  },
 }
 
 export const trip = createSlice({
@@ -34,9 +43,33 @@ export const trip = createSlice({
       state.plate = ''
       state._id = ''
     },
+    startRiderTwoTrip: (state, { payload }) => {
+      state.riderTwo.from = payload.from
+      state.riderTwo.to = payload.to
+      state.riderTwo.distance = payload.distance
+      state.riderTwo.duration = payload.duration
+      state.riderTwo.directionsResponse = payload.directionsResponse
+      state.riderTwo.plate = payload.plate
+      state.riderTwo._id = payload._id
+    },
+    cancelRiderTwoTrip: (state) => {
+      state.riderTwo.from = ''
+      state.riderTwo.to = ''
+      state.riderTwo.distance = ''
+      state.riderTwo.duration = ''
+      state.riderTwo.directionsResponse = null
+      state.riderTwo.plate = ''
+      state.riderTwo._id = ''
+    },
   },
 })
 
-export const { startTrip, plateConfirmation, cancelTrip } = trip.actions
+export const {
+  startTrip,
+  plateConfirmation,
+  cancelTrip,
+  startRiderTwoTrip,
+  cancelRiderTwoTrip,
+} = trip.actions
 
 export default trip.reducer

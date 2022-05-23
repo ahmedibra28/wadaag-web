@@ -47,7 +47,7 @@ const PlateConfirmation = () => {
   useEffect(() => {
     if (isSuccessRide) {
       dispatch(plateConfirmation({ id: dataRide._id }))
-      router.replace('/wait-for-rider-two')
+      router.replace('/ride-waiting')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessRide])

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import useRidesHook from '../utils/api/rides'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm, Message } from '../components'
@@ -6,8 +7,9 @@ import { FaTrash, FaCheckCircle } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
 import { cancelTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
+import withAuth from '../HOC/withAuth'
 
-const WaitingForRiderTwo = () => {
+const RideWaiting = () => {
   const router = useRouter()
 
   const { deleteRide, getPendingRider } = useRidesHook({
@@ -15,7 +17,7 @@ const WaitingForRiderTwo = () => {
     limit: 25,
   })
 
-  const { data, isLoading } = getPendingRider
+  const { data } = getPendingRider
 
   const {
     isLoading: isLoadingDelete,
@@ -46,11 +48,10 @@ const WaitingForRiderTwo = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && data && !data._id) {
+    if (!data) {
       router.replace('/')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [data, router])
 
   useEffect(() => {
     if (isSuccessDelete) {
@@ -110,4 +111,6 @@ const WaitingForRiderTwo = () => {
   )
 }
 
-export default WaitingForRiderTwo
+export default dynamic(() => Promise.resolve(withAuth(RideWaiting)), {
+  ssr: false,
+})

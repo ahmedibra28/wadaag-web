@@ -1,4 +1,4 @@
-import { FaHome, FaMap, FaUser } from 'react-icons/fa'
+import { FaHome, FaSearchLocation, FaUser } from 'react-icons/fa'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
@@ -15,12 +15,12 @@ function BottomTab() {
       icon: <FaHome className='fs-3' />,
       link: '/',
     },
-    // {
-    //   id: 2,
-    //   title: 'Map',
-    //   icon: <FaMap className='fs-3' />,
-    //   link: '/map',
-    // },
+    {
+      id: 2,
+      title: 'Riders',
+      icon: <FaSearchLocation className='fs-3' />,
+      link: '/riders',
+    },
     {
       id: 3,
       title: 'Profile',
@@ -30,18 +30,24 @@ function BottomTab() {
   ]
   return (
     <div className='position-fixed bottom-0 bg-light w-100'>
-      <ul className='nav justify-content-between bg-light p-2'>
+      <ul className='nav justify-content-between bg-light p-1'>
         {items.map((item) => (
           <li key={item.id} className='nav-item'>
             <Link href={item.link}>
               <a
-                className={`nav-link active bg-light ${
-                  currentPath === item.link && 'shadow rounded-pill p-3'
+                className={`nav-link active bg-light py-0 text-center ${
+                  currentPath === item.link && 'shadow rounded-pill py-2'
                 } `}
-                style={{ marginTop: currentPath === item.link ? -15 : 0 }}
+                style={{
+                  marginTop: currentPath === item.link ? -15 : 0,
+                  transition: 'all 0.3s ease-in-out',
+                }}
                 aria-current='page'
               >
-                {item.icon}
+                {item.icon} <br />
+                <span className='' style={{ fontSize: 12 }}>
+                  {item.title}
+                </span>
               </a>
             </Link>
           </li>

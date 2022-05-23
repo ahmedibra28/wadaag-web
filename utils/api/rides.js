@@ -29,12 +29,12 @@ export default function useRidesHook(props) {
       await dynamicAPI('delete', `${url}/${id}?status=${status}`, {}),
     {
       retry: 0,
-      onSuccess: () => queryClient.invalidateQueries('pending-rider-by-id'),
+      onSuccess: () => queryClient.invalidateQueries('rides-pending'),
     }
   )
 
   const getPendingRider = useQuery(
-    'pending-rider-by-id',
+    'rides-pending',
     async () => await dynamicAPI('get', `${url}/pending`, {}),
     { retry: 0 }
   )
@@ -48,10 +48,10 @@ export default function useRidesHook(props) {
   )
 
   return {
+    getPendingRider,
     getRides,
     updateRide,
     deleteRide,
     postRide,
-    getPendingRider,
   }
 }

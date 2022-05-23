@@ -11,18 +11,18 @@ handler.get(async (req, res) => {
   await db()
 
   try {
-    const _id = req.user.id
+    const { _id } = req.user
 
-    const ride = await schemaName.findOne({
-      status: 'pending',
-      'riderOne.rider': _id,
-    })
+    const ride = await schemaName
+      .findOne({
+        status: 'pending',
+        'riderOne.rider': _id,
+      })
+      .lean()
 
-    if (ride) return res.status(200).json(ride)
-
-    return res.status(200).json({ message: 'No pending rides' })
+    return res.status(200).send(ride)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).send({ error: error.message })
   }
 })
 
