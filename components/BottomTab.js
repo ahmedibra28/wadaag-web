@@ -30,7 +30,7 @@ function BottomTab() {
   ]
   return (
     <div className='position-fixed bottom-0 bg-light w-100'>
-      <ul className='nav justify-content-between bg-light p-1'>
+      <ul className='nav justify-content-between bg-light p-1 container'>
         {items.map((item) => (
           <li key={item.id} className='nav-item'>
             <Link href={item.link}>
