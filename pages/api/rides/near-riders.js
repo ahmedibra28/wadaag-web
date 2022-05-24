@@ -1,5 +1,6 @@
 import nc from 'next-connect'
 import db from '../../../config/db'
+import Profile from '../../../models/Profile'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
 
@@ -49,9 +50,31 @@ handler.post(async (req, res) => {
           ) < 0.005
       )
 
-    console.log(nearDestination)
+    const results = Promise.all(
+      nearDestination.map(async (near) => {
+        const profile = await Profile.findOne({
+          user: near.riderOne.rider,
+        })
+          .lean()
+          .populate('user', ['name', 'mobileNumber'])
 
-    return res.status(200).send(nearDestination)
+        return {
+          _id: near._id,
+          rider: near.riderOne.rider,
+          name: profile?.name || 'unknown',
+          mobileNumber: profile?.user?.mobileNumber,
+          image: profile?.image,
+          from: near.riderOne.from,
+          to: near.riderOne.to,
+          plate: near.riderOne.plate,
+          createdAt: near.createdAt,
+        }
+      })
+    )
+
+    const objects = await results
+
+    return res.status(200).send(objects)
   } catch (error) {
     res.status(500).send({ error: error.message })
   }

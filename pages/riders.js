@@ -246,58 +246,67 @@ const Riders = () => {
         </div>
       </div>
 
-      <div className='row gy-3'>
-        {riders.map((rider) => (
-          <div key={rider._id} className='col-lg-4 col-md-6 col-12'>
-            <div className='card shadow border-0'>
-              <div className='card-body p-2'>
-                <div className='row'>
-                  <div className='col-3 my-auto'>
-                    <LazyLoad height={63} once>
-                      <img
-                        src={rider.image}
-                        alt='avatar'
-                        className='img-fluid img-thumbnail rounded-circle'
-                        style={{
-                          objectFit: 'cover',
-                          height: '63px',
-                          width: '63px',
-                        }}
-                      />
-                    </LazyLoad>
-                  </div>
-                  <div
-                    className='col-7 my-auto border border-primary  border-top-0 border-bottom-0'
-                    style={{ fontSize: 12 }}
-                  >
-                    <div className='fw-bold text-primary fs-6'>
-                      <FaSignature /> {rider.name}
-                    </div>
+      {isLoadingPost ? (
+        <Spinner />
+      ) : isErrorPost ? (
+        <Message variant='danger'>{errorPost}</Message>
+      ) : (
+        <div className='row gy-3'>
+          {dataPost &&
+            dataPost.map((rider) => (
+              <div key={rider._id} className='col-lg-4 col-md-6 col-12'>
+                <div className='card shadow border-0'>
+                  <div className='card-body p-2'>
+                    <div className='row'>
+                      <div className='col-3 my-auto'>
+                        <LazyLoad height={63} once>
+                          <img
+                            src={rider.image}
+                            alt='avatar'
+                            className='img-fluid img-thumbnail rounded-circle'
+                            style={{
+                              objectFit: 'cover',
+                              height: '63px',
+                              width: '63px',
+                            }}
+                          />
+                        </LazyLoad>
+                      </div>
+                      <div
+                        className='col-7 my-auto border border-primary  border-top-0 border-bottom-0'
+                        style={{ fontSize: 12 }}
+                      >
+                        <div className='fw-bold text-primary fs-6'>
+                          <FaSignature /> {rider.name}
+                        </div>
 
-                    <div>
-                      <FaPhoneAlt className='text-primary' /> {rider.mobile}
+                        <div>
+                          <FaPhoneAlt className='text-primary' />{' '}
+                          {rider.mobileNumber}
+                        </div>
+                        <div>
+                          <FaMapPin className='text-primary' /> {rider.from}
+                        </div>
+                        <div>
+                          <FaFlagCheckered className='text-primary' />{' '}
+                          {rider.to}
+                        </div>
+                      </div>
+                      <div className='col-2 my-auto '>
+                        <button
+                          className='btn btn-primary btn-sm rounded-circle'
+                          onClick={() => chatHandler(rider)}
+                        >
+                          <FaRocketchat />{' '}
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <FaMapPin className='text-primary' /> {rider.from}
-                    </div>
-                    <div>
-                      <FaFlagCheckered className='text-primary' /> {rider.to}
-                    </div>
-                  </div>
-                  <div className='col-2 my-auto '>
-                    <button
-                      className='btn btn-primary btn-sm rounded-circle'
-                      onClick={() => chatHandler(rider)}
-                    >
-                      <FaRocketchat />{' '}
-                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            ))}
+        </div>
+      )}
     </>
   )
 }
