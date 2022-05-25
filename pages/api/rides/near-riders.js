@@ -50,6 +50,9 @@ handler.post(async (req, res) => {
           ) < 0.005
       )
 
+    if (!nearDestination)
+      return res.status(400).json({ error: 'No riders found at your location' })
+
     const results = Promise.all(
       nearDestination.map(async (near) => {
         const profile = await Profile.findOne({
@@ -73,6 +76,8 @@ handler.post(async (req, res) => {
     )
 
     const objects = await results
+
+    console.log(objects)
 
     return res.status(200).send(objects)
   } catch (error) {

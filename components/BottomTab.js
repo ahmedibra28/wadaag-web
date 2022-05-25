@@ -1,4 +1,4 @@
-import { FaHome, FaSearchLocation, FaUser } from 'react-icons/fa'
+import { FaHome, FaSearchLocation, FaUser, FaRocketchat } from 'react-icons/fa'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
@@ -23,6 +23,12 @@ function BottomTab() {
     },
     {
       id: 3,
+      title: 'Chat',
+      icon: <FaRocketchat className='fs-3' />,
+      link: '/chat',
+    },
+    {
+      id: 4,
       title: 'Profile',
       icon: <FaUser className='fs-3' />,
       link: '/account/profile',

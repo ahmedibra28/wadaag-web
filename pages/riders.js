@@ -70,41 +70,11 @@ const Riders = () => {
     return <Spinner />
   }
 
-  const riders = [
-    {
-      _id: 1,
-      mobile: '+252615301507',
-      name: 'John Doe',
-      from: 'Alakananda',
-      to: 'Kathmandu',
-      distance: '2.3 km',
-      duration: '1 hour',
-      image: 'https://github.com/ahmaat19.png',
-    },
-    {
-      _id: 2,
-      mobile: '+252615301507',
-      name: 'John Doe',
-      from: 'Alakananda',
-      to: 'Kathmandu',
-      distance: '2.3 km',
-      duration: '1 hour',
-      image: 'https://github.com/ibrahim.png',
-    },
-    {
-      _id: 3,
-      mobile: '+252615301507',
-      name: 'John Doe',
-      from: 'Alakananda',
-      to: 'Kathmandu',
-      distance: '2.3 km',
-      duration: '1 hour',
-      image: 'https://github.com/sara.png',
-    },
-  ]
-
   const chatHandler = (rider) => {
     console.log('chatHandler', rider)
+    router.push(`/chat`)
+
+    // click markii la siiyo ku save gareey rider kaas tablke chat ka marka chat ka tabel ka la tago soo bixi datada ee uso hormari
   }
 
   async function submitHandler() {
@@ -166,6 +136,10 @@ const Riders = () => {
     <>
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
       {message && <Message variant='danger'>{message}</Message>}
+
+      {dataPost && dataPost.length === 0 && (
+        <Message variant='danger'>No riders found near you 😢</Message>
+      )}
 
       {/* {isLoading && <Spinner />} */}
       <div className='bg-light p-3 mb-3'>
