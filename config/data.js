@@ -131,6 +131,27 @@ const clientPermissions = [
     auth: true,
     description: 'Near Riders page',
   },
+  {
+    name: 'Chats',
+    path: '/chats',
+    menu: 'hidden',
+    auth: true,
+    description: 'Chats page',
+  },
+  {
+    name: 'Chatting',
+    path: '/chats/:id',
+    menu: 'hidden',
+    auth: true,
+    description: 'Individual Chat page',
+  },
+  {
+    name: 'Chat History',
+    path: '/chats/histories',
+    menu: 'hidden',
+    auth: true,
+    description: 'Chat History page',
+  },
 ]
 
 const permissions = [
@@ -338,7 +359,7 @@ const permissions = [
     method: 'DELETE',
   },
   {
-    description: 'Get All Rider',
+    description: 'Get All Rides',
     route: '/api/rides',
     auth: true,
     name: 'Rides',
@@ -371,6 +392,34 @@ const permissions = [
     auth: true,
     name: 'Rides',
     method: 'POST',
+  },
+  {
+    description: 'Get All Chats',
+    route: '/api/chats',
+    auth: true,
+    name: 'Chats',
+    method: 'GET',
+  },
+  {
+    description: 'Create New Chat',
+    route: '/api/chats',
+    auth: true,
+    name: 'Chats',
+    method: 'POST',
+  },
+  {
+    description: 'Get Chat History By Id',
+    route: '/api/chats/histories',
+    auth: true,
+    name: 'Chats',
+    method: 'GET',
+  },
+  {
+    description: 'Get Chat Chatting By Id',
+    route: '/api/chats/:id',
+    auth: true,
+    name: 'Chats',
+    method: 'GET',
   },
 ]
 

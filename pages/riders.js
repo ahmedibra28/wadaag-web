@@ -19,6 +19,7 @@ import LazyLoad from 'react-lazyload'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { cancelRiderTwoTrip, startRiderTwoTrip } from '../redux/slice/trip'
 import useRidesHook from '../utils/api/rides'
+import useChatsHook from '../utils/api/chats'
 import { useRouter } from 'next/router'
 
 const Riders = () => {
@@ -33,11 +34,18 @@ const Riders = () => {
   /** @type React.MutableRefObject<HTMLDivElement> */
   const destinationRef = useRef()
 
+  const [temp, setTemp] = useState('')
+
   const trip = useSelector((state) =>
     JSON.parse(JSON.stringify(state.trip.riderTwo))
   )
 
   const { getPendingRider, postNearRiders } = useRidesHook({
+    page: 1,
+    limit: 25,
+  })
+
+  const { postChat } = useChatsHook({
     page: 1,
     limit: 25,
   })
@@ -52,11 +60,26 @@ const Riders = () => {
     data: dataPost,
   } = postNearRiders
 
+  const {
+    isLoading: isLoadingChatPost,
+    isError: isErrorChatPost,
+    error: errorChatPost,
+    mutateAsync: mutateAsyncChat,
+    isSuccess: isSuccessChatPost,
+  } = postChat
+
   useEffect(() => {
     if (data) {
       router.push('/ride-waiting')
     }
   }, [data, router])
+
+  useEffect(() => {
+    if (isSuccessChatPost) {
+      router.push(`/chats/${temp._id}`)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessChatPost])
 
   const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 
@@ -71,10 +94,8 @@ const Riders = () => {
   }
 
   const chatHandler = (rider) => {
-    console.log('chatHandler', rider)
-    router.push(`/chat`)
-
-    // click markii la siiyo ku save gareey rider kaas tablke chat ka marka chat ka tabel ka la tago soo bixi datada ee uso hormari
+    setTemp(rider)
+    mutateAsyncChat({ user: rider._id, text: 'Asckm' })
   }
 
   async function submitHandler() {
@@ -135,6 +156,7 @@ const Riders = () => {
   return (
     <>
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
+      {isErrorChatPost && <Message variant='danger'>{errorChatPost}</Message>}
       {message && <Message variant='danger'>{message}</Message>}
 
       {dataPost && dataPost.length === 0 && (
@@ -270,8 +292,13 @@ const Riders = () => {
                         <button
                           className='btn btn-primary btn-sm rounded-circle'
                           onClick={() => chatHandler(rider)}
+                          disabled={isLoadingChatPost}
                         >
-                          <FaRocketchat />{' '}
+                          {isLoadingChatPost ? (
+                            <span className='spinner-border spinner-border-sm' />
+                          ) : (
+                            <FaRocketchat />
+                          )}
                         </button>
                       </div>
                     </div>

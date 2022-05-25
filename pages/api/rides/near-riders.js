@@ -77,8 +77,6 @@ handler.post(async (req, res) => {
 
     const objects = await results
 
-    console.log(objects)
-
     return res.status(200).send(objects)
   } catch (error) {
     res.status(500).send({ error: error.message })
