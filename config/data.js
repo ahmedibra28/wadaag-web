@@ -140,7 +140,7 @@ const clientPermissions = [
   },
   {
     name: 'Chatting',
-    path: '/chats/:id',
+    path: '/chats/[id]',
     menu: 'hidden',
     auth: true,
     description: 'Individual Chat page',
@@ -401,6 +401,13 @@ const permissions = [
     method: 'GET',
   },
   {
+    description: 'Get Chatting By Id',
+    route: '/api/chats/:id',
+    auth: true,
+    name: 'Chats',
+    method: 'GET',
+  },
+  {
     description: 'Create New Chat',
     route: '/api/chats',
     auth: true,
@@ -408,15 +415,15 @@ const permissions = [
     method: 'POST',
   },
   {
-    description: 'Get Chat History By Id',
-    route: '/api/chats/histories',
+    description: 'Update Chat',
+    route: '/api/chats/:id',
     auth: true,
     name: 'Chats',
-    method: 'GET',
+    method: 'PUT',
   },
   {
-    description: 'Get Chat Chatting By Id',
-    route: '/api/chats/:id',
+    description: 'Get Chat History By Id',
+    route: '/api/chats/histories',
     auth: true,
     name: 'Chats',
     method: 'GET',

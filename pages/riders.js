@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useRef, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import withAuth from '../HOC/withAuth'
 import {
   FaRocketchat,
   FaTimesCircle,
@@ -76,7 +78,7 @@ const Riders = () => {
 
   useEffect(() => {
     if (isSuccessChatPost) {
-      router.push(`/chats/${temp._id}`)
+      router.push(`/chats/${temp.rider}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessChatPost])
@@ -95,7 +97,7 @@ const Riders = () => {
 
   const chatHandler = (rider) => {
     setTemp(rider)
-    mutateAsyncChat({ user: rider._id, text: 'Asckm' })
+    mutateAsyncChat({ user: rider.rider, text: 'Asckm' })
   }
 
   async function submitHandler() {
@@ -312,4 +314,4 @@ const Riders = () => {
   )
 }
 
-export default Riders
+export default dynamic(() => Promise.resolve(withAuth(Riders)), { ssr: false })

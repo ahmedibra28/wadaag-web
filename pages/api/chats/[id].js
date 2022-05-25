@@ -4,10 +4,8 @@ import Chat from '../../../models/Chat'
 import { isAuth } from '../../../utils/auth'
 
 const schemaName = Chat
-const schemaNameString = 'Chat'
 
 const handler = nc()
-
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
@@ -16,9 +14,13 @@ handler.get(async (req, res) => {
     const user = req.query.id
     const currentUser = req.user._id
 
-    const chat = await schemaName.findOne({
-      users: { $all: [currentUser, user] },
-    })
+    const chat = await schemaName
+      .findOne({
+        users: { $all: [currentUser, user] },
+      })
+      .populate('messages.user', 'name')
+      .populate('users', 'name')
+    //  populate user inside messages array
 
     res.status(200).send(chat)
   } catch (error) {
@@ -26,37 +28,35 @@ handler.get(async (req, res) => {
   }
 })
 
-handler.delete(async (req, res) => {
+// @TODO: finish this function
+
+handler.put(async (req, res) => {
   await db()
   try {
-    const { id, status } = req.query
+    const { id } = req.query
 
-    const object = await schemaName.findById(id)
-    if (!object)
-      return res.status(400).json({ error: `${schemaNameString} not found` })
+    const { user, text } = req.body
 
-    if (status === 'cancelled') {
-      object.status = 'cancelled'
-      await object.save()
-      return res.status(200).json({ message: `${schemaNameString} cancelled` })
+    const currentUser = req.user._id
+
+    const chat = await schemaName.findOne({
+      users: { $all: [currentUser, user] },
+    })
+    if (chat) {
+      chat.messages.push({ text, user: currentUser, createdAt: Date.now() })
+
+      await chat.save()
+      return res.status(200).json({ message: 'Message added to chat' })
     }
 
-    if (status === 'completed') {
-      object.status = 'completed'
-      await object.save()
-      return res.status(200).json({ message: `${schemaNameString} completed` })
-    }
+    const newChat = await schemaName.create({
+      users: [currentUser, user],
+      messages: [{ text, user: currentUser, createdAt: Date.now() }],
+    })
 
-    if (status === 'pending') {
-      object.status = 'pending'
-      await object.save()
-      return res.status(200).json({ message: `${schemaNameString} pending` })
-    }
+    if (!newChat) return res.status(400).json({ error: 'Chat not created' })
 
-    if (status === 'delete') {
-      await object.remove()
-      return res.status(200).json({ message: `${schemaNameString} deleted` })
-    }
+    return res.status(200).send('Chat has been started')
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

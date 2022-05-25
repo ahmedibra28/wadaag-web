@@ -25,7 +25,7 @@ function BottomTab() {
       id: 3,
       title: 'Chat',
       icon: <FaRocketchat className='fs-3' />,
-      link: '/chat',
+      link: '/chats',
     },
     {
       id: 4,
