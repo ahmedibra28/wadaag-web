@@ -1,6 +1,7 @@
 import nc from 'next-connect'
 import db from '../../../config/db'
 import Chat from '../../../models/Chat'
+import Profile from '../../../models/Profile'
 import { isAuth } from '../../../utils/auth'
 
 const schemaName = Chat
@@ -25,16 +26,46 @@ handler.get(async (req, res) => {
 
     const result = await query
 
+    const results = result.map((r) => ({
+      _id: r._id,
+      user: r.users.find((u) => u.toString() !== _id.toString()),
+      updatedAt: r.updatedAt,
+    }))
+
+    const data = Promise.all(
+      results.map(async (r) => {
+        const profile = await Profile.findOne(
+          {
+            user: r.user,
+          },
+          { image: 1, name: 1 }
+        )
+          .populate('user', ['mobileNumber'])
+          .lean()
+
+        return {
+          _id: r._id,
+          user: profile,
+          mobileNumber: profile.user.mobileNumber,
+          updatedAt: r.updatedAt,
+        }
+      })
+    )
+
+    const objects = await data
+
     res.status(200).json({
       startIndex: skip + 1,
-      endIndex: skip + result.length,
-      count: result.length,
+      endIndex: skip + objects.length,
+      count: objects.length,
       page,
       pages,
       total,
-      data: result,
+      data: objects,
     })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
 })
+
+export default handler

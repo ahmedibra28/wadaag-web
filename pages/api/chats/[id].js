@@ -14,13 +14,9 @@ handler.get(async (req, res) => {
     const user = req.query.id
     const currentUser = req.user._id
 
-    const chat = await schemaName
-      .findOne({
-        users: { $all: [currentUser, user] },
-      })
-      .populate('messages.user', 'name')
-      .populate('users', 'name')
-    //  populate user inside messages array
+    const chat = await schemaName.findOne({
+      users: { $all: [currentUser, user] },
+    })
 
     res.status(200).send(chat)
   } catch (error) {
@@ -28,15 +24,11 @@ handler.get(async (req, res) => {
   }
 })
 
-// @TODO: finish this function
-
 handler.put(async (req, res) => {
   await db()
   try {
-    const { id } = req.query
-
-    const { user, text } = req.body
-
+    const user = req.query.id
+    const { text } = req.body
     const currentUser = req.user._id
 
     const chat = await schemaName.findOne({
