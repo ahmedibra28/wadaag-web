@@ -422,6 +422,13 @@ const permissions = [
     method: 'PUT',
   },
   {
+    description: 'Delete Chat',
+    route: '/api/chats/:id',
+    auth: true,
+    name: 'Chats',
+    method: 'DELETE',
+  },
+  {
     description: 'Get Chat History By Id',
     route: '/api/chats/histories',
     auth: true,

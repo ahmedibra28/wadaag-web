@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import useRidesHook from '../utils/api/rides'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm, Message } from '../components'
@@ -83,9 +84,11 @@ const RideWaiting = () => {
         )}
       </button>
 
-      <div className='my-5 py-5 shadow rounded-3'>
-        <p>Waiting request from the second rider</p>
-        <span className='spinner spinner-border' />
+      <div className='my-5 py-5 shadow rounded-3 text-center'>
+        <Link href='/chats'>
+          <a className='btn btn-primary w-75'>Chat With Riders If Available</a>
+        </Link>
+        <br />
       </div>
 
       <div

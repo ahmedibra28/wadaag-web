@@ -4,6 +4,7 @@ import Chat from '../../../models/Chat'
 import { isAuth } from '../../../utils/auth'
 
 const schemaName = Chat
+const schemaNameString = 'Chat'
 
 const handler = nc()
 handler.use(isAuth)
@@ -49,6 +50,26 @@ handler.put(async (req, res) => {
     if (!newChat) return res.status(400).json({ error: 'Chat not created' })
 
     return res.status(200).send('Chat has been started')
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+handler.delete(async (req, res) => {
+  await db()
+  try {
+    const { id } = req.query
+    const currentUser = req.user._id
+
+    const object = await schemaName.findOne({
+      users: { $all: [currentUser, id] },
+    })
+
+    if (!object)
+      return res.status(400).json({ error: `${schemaNameString} not found` })
+
+    await object.remove()
+    res.status(200).json({ message: `${schemaNameString} removed` })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

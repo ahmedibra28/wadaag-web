@@ -2,21 +2,20 @@ import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
-import { FormContainer, Message, Spinner } from '../../components'
+import { Message, Spinner, Confirm } from '../../components'
 import useChatsHook from '../../utils/api/chats'
-import { inputCheckRadio, inputFile, inputText } from '../../utils/dynamicForm'
-import LazyLoad from 'react-lazyload'
 import { useRouter } from 'next/router'
-import { FaPaperPlane } from 'react-icons/fa'
+import { FaPaperPlane, FaTimesCircle } from 'react-icons/fa'
 import { customLocalStorage } from '../../utils/customLocalStorage'
 import moment from 'moment'
+import { confirmAlert } from 'react-confirm-alert'
 
 const IndividualChat = () => {
   const router = useRouter()
   const { id } = router.query
   const [text, setText] = useState('')
 
-  const { getChattingById, updateChat } = useChatsHook({
+  const { getChattingById, updateChat, deleteChat } = useChatsHook({
     page: 1,
     limit: 25,
     id,
@@ -32,12 +31,27 @@ const IndividualChat = () => {
     mutateAsync: mutateAsyncUpdate,
   } = updateChat
 
+  const {
+    isLoading: isLoadingDelete,
+    isError: isErrorDelete,
+    error: errorDelete,
+    isSuccess: isSuccessDelete,
+    mutateAsync: mutateAsyncDelete,
+  } = deleteChat
+
   const submitHandler = (e) => {
     e.preventDefault()
     if (text) {
       mutateAsyncUpdate({ _id: id, text })
     }
   }
+
+  useEffect(() => {
+    if (isSuccessUpdate) {
+      router.replace('/chats')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessDelete])
 
   useEffect(() => {
     isSuccessUpdate && setText('')
@@ -50,6 +64,14 @@ const IndividualChat = () => {
     if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight
   }, [data])
 
+  const endChatHandler = () => {
+    confirmAlert(
+      Confirm(() => {
+        mutateAsyncDelete(id)
+      }, 'Are you sure you want to end this chat?')
+    )
+  }
+
   return (
     <div>
       <Head>
@@ -59,6 +81,7 @@ const IndividualChat = () => {
 
       {isError && <Message variant='danger'>{error}</Message>}
       {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+      {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
 
       {isLoading ? (
         <Spinner />
@@ -99,6 +122,17 @@ const IndividualChat = () => {
                     <FaPaperPlane />
                   )}
                 </button>
+                <button
+                  onClick={() => endChatHandler()}
+                  disabled={isLoadingDelete}
+                  className='btn btn-outline-danger btn-lg shadow-none ms-1'
+                >
+                  {isLoadingDelete ? (
+                    <span className='spinner-border spinner-border-sm' />
+                  ) : (
+                    <FaTimesCircle />
+                  )}
+                </button>
               </div>
             </div>
           </form>
@@ -107,7 +141,7 @@ const IndividualChat = () => {
             className='container'
             style={{
               overflow: 'auto',
-              height: 'calc(100vh - 170px)',
+              height: 'calc(100vh - 180px)',
             }}
             id='chat-div'
           >
