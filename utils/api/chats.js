@@ -30,7 +30,7 @@ export default function useChatsHook(props) {
   const getChattingById = useQuery(
     'chatting',
     async () => await dynamicAPI('get', `${url}/${id}`, {}),
-    { retry: 0, enabled: !!id, refetchInterval: 1000 }
+    { retry: 0, enabled: !!id, refetchInterval: 3000 }
   )
 
   const updateChat = useMutation(

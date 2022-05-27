@@ -34,9 +34,7 @@ const IndividualChat = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log('submitted', text)
     if (text) {
-      console.log({ _id: id, text })
       mutateAsyncUpdate({ _id: id, text })
     }
   }
@@ -49,7 +47,7 @@ const IndividualChat = () => {
 
   useEffect(() => {
     const chatDiv = document.getElementById('chat-div')
-    chatDiv.scrollTop = chatDiv.scrollHeight
+    if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight
   }, [data])
 
   return (
@@ -60,6 +58,7 @@ const IndividualChat = () => {
       </Head>
 
       {isError && <Message variant='danger'>{error}</Message>}
+      {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
 
       {isLoading ? (
         <Spinner />
@@ -113,6 +112,7 @@ const IndividualChat = () => {
             id='chat-div'
           >
             {data &&
+              data.messages &&
               data.messages.map((message) => (
                 <div
                   key={message._id}
