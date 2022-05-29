@@ -38,8 +38,8 @@ const ViewUsers = ({
           <tr>
             <th>Joined Date</th>
             <th>Name</th>
-            <th>Email</th>
-            <th>Confirmed</th>
+            <th>Mobile</th>
+            <th>Active</th>
             <th>Blocked</th>
             <th>Actions</th>
           </tr>
@@ -50,19 +50,19 @@ const ViewUsers = ({
             data.data.map((user) => (
               <tr key={user._id}>
                 <td>{moment(user.createdAt).format('lll')}</td>
-                <td>{user.name}</td>
                 <td>
-                  <a href={`mailto:${user.email}`}>{user.email}</a>
+                  {user.name || <span className='badge bg-danger'>ERROR!</span>}
                 </td>
+                <td>{user.mobileNumber}</td>
                 <td>
-                  {user.confirmed ? (
+                  {user.isActive ? (
                     <FaCheckCircle className='text-success' />
                   ) : (
                     <FaTimesCircle className='text-danger' />
                   )}
                 </td>
                 <td>
-                  {user.blocked ? (
+                  {!user.blocked ? (
                     <FaCheckCircle className='text-success' />
                   ) : (
                     <FaTimesCircle className='text-danger' />

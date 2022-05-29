@@ -43,7 +43,7 @@ const ViewUserRoles = ({
         <thead className='border-0'>
           <tr>
             <th>Name</th>
-            <th>Email</th>
+            <th>Mobile</th>
             <th>Role</th>
             <th>Role Type</th>
             <th>Actions</th>
@@ -54,8 +54,12 @@ const ViewUserRoles = ({
           {data &&
             data.data.map((userRole) => (
               <tr key={userRole._id}>
-                <td>{userRole.user && userRole.user.name}</td>
-                <td>{userRole.user && userRole.user.email}</td>
+                <td>
+                  {userRole?.user?.name || (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>{userRole?.user?.mobileNumber}</td>
                 <td>{userRole.role && userRole.role.name}</td>
                 <td>{userRole.role && userRole.role.type}</td>
 

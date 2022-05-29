@@ -3,6 +3,7 @@ import {
   inputCheckBox,
   inputEmail,
   inputPassword,
+  inputTel,
   inputText,
 } from '../../../utils/dynamicForm'
 
@@ -58,44 +59,22 @@ const FormUsers = ({
                   name: 'name',
                   placeholder: 'Name',
                 })}
-                {inputEmail({
+                {inputTel({
                   register,
                   errors,
-                  label: 'Email',
-                  name: 'email',
-                  placeholder: 'Email',
-                })}
-
-                {inputPassword({
-                  register,
-                  errors,
-                  label: 'Password',
-                  name: 'password',
-                  minLength: true,
-                  isRequired: false,
-                  placeholder: 'Password',
-                })}
-
-                {inputPassword({
-                  register,
-                  errors,
-                  watch,
-                  name: 'confirmPassword',
-                  label: 'Confirm Password',
-                  validate: true,
-                  minLength: true,
-                  isRequired: false,
-                  placeholder: 'Confirm Password',
+                  label: 'Mobile',
+                  name: 'mobileNumber',
+                  placeholder: 'Mobile',
                 })}
 
                 {inputCheckBox({
                   register,
                   errors,
                   watch,
-                  name: 'confirmed',
-                  label: 'Confirmed',
+                  name: 'isActive',
+                  label: 'Active',
                   isRequired: false,
-                  placeholder: 'Confirmed',
+                  placeholder: 'Active',
                 })}
 
                 {inputCheckBox({

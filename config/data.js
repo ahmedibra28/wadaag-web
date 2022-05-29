@@ -226,6 +226,13 @@ const permissions = [
     method: 'GET',
   },
   {
+    description: 'Update User Profiles',
+    route: '/api/auth/user-profiles/:id',
+    auth: true,
+    name: 'User Profiles',
+    method: 'PUT',
+  },
+  {
     description: 'Get Profile',
     route: '/api/auth/profile',
     auth: true,

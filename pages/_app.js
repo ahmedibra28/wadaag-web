@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </Layout>
       </Provider>
-      {/* <ReactQueryDevtools /> */}
+      <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }

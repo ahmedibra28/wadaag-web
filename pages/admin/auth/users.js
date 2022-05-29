@@ -100,10 +100,9 @@ const Users = () => {
       ? mutateAsyncUpdate({
           _id: id,
           name: data.name,
-          email: data.email,
-          confirmed: data.confirmed,
+          mobileNumber: data.mobileNumber,
+          isActive: data.isActive,
           blocked: data.blocked,
-          password: data.password,
         })
       : mutateAsyncPost(data)
   }
@@ -112,8 +111,8 @@ const Users = () => {
     setId(user._id)
     setEdit(true)
     setValue('name', user.name)
-    setValue('email', user.email)
-    setValue('confirmed', user.confirmed)
+    setValue('mobileNumber', user.mobileNumber)
+    setValue('isActive', user.isActive)
     setValue('blocked', user.blocked)
   }
 

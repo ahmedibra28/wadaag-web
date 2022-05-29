@@ -29,7 +29,7 @@ handler.get(async (req, res) => {
       .limit(pageSize)
       .sort({ createdAt: -1 })
       .lean()
-      .populate('user', ['email'])
+      .populate('user', ['mobileNumber'])
 
     const result = await query
 

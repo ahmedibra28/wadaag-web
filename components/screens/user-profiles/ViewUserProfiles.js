@@ -1,7 +1,15 @@
 import { Search } from '../../'
 import Image from 'next/image'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
-const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
+const ViewUserProfiles = ({
+  data,
+  setQ,
+  q,
+  searchHandler,
+  mutateAsyncUpdate,
+  isLoadingUpdate,
+}) => {
   return (
     <div className='table-responsive bg-light p-3 mt-2'>
       <div className='d-flex align-items-center flex-column mb-2'>
@@ -23,9 +31,12 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
           <tr>
             <th>Image</th>
             <th>Name</th>
-            <th>Address</th>
+            <th>Type</th>
             <th>Phone</th>
-            <th>Email</th>
+            <th>Approved</th>
+            <th>Points</th>
+            <th>Expiration</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -42,10 +53,67 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
                     className='img-fluid rounded-pill'
                   />
                 </td>
-                <td>{userProfile.name}</td>
-                <td>{userProfile.address}</td>
-                <td>{userProfile.phone}</td>
-                <td>{userProfile.user && userProfile.user.email}</td>
+                <td>
+                  {userProfile.name || (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.type === 'driver' ? (
+                    <span className='badge bg-warning'>DRIVER</span>
+                  ) : userProfile.type === 'rider' ? (
+                    <span className='badge bg-primary'>RIDER</span>
+                  ) : userProfile.type === 'administrator' ? (
+                    <span className='badge bg-success'>ADMIN</span>
+                  ) : (
+                    <span className='badge bg-danger'>ERROR!</span>
+                  )}
+                </td>
+                <td>{userProfile?.user?.mobileNumber}</td>
+                <td>
+                  {userProfile.approved ? (
+                    <FaCheckCircle className='text-success' />
+                  ) : (
+                    <FaTimesCircle className='text-danger' />
+                  )}
+                </td>
+                <td>
+                  {userProfile?.points || (
+                    <span className='text-danger'>0</span>
+                  )}
+                </td>
+                <td>
+                  {userProfile.expiration <= 10 ? (
+                    <span className='text-danger'>
+                      {userProfile.expiration} days
+                    </span>
+                  ) : userProfile.expiration >= 20 ? (
+                    <span className='text-success'>
+                      {userProfile.expiration} days
+                    </span>
+                  ) : (
+                    <span className='text-warning'>
+                      {userProfile.expiration} days
+                    </span>
+                  )}
+                </td>
+                <td>
+                  {!userProfile.approved && (
+                    <button
+                      onClick={() => mutateAsyncUpdate(userProfile._id)}
+                      disabled={isLoadingUpdate}
+                      className={`btn btn-sm btn-success`}
+                    >
+                      {isLoadingUpdate ? (
+                        <span className='spinner-border spinner-border-sm' />
+                      ) : (
+                        <>
+                          <FaCheckCircle className='mb-1' /> Approve
+                        </>
+                      )}
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
         </tbody>

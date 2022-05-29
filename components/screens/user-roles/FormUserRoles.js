@@ -59,7 +59,7 @@ const FormUserRoles = ({
                     dataUsers &&
                     dataUsers.data &&
                     dataUsers.data.filter(
-                      (user) => user.confirmed && !user.blocked
+                      (user) => user.isActive && !user.blocked
                     ),
                   placeholder: 'User',
                 })}
