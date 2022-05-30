@@ -59,14 +59,10 @@ const ViewUserProfiles = ({
                   )}
                 </td>
                 <td>
-                  {userProfile.type === 'driver' ? (
-                    <span className='badge bg-warning'>DRIVER</span>
-                  ) : userProfile.type === 'rider' ? (
+                  {userProfile.isRider ? (
                     <span className='badge bg-primary'>RIDER</span>
-                  ) : userProfile.type === 'administrator' ? (
-                    <span className='badge bg-success'>ADMIN</span>
                   ) : (
-                    <span className='badge bg-danger'>ERROR!</span>
+                    <span className='badge bg-success'>ADMIN</span>
                   )}
                 </td>
                 <td>{userProfile?.user?.mobileNumber}</td>

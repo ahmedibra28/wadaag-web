@@ -23,6 +23,9 @@ handler.post(async (req, res) => {
     if (user && user.blocked)
       return res.status(401).json({ error: 'User is blocked' })
 
+    if (user && !user.isActive)
+      return res.status(401).json({ error: 'User is not active' })
+
     if (!user) {
       const object = await schemaName.create({ mobileNumber })
 

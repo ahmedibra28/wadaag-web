@@ -27,11 +27,11 @@ handler.post(async (req, res) => {
       rides.filter(
         (ride) =>
           Math.abs(
-            Number(ride.riderOne.originLatLng.split(',')[0]) -
+            Number(ride.originLatLng.split(',')[0]) -
               Number(originLatLng.split(',')[0])
           ) < 0.005 &&
           Math.abs(
-            Number(ride.riderOne.originLatLng.split(',')[1]) -
+            Number(ride.originLatLng.split(',')[1]) -
               Number(originLatLng.split(',')[1])
           ) < 0.005
       )
@@ -41,11 +41,11 @@ handler.post(async (req, res) => {
       nearOrigin.filter(
         (ride) =>
           Math.abs(
-            Number(ride.riderOne.destinationLatLng.split(',')[0]) -
+            Number(ride.destinationLatLng.split(',')[0]) -
               Number(destinationLatLng.split(',')[0])
           ) < 0.005 &&
           Math.abs(
-            Number(ride.riderOne.destinationLatLng.split(',')[1]) -
+            Number(ride.destinationLatLng.split(',')[1]) -
               Number(destinationLatLng.split(',')[1])
           ) < 0.005
       )
@@ -56,20 +56,19 @@ handler.post(async (req, res) => {
     const results = Promise.all(
       nearDestination.map(async (near) => {
         const profile = await Profile.findOne({
-          user: near.riderOne.rider,
+          user: near.rider,
         })
           .lean()
           .populate('user', ['name', 'mobileNumber'])
 
         return {
           _id: near._id,
-          rider: near.riderOne.rider,
+          rider: near.rider,
           name: profile?.name || 'unknown',
           mobileNumber: profile?.user?.mobileNumber,
           image: profile?.image,
-          from: near.riderOne.from,
-          to: near.riderOne.to,
-          plate: near.riderOne.plate,
+          from: near.from,
+          to: near.to,
           createdAt: near.createdAt,
         }
       })

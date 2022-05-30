@@ -32,18 +32,17 @@ handler.put(async (req, res) => {
   await db()
   try {
     const { id } = req.query
-    const { name, confirmed, blocked, password, email } = req.body
+
+    const { name, mobileNumber, isActive, blocked } = req.body
 
     const object = await schemaName.findById(id)
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })
 
     object.name = name
-    object.email = email
-    object.confirmed = confirmed
+    object.mobileNumber = mobileNumber
+    object.isActive = isActive
     object.blocked = blocked
-
-    password && (object.password = await object.encryptPassword(password))
 
     if (name) {
       await Profile.findOneAndUpdate({ user: id }, { name })

@@ -26,6 +26,12 @@ handler.post(async (req, res) => {
     if (!object)
       return res.status(400).json({ error: `Invalid OTP or expired` })
 
+    if (!object.isActive)
+      return res.status(400).json({ error: `User is not active` })
+
+    if (object.blocked)
+      return res.status(400).json({ error: `User is blocked` })
+
     object.otp = undefined
     object.otpExpire = undefined
 
@@ -37,7 +43,8 @@ handler.post(async (req, res) => {
     if (!profile) {
       await Profile.create({
         user: object._id,
-        type: 'temporary',
+        name: 'John Doe',
+        isRider: true,
         image: `https://ui-avatars.com/api/?uppercase=true&name=wadaag&background=random&color=random&size=128`,
         approved: false,
         profileCompleted: false,
@@ -54,7 +61,7 @@ handler.post(async (req, res) => {
 
     res.status(200).send({
       _id: object._id,
-      name: object.name || 'Profile',
+      name: object.name || 'John Doe',
       token: generateToken(object._id),
       mobileNumber: object.mobileNumber,
     })

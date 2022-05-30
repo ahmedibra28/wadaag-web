@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
 import Head from 'next/head'
-import Link from 'next/link'
 import { Message, Spinner } from '../components'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -19,8 +18,6 @@ import {
   FaClock,
   FaArrowAltCircleRight,
 } from 'react-icons/fa'
-import { useSelector, useDispatch } from 'react-redux'
-import { cancelTrip, startTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
 import useRidesHook from '../utils/api/rides'
 
@@ -35,15 +32,40 @@ const Home = () => {
   /** @type React.MutableRefObject<HTMLDivElement> */
   const destinationRef = useRef()
 
-  const trip = useSelector((state) => JSON.parse(JSON.stringify(state.trip)))
-  const dispatch = useDispatch()
+  const initialState = {
+    from: '',
+    to: '',
+    distance: '',
+    duration: '',
+    directionsResponse: null,
+    _id: '',
+    originLatLng: null,
+    destinationLatLng: null,
+  }
 
-  const { getPendingRider } = useRidesHook({
+  const [state, setState] = useState(initialState)
+
+  const { getPendingRider, postRide } = useRidesHook({
     page: 1,
     limit: 25,
   })
 
   const { data } = getPendingRider
+
+  const {
+    mutateAsync: rideMutateAsync,
+    error: errorRide,
+    isError: isErrorRide,
+    isLoading: isLoadingRide,
+    isSuccess: isSuccessRide,
+  } = postRide
+
+  useEffect(() => {
+    if (isSuccessRide) {
+      router.replace('/ride-waiting')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessRide])
 
   useEffect(() => {
     if (data) {
@@ -78,23 +100,21 @@ const Home = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       })
 
-      dispatch(
-        startTrip({
-          from: originRef.current.value,
-          to: destinationRef.current.value,
-          distance: results.routes[0].legs[0].distance.text,
-          duration: results.routes[0].legs[0].duration.text,
-          directionsResponse: JSON.stringify(results),
-          originLatLng:
-            results.routes[0].legs[0].start_location.lat() +
-            ',' +
-            results.routes[0].legs[0].start_location.lng(),
-          destinationLatLng:
-            results.routes[0].legs[0].end_location.lat() +
-            ',' +
-            results.routes[0].legs[0].end_location.lng(),
-        })
-      )
+      setState({
+        from: originRef.current.value,
+        to: destinationRef.current.value,
+        distance: results.routes[0].legs[0].distance.text,
+        duration: results.routes[0].legs[0].duration.text,
+        directionsResponse: JSON.stringify(results),
+        originLatLng:
+          results.routes[0].legs[0].start_location.lat() +
+          ',' +
+          results.routes[0].legs[0].start_location.lng(),
+        destinationLatLng:
+          results.routes[0].legs[0].end_location.lat() +
+          ',' +
+          results.routes[0].legs[0].end_location.lng(),
+      })
       setMessage('')
     } catch (error) {
       setMessage('No route could be found between the origin and destination.')
@@ -105,10 +125,15 @@ const Home = () => {
   }
 
   function clearRoute() {
-    dispatch(cancelTrip())
+    setState(initialState)
     setMessage('')
     originRef.current.value = ''
     destinationRef.current.value = ''
+  }
+
+  const confirmRideHandler = () => {
+    rideMutateAsync(state)
+    console.log(state)
   }
 
   return (
@@ -120,6 +145,7 @@ const Home = () => {
       </Head>
 
       {message && <Message variant='danger'>{message}</Message>}
+      {isErrorRide && <Message variant='danger'>{errorRide}</Message>}
 
       <div className='row gx-1 my-2'>
         <div className='col-lg-4 col-md-6 col-12'>
@@ -127,7 +153,7 @@ const Home = () => {
             <div className='mb-2'>
               <input
                 ref={originRef}
-                defaultValue={trip.from}
+                defaultValue={state.from}
                 type='text'
                 className='form-control'
                 placeholder='From where?'
@@ -140,7 +166,7 @@ const Home = () => {
             <div className='mb-2'>
               <input
                 ref={destinationRef}
-                defaultValue={trip.to}
+                defaultValue={state.to}
                 type='text'
                 className='form-control'
                 placeholder='To where?'
@@ -157,7 +183,7 @@ const Home = () => {
             >
               <FaSearchLocation className='mb-1' />
             </button>
-            {trip.directionsResponse && (
+            {state.directionsResponse && (
               <button
                 className='btn btn-sm btn-danger shadow-none'
                 onClick={clearRoute}
@@ -166,24 +192,32 @@ const Home = () => {
               </button>
             )}
 
-            {trip.duration && (
+            {state.duration && (
               <button className='btn btn-sm btn-light ms-1'>
-                <FaClock className='mb-1 text-primary' /> {trip.duration}
+                <FaClock className='mb-1 text-primary' /> {state.duration}
               </button>
             )}
 
-            {trip.distance && (
+            {state.distance && (
               <button className='btn btn-sm btn-light ms-1'>
                 <FaTachometerAlt className='mb-1 text-primary' />{' '}
-                {trip.distance}
+                {state.distance}
               </button>
             )}
-            {trip.directionsResponse && (
-              <Link href='plate-confirmation'>
-                <a className='btn btn-sm btn-success ms- shadow-none float-end'>
-                  <FaArrowAltCircleRight className='mb-1' /> NEXT
-                </a>
-              </Link>
+            {state.directionsResponse && (
+              <button
+                onClick={confirmRideHandler}
+                className='btn btn-sm btn-success ms- shadow-none float-end'
+                disabled={isLoadingRide}
+              >
+                {isLoadingRide ? (
+                  <span className='spinner-border spinner-border-sm' />
+                ) : (
+                  <>
+                    <FaArrowAltCircleRight className='mb-1' /> SUBMIT
+                  </>
+                )}
+              </button>
             )}
           </div>
         </div>
@@ -201,9 +235,9 @@ const Home = () => {
         }}
       >
         <Marker position={center} />
-        {trip.directionsResponse && (
+        {state.directionsResponse && (
           <DirectionsRenderer
-            directions={JSON.parse(trip.directionsResponse)}
+            directions={JSON.parse(state.directionsResponse)}
             options={{
               polylineOptions: {
                 strokeColor: '#5c1a67',

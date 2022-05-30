@@ -3,10 +3,8 @@ import { useState, useRef, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
 import {
-  FaRocketchat,
   FaTimesCircle,
   FaTachometerAlt,
-  FaArrowAltCircleRight,
   FaSearchLocation,
   FaSignature,
   FaClock,
@@ -16,16 +14,13 @@ import {
 } from 'react-icons/fa'
 import Head from 'next/head'
 import Link from 'next/link'
-import { FormContainer, Message, Spinner } from '../components'
+import { Message, Spinner } from '../components'
 import LazyLoad from 'react-lazyload'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
-import { cancelRiderTwoTrip, startRiderTwoTrip } from '../redux/slice/trip'
 import useRidesHook from '../utils/api/rides'
-import useChatsHook from '../utils/api/chats'
 import { useRouter } from 'next/router'
 
 const Riders = () => {
-  const dispatch = useDispatch()
   const router = useRouter()
 
   const [libraries, setLibraries] = useState(['places'])
@@ -38,16 +33,20 @@ const Riders = () => {
 
   const [temp, setTemp] = useState('')
 
-  const trip = useSelector((state) =>
-    JSON.parse(JSON.stringify(state.trip.riderTwo))
-  )
+  const initialState = {
+    from: '',
+    to: '',
+    distance: '',
+    duration: '',
+    directionsResponse: null,
+    _id: '',
+    originLatLng: null,
+    destinationLatLng: null,
+  }
+
+  const [state, setState] = useState(initialState)
 
   const { getPendingRider, postNearRiders } = useRidesHook({
-    page: 1,
-    limit: 25,
-  })
-
-  const { postChat } = useChatsHook({
     page: 1,
     limit: 25,
   })
@@ -62,26 +61,11 @@ const Riders = () => {
     data: dataPost,
   } = postNearRiders
 
-  const {
-    isLoading: isLoadingChatPost,
-    isError: isErrorChatPost,
-    error: errorChatPost,
-    mutateAsync: mutateAsyncChat,
-    isSuccess: isSuccessChatPost,
-  } = postChat
-
   useEffect(() => {
     if (data) {
       router.push('/ride-waiting')
     }
   }, [data, router])
-
-  useEffect(() => {
-    if (isSuccessChatPost) {
-      router.push(`/chats/${temp.rider}`)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccessChatPost])
 
   const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 
@@ -95,11 +79,6 @@ const Riders = () => {
     return <Spinner />
   }
 
-  const chatHandler = (rider) => {
-    setTemp(rider)
-    mutateAsyncChat({ user: rider.rider, text: 'Asckm' })
-  }
-
   async function submitHandler() {
     try {
       const directionsService = new google.maps.DirectionsService()
@@ -110,23 +89,21 @@ const Riders = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       })
 
-      dispatch(
-        startRiderTwoTrip({
-          from: originRef.current.value,
-          to: destinationRef.current.value,
-          distance: results.routes[0].legs[0].distance.text,
-          duration: results.routes[0].legs[0].duration.text,
-          directionsResponse: JSON.stringify(results),
-          originLatLng:
-            results.routes[0].legs[0].start_location.lat() +
-            ',' +
-            results.routes[0].legs[0].start_location.lng(),
-          destinationLatLng:
-            results.routes[0].legs[0].end_location.lat() +
-            ',' +
-            results.routes[0].legs[0].end_location.lng(),
-        })
-      )
+      setState({
+        from: originRef.current.value,
+        to: destinationRef.current.value,
+        distance: results.routes[0].legs[0].distance.text,
+        duration: results.routes[0].legs[0].duration.text,
+        directionsResponse: JSON.stringify(results),
+        originLatLng:
+          results.routes[0].legs[0].start_location.lat() +
+          ',' +
+          results.routes[0].legs[0].start_location.lng(),
+        destinationLatLng:
+          results.routes[0].legs[0].end_location.lat() +
+          ',' +
+          results.routes[0].legs[0].end_location.lng(),
+      })
 
       mutateAsync({
         originLatLng:
@@ -149,7 +126,7 @@ const Riders = () => {
   }
 
   function clearRoute() {
-    dispatch(cancelRiderTwoTrip())
+    setState(initialState)
     setMessage('')
     originRef.current.value = ''
     destinationRef.current.value = ''
@@ -158,7 +135,6 @@ const Riders = () => {
   return (
     <>
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
-      {isErrorChatPost && <Message variant='danger'>{errorChatPost}</Message>}
       {message && <Message variant='danger'>{message}</Message>}
 
       {dataPost && dataPost.length === 0 && (
@@ -177,7 +153,7 @@ const Riders = () => {
               <div className='mb-2'>
                 <input
                   ref={originRef}
-                  defaultValue={trip.from}
+                  defaultValue={state.from}
                   type='text'
                   className='form-control'
                   placeholder='From where?'
@@ -190,7 +166,7 @@ const Riders = () => {
               <div className='mb-2'>
                 <input
                   ref={destinationRef}
-                  defaultValue={trip.to}
+                  defaultValue={state.to}
                   type='text'
                   className='form-control'
                   placeholder='To where?'
@@ -213,25 +189,25 @@ const Riders = () => {
                 )}
               </button>
 
-              {trip.duration && (
+              {state.duration && (
                 <button
                   className='btn btn-sm btn-light'
                   style={{ fontSize: 14 }}
                 >
-                  <FaClock className='mb-1 text-primary' /> {trip.duration}
+                  <FaClock className='mb-1 text-primary' /> {state.duration}
                 </button>
               )}
 
-              {trip.distance && (
+              {state.distance && (
                 <button
                   className='btn btn-sm btn-light'
                   style={{ fontSize: 13 }}
                 >
                   <FaTachometerAlt className='mb-1 text-primary' />{' '}
-                  {trip.distance}
+                  {state.distance}
                 </button>
               )}
-              {trip.directionsResponse && (
+              {state.directionsResponse && (
                 <button
                   className='btn btn-sm btn-danger shadow-none float-end'
                   onClick={clearRoute}
@@ -253,59 +229,50 @@ const Riders = () => {
           {dataPost &&
             dataPost.map((rider) => (
               <div key={rider._id} className='col-lg-4 col-md-6 col-12'>
-                <div className='card shadow border-0'>
-                  <div className='card-body p-2'>
-                    <div className='row'>
-                      <div className='col-3 my-auto'>
-                        <LazyLoad height={63} once>
-                          <img
-                            src={rider.image}
-                            alt='avatar'
-                            className='img-fluid img-thumbnail rounded-circle'
-                            style={{
-                              objectFit: 'cover',
-                              height: '63px',
-                              width: '63px',
-                            }}
-                          />
-                        </LazyLoad>
-                      </div>
-                      <div
-                        className='col-7 my-auto border border-primary  border-top-0 border-bottom-0'
-                        style={{ fontSize: 12 }}
-                      >
-                        <div className='fw-bold text-primary fs-6'>
-                          <FaSignature /> {rider.name}
-                        </div>
+                <Link href={`/chats/${rider.rider}`}>
+                  <a className='text-decoration-none'>
+                    <div className='card shadow border-0'>
+                      <div className='card-body p-2'>
+                        <div className='row'>
+                          <div className='col-3 my-auto'>
+                            <LazyLoad height={63} once>
+                              <img
+                                src={rider.image}
+                                alt='avatar'
+                                className='img-fluid img-thumbnail rounded-circle'
+                                style={{
+                                  objectFit: 'cover',
+                                  height: '63px',
+                                  width: '63px',
+                                }}
+                              />
+                            </LazyLoad>
+                          </div>
+                          <div
+                            className='col-9 my-auto'
+                            style={{ fontSize: 12 }}
+                          >
+                            <div className='fw-bold text-primary fs-6'>
+                              <FaSignature /> {rider.name}
+                            </div>
 
-                        <div>
-                          <FaPhoneAlt className='text-primary' />{' '}
-                          {rider.mobileNumber}
+                            <div>
+                              <FaPhoneAlt className='text-primary' />{' '}
+                              {rider.mobileNumber}
+                            </div>
+                            <div>
+                              <FaMapPin className='text-primary' /> {rider.from}
+                            </div>
+                            <div>
+                              <FaFlagCheckered className='text-primary' />{' '}
+                              {rider.to}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <FaMapPin className='text-primary' /> {rider.from}
-                        </div>
-                        <div>
-                          <FaFlagCheckered className='text-primary' />{' '}
-                          {rider.to}
-                        </div>
-                      </div>
-                      <div className='col-2 my-auto '>
-                        <button
-                          className='btn btn-primary btn-sm rounded-circle'
-                          onClick={() => chatHandler(rider)}
-                          disabled={isLoadingChatPost}
-                        >
-                          {isLoadingChatPost ? (
-                            <span className='spinner-border spinner-border-sm' />
-                          ) : (
-                            <FaRocketchat />
-                          )}
-                        </button>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </a>
+                </Link>
               </div>
             ))}
         </div>

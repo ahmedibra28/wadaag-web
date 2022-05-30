@@ -16,7 +16,7 @@ handler.get(async (req, res) => {
     const ride = await schemaName
       .findOne({
         status: 'pending',
-        'riderOne.rider': _id,
+        rider: _id,
       })
       .lean()
 

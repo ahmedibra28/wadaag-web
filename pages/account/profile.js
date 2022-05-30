@@ -6,7 +6,7 @@ import { FormContainer, Message } from '../../components'
 import { useForm } from 'react-hook-form'
 import useProfilesHook from '../../utils/api/profiles'
 import useUploadHook from '../../utils/api/upload'
-import { inputCheckRadio, inputFile, inputText } from '../../utils/dynamicForm'
+import { inputFile, inputText } from '../../utils/dynamicForm'
 import LazyLoad from 'react-lazyload'
 import { Spinner } from '../../components'
 
@@ -16,7 +16,6 @@ const Profile = () => {
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm()
@@ -48,28 +47,16 @@ const Profile = () => {
 
   useEffect(() => {
     setValue('name', !isLoading ? data && data.name : '')
-    setValue('license', !isLoading ? data && data.license : '')
-    setValue('plate', !isLoading ? data && data.plate : '')
-    setValue('owner', !isLoading ? data && data.owner : '')
-    setValue('type', !isLoading ? data && data.type : '')
   }, [isLoading, setValue, data])
 
   const submitHandler = (data) => {
     if (!file && !fileLink) {
       mutateAsync({
         name: data.name,
-        license: data.license,
-        plate: data.plate,
-        type: data.type,
-        owner: data.owner,
       })
     } else {
       mutateAsync({
         name: data.name,
-        license: data.license,
-        plate: data.plate,
-        type: data.type,
-        owner: data.owner,
         image: fileLink,
       })
     }
@@ -112,19 +99,16 @@ const Profile = () => {
 
       {isLoading && <Spinner />}
       <form onSubmit={handleSubmit(submitHandler)}>
-        {(data && !data.profileCompleted) ||
-          (data && !data.approved && (
-            <div className='alert alert-warning pb-1 border-0'>
-              <ul>
-                {data && !data.profileCompleted && (
-                  <li> Please complete your profile. </li>
-                )}
-                {data && !data.approved && (
-                  <li> Please wait until you get approved </li>
-                )}
-              </ul>
-            </div>
-          ))}
+        {data && !data.profileCompleted && (
+          <div className='alert alert-danger pb-0 pt-1 border-0 rounded-0 mb-0'>
+            <li>Please complete your profile.</li>
+          </div>
+        )}
+        {data && !data.approved && (
+          <div className='alert alert-danger pb-0 pt-1 border-0 rounded-0'>
+            <li>Please wait until you get approved</li>
+          </div>
+        )}
         {data && data.image && (
           <div className='d-flex justify-content-center position-relative'>
             <LazyLoad height={150} once>
@@ -143,18 +127,6 @@ const Profile = () => {
         )}
 
         <div className='row'>
-          <div className='col-12'>
-            {inputCheckRadio({
-              register,
-              errors,
-              label: 'User type',
-              name: 'type',
-              data: [
-                { _id: 'driver', name: 'Driver' },
-                { _id: 'rider', name: 'Rider' },
-              ],
-            })}
-          </div>
           <div className='col-12'>
             {inputText({
               register,
@@ -176,44 +148,12 @@ const Profile = () => {
               placeholder: 'Choose an image',
             })}
           </div>
-
-          {watch().type === 'rider' && (
-            <label className='text-danger text-center my-2'>
-              Implement monthly payment here
-            </label>
-          )}
-          {watch().type === 'driver' && (
-            <>
-              <div className='col-12'>
-                {inputText({
-                  register,
-                  errors,
-                  label: 'Owner name',
-                  name: 'owner',
-                  placeholder: 'Owner name',
-                })}
-              </div>
-              <div className='col-12'>
-                {inputText({
-                  register,
-                  errors,
-                  label: 'Plate',
-                  name: 'plate',
-                  placeholder: 'Plate',
-                })}
-              </div>
-              <div className='col-12'>
-                {inputText({
-                  register,
-                  errors,
-                  label: 'License',
-                  name: 'license',
-                  placeholder: 'License',
-                })}
-              </div>
-            </>
-          )}
         </div>
+        {data && data.isRider && (
+          <div className='alert alert-warning text-center my-3'>
+            Implement monthly payment here 📱 *789*xxxxxx*1#
+          </div>
+        )}
 
         <button
           type='submit'

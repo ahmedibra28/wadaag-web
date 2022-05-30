@@ -26,16 +26,6 @@ const roles = [
     description: 'Default role given to authenticated user.',
     type: 'AUTHENTICATED',
   },
-  {
-    name: 'Rider',
-    description: 'Riders can find other riders and travel.',
-    type: 'RIDER',
-  },
-  {
-    name: 'Driver',
-    description: 'Drivers can monitor his/her points.',
-    type: 'DRIVER',
-  },
 ]
 
 const users = {
@@ -47,7 +37,7 @@ const users = {
 
 const profile = {
   name: 'Ahmed Ibrahim',
-  type: 'administrator',
+  isRider: false,
   approved: true,
   profileCompleted: true,
   image: 'https://github.com/ahmaat19.png',
@@ -109,13 +99,6 @@ const clientPermissions = [
     menu: 'admin',
     auth: true,
     description: 'User Profiles page',
-  },
-  {
-    name: 'Plate Confirmation',
-    path: '/plate-confirmation',
-    menu: 'hidden',
-    auth: true,
-    description: 'Plate Confirmation page',
   },
   {
     name: 'Ride Waiting',
@@ -198,7 +181,7 @@ const permissions = [
     method: 'POST',
   },
   {
-    description: 'Login',
+    description: 'OTP',
     route: '/api/auth/login/otp',
     auth: false,
     name: 'OTP',

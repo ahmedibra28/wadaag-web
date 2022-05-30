@@ -62,7 +62,7 @@ const ViewUsers = ({
                   )}
                 </td>
                 <td>
-                  {!user.blocked ? (
+                  {user.blocked ? (
                     <FaCheckCircle className='text-success' />
                   ) : (
                     <FaTimesCircle className='text-danger' />

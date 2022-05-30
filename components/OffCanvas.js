@@ -153,25 +153,14 @@ const OffCanvas = () => {
               </a>
             </Link>
 
-            <div className='info'>
+            <div className='info  mt-2'>
               <span className='text-white'>
-                {data.name || 'User'}
+                {data.name || 'Rider'}
                 <FaCheckCircle className='text-success mb-1 ms-1' />
               </span>
               <div className='text-white'>
                 <span className='text-muted'>{data.type}</span> <br />
-                {data.type === 'driver' && (
-                  <div className='btn-group'>
-                    <button className='btn btn-sm btn-outline-light'>
-                      Points: {data.points}
-                    </button>
-                    <button className='btn btn-sm btn-outline-light'>
-                      Level {data.level || 1}
-                      <FaLevelUpAlt className='mb-1 text-success' />
-                    </button>
-                  </div>
-                )}
-                {data.type === 'rider' && (
+                {data.isRider && (
                   <button
                     className={`btn btn-sm mt-1 w-100 ${
                       data.expiration < 10

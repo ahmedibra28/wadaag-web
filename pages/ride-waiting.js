@@ -5,8 +5,6 @@ import useRidesHook from '../utils/api/rides'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm, Message } from '../components'
 import { FaTrash, FaCheckCircle } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
-import { cancelTrip } from '../redux/slice/trip'
 import { useRouter } from 'next/router'
 import withAuth from '../HOC/withAuth'
 
@@ -27,8 +25,6 @@ const RideWaiting = () => {
     isSuccess: isSuccessDelete,
     mutateAsync: mutateAsyncDelete,
   } = deleteRide
-
-  const dispatch = useDispatch()
 
   const deleteHandler = (id) => {
     const dataId = id ? id : data && data._id
@@ -57,7 +53,6 @@ const RideWaiting = () => {
   useEffect(() => {
     if (isSuccessDelete) {
       router.replace('/')
-      dispatch(cancelTrip())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessDelete])

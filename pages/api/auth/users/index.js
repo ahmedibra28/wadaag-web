@@ -47,12 +47,20 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db()
   try {
+    const user = await schemaName.findOne({
+      mobileNumber: req.body.mobileNumber,
+    })
+
+    if (user) return res.status(400).json({ error: 'User already exists' })
+
     const object = await schemaName.create(req.body)
 
     await Profile.create({
       user: object._id,
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
+      isRider: req.body.isRider,
+      approved: req.body.approved,
     })
 
     res.status(200).send(object)
