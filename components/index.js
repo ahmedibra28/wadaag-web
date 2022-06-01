@@ -9,6 +9,7 @@ import FormUserRoles from './screens/user-roles/FormUserRoles'
 import ViewUserProfiles from './screens/user-profiles/ViewUserProfiles'
 import ViewRoles from './screens/roles/ViewRoles'
 import FormRoles from './screens/roles/FormRoles'
+import ViewPaymentReports from './screens/payment-reports/ViewPaymentReports'
 import { Spinner } from './Spinner'
 import Pagination from './Pagination'
 import Message from './Message'
@@ -38,4 +39,5 @@ export {
   FormContainer,
   Search,
   Footer,
+  ViewPaymentReports,
 }

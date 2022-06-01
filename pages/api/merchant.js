@@ -19,7 +19,7 @@ const LOGIN_HEADERS = {
       'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
     'Cache-Control': 'no-cache',
     Host: 'merchant.hormuud.com',
-    TLSVersion: 'TLSv1.2',
+    TLSVersion: 'TLSv2,TLSv1.2',
   },
 }
 
@@ -51,6 +51,11 @@ handler.get(async (req, res) => {
     const loginCookie = response.headers['set-cookie']
     const { sessionId } = loginData
 
+    console.log({
+      loginCookie,
+      sessionId,
+    })
+
     // Data
     const { data } = await axios.post(
       URL,
@@ -70,6 +75,7 @@ handler.get(async (req, res) => {
           cookie: loginCookie,
           Referer: 'https://merchant.hormuud.com/',
           'Referrer-Policy': 'strict-origin-when-cross-origin',
+          TLSVersion: 'TLSv2,TLSv1.2',
         },
       }
     )

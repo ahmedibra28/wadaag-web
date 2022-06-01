@@ -135,6 +135,13 @@ const clientPermissions = [
     auth: true,
     description: 'Chat History page',
   },
+  {
+    name: 'Payments Report',
+    path: '/reports/payments',
+    menu: 'report',
+    auth: true,
+    description: 'Payment report page',
+  },
 ]
 
 const permissions = [
@@ -424,6 +431,20 @@ const permissions = [
     auth: true,
     name: 'Chats',
     method: 'GET',
+  },
+  {
+    description: 'Get Payment Transactions From Merchant',
+    route: '/api/payments',
+    auth: true,
+    name: 'Payments',
+    method: 'GET',
+  },
+  {
+    description: 'Get Payments Report',
+    route: '/api/reports/payments',
+    auth: true,
+    name: 'Payments Report',
+    method: 'POST',
   },
 ]
 
