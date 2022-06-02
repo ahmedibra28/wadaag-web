@@ -32,25 +32,11 @@ handler.use(isAuth)
 handler.get(async (req, res) => {
   try {
     await db()
-    const QUERY = req.query.query
 
     const BASE_URL = `https://merchant.hormuud.com/api/account`
 
     const LOGIN_URL = `${BASE_URL}/login`
-    // const BALANCE = `${BASE_URL}/balance`
     const TRANSACTIONS = `${BASE_URL}/transactions`
-
-    const allowedQueries = ['balance', 'transactions']
-
-    if (!allowedQueries.includes(QUERY))
-      return res.status(400).json({ error: 'Invalid query' })
-
-    // const URL =
-    //   QUERY === 'balance'
-    //     ? BALANCE
-    //     : QUERY === 'transactions'
-    //     ? TRANSACTIONS
-    //     : ''
 
     // Login
     const response = await axios.post(LOGIN_URL, REQUEST_PAYLOAD, LOGIN_HEADERS)
@@ -66,6 +52,9 @@ handler.get(async (req, res) => {
       'Referrer-Policy': 'strict-origin-when-cross-origin',
     }
 
+    if (loginData.replyMessage !== 'Success')
+      return res.status(401).json({ error: 'Authentication Error' })
+
     // Transactions
     const { data } = await axios.post(
       TRANSACTIONS,
@@ -74,6 +63,9 @@ handler.get(async (req, res) => {
         headers,
       }
     )
+
+    if (data.replyMessage !== 'Success')
+      return res.status(401).json({ error: 'Fetching Transactions Error' })
 
     if (data) {
       const payments = await schemaName.find(
@@ -104,8 +96,6 @@ handler.get(async (req, res) => {
         totalTransactions: data.transactionInfo.length,
       })
     }
-
-    res.status(200).json(data)
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }

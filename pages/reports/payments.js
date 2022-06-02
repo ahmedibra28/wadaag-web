@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
 import useReportsHook from '../../utils/api/reports'
-import { Spinner, Message, ViewPaymentReports } from '../../components'
+import { ViewPaymentReports } from '../../components'
 import { useForm } from 'react-hook-form'
 
 const PaymentReports = () => {
@@ -28,8 +27,6 @@ const PaymentReports = () => {
   const submitHandler = (data) => {
     mutateAsyncPost(data)
   }
-
-  console.log(data && data)
 
   return (
     <>

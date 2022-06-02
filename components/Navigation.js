@@ -8,6 +8,7 @@ import {
   FaBell,
 } from 'react-icons/fa'
 import useAuthHook from '../utils/api/auth'
+import usePaymentsHook from '../utils/api/payments'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 
@@ -15,6 +16,14 @@ const Navigation = () => {
   const router = useRouter()
 
   const { postLogout } = useAuthHook()
+  const { getPayments } = usePaymentsHook()
+
+  const { data: merchantData, error: merchantError, isError } = getPayments
+
+  console.log(
+    'MERCHANT INFO ==> ⚠🔥🔥🔥🔥⚠ ',
+    !isError ? merchantData && merchantData.merchantInfo : merchantError
+  )
 
   const { mutateAsync } = useMutation(postLogout, {
     onSuccess: () => router.push('/auth/login'),
