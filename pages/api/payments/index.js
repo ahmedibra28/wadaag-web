@@ -28,15 +28,15 @@ const LOGIN_HEADERS = {
   },
 }
 
+const BASE_URL = `https://merchant.hormuud.com/api/account`
+
+const LOGIN_URL = `${BASE_URL}/login`
+const TRANSACTIONS = `${BASE_URL}/transactions`
+
 handler.use(isAuth)
 handler.get(async (req, res) => {
   try {
     await db()
-
-    const BASE_URL = `https://merchant.hormuud.com/api/account`
-
-    const LOGIN_URL = `${BASE_URL}/login`
-    const TRANSACTIONS = `${BASE_URL}/transactions`
 
     // Login
     const response = await axios.post(LOGIN_URL, REQUEST_PAYLOAD, LOGIN_HEADERS)

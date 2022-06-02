@@ -20,10 +20,8 @@ const Navigation = () => {
 
   const { data: merchantData, error: merchantError, isError } = getPayments
 
-  console.log(
-    'MERCHANT INFO ==> ⚠🔥🔥🔥🔥⚠ ',
-    !isError ? merchantData && merchantData.merchantInfo : merchantError
-  )
+  merchantData && console.log('🔥🔥💖💖 ', merchantData)
+  isError && console.log('⚠⚠ 🔐🔐  ', merchantError)
 
   const { mutateAsync } = useMutation(postLogout, {
     onSuccess: () => router.push('/auth/login'),
