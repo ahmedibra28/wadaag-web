@@ -9,6 +9,7 @@ import useUploadHook from '../../utils/api/upload'
 import { inputFile, inputText } from '../../utils/dynamicForm'
 import LazyLoad from 'react-lazyload'
 import { Spinner } from '../../components'
+import { FaMoneyBillAlt } from 'react-icons/fa'
 
 const Profile = () => {
   const [file, setFile] = useState(null)
@@ -99,11 +100,33 @@ const Profile = () => {
 
       {isLoading && <Spinner />}
       <form onSubmit={handleSubmit(submitHandler)}>
+        {data && data.isRider && (
+          <>
+            <button
+              type='button'
+              className='btn btn-outline-primary form-control mb-2 shadow-none'
+            >
+              Your subscription expires on <strong>{data.expiration} </strong>
+              days from now
+            </button>
+            {data.expiration < 2 && (
+              <a
+                href='tel:*789*631000*1#'
+                className='btn btn-outline-success form-control mb-2 shadow-none'
+              >
+                <FaMoneyBillAlt className='fs-3' />
+                <span className='ms-2'>Pay Now</span>
+              </a>
+            )}
+          </>
+        )}
+
         {data && !data.profileCompleted && (
           <div className='alert alert-danger pb-0 pt-1 border-0 rounded-0 mb-0'>
             <li>Please complete your profile.</li>
           </div>
         )}
+
         {data && !data.approved && (
           <div className='alert alert-danger pb-0 pt-1 border-0 rounded-0'>
             <li>Please wait until you get approved</li>
@@ -149,11 +172,6 @@ const Profile = () => {
             })}
           </div>
         </div>
-        {data && data.isRider && (
-          <div className='alert alert-warning text-center my-3'>
-            Implement monthly payment here 📱 *789*xxxxxx*1#
-          </div>
-        )}
 
         <button
           type='submit'

@@ -1,6 +1,7 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
+import Payment from '../../../../models/Payment'
 import User from '../../../../models/User'
 import { isAuth } from '../../../../utils/auth'
 
@@ -18,6 +19,22 @@ handler.get(async (req, res) => {
       .lean()
       .sort({ createdAt: -1 })
       .populate('user', ['mobileNumber'])
+
+    const payments = await Payment.find({
+      mobileNumber: objects.user.mobileNumber,
+    })
+
+    const expirationDays = payments
+      .map((payment) => {
+        const date = new Date(payment.date)
+        const now = new Date()
+        const diff = now - date
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        return days < 31 && 31 - days
+      })
+      ?.reduce((a, b) => a + b, 0)
+
+    console.log(expirationDays)
 
     res.status(200).send(objects)
   } catch (error) {
