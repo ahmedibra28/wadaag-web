@@ -159,7 +159,6 @@ const OffCanvas = () => {
                 <FaCheckCircle className='text-success mb-1 ms-1' />
               </span>
               <div className='text-white'>
-                <span className='text-muted'>{data.type}</span> <br />
                 {data.isRider && (
                   <button
                     className={`btn btn-sm mt-1 w-100 ${
