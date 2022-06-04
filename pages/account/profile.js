@@ -100,16 +100,16 @@ const Profile = () => {
 
       {isLoading && <Spinner />}
       <form onSubmit={handleSubmit(submitHandler)}>
-        {data && data.isRider && (
+        {data && data.isRider && data.expiration < 10 && (
           <>
             <button
               type='button'
               className='btn btn-outline-primary form-control mb-2 shadow-none'
             >
-              Your subscription expires on <strong>{data.expiration} </strong>
-              days from now
+              Your subscription for <strong>Rider </strong> is about to expire.
+              <strong> {data.expiration}</strong> days left.
             </button>
-            {data.expiration < 2 && (
+            {data.expiration < 5 && (
               <a
                 href='tel:*789*631000*1#'
                 className='btn btn-outline-success form-control mb-2 shadow-none'

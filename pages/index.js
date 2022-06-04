@@ -133,7 +133,6 @@ const Home = () => {
 
   const confirmRideHandler = () => {
     rideMutateAsync(state)
-    console.log(state)
   }
 
   return (

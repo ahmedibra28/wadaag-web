@@ -16,8 +16,6 @@ const Chat = () => {
 
   const { data, isLoading, isError, error } = getChatHistories
 
-  console.log(data && data)
-
   return (
     <>
       <Head>

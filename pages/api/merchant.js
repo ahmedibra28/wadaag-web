@@ -51,11 +51,6 @@ handler.get(async (req, res) => {
     const loginCookie = response.headers['set-cookie']
     const { sessionId } = loginData
 
-    console.log({
-      loginCookie,
-      sessionId,
-    })
-
     // Data
     const { data } = await axios.post(
       URL,
