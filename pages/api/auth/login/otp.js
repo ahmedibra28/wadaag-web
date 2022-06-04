@@ -46,7 +46,6 @@ handler.post(async (req, res) => {
         name: 'John Doe',
         isRider: true,
         image: `https://ui-avatars.com/api/?uppercase=true&name=wadaag&background=random&color=random&size=128`,
-        approved: false,
         profileCompleted: false,
       })
     }

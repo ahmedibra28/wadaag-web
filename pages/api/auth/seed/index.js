@@ -49,7 +49,6 @@ handler.get(async (req, res) => {
       user: userObject._id,
       name: profile.name,
       type: profile.type,
-      approved: profile.approved,
       profileCompleted: profile.profileCompleted,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${userObject.name}&background=random&color=random&size=128`,
     })

@@ -60,7 +60,6 @@ handler.post(async (req, res) => {
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
       isRider: req.body.isRider,
-      approved: req.body.approved,
     })
 
     res.status(200).send(object)

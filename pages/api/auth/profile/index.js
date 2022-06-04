@@ -52,11 +52,6 @@ handler.post(async (req, res) => {
 
     if (name) await User.findOneAndUpdate({ _id }, { name })
 
-    if (object.isRider) {
-      // @TODO: here implement payment logic
-      // if rider is paid, then set approved to true
-    }
-
     object.profileCompleted = true
     object.image = image ? image : object.image
     object.name = name ? name : object.name

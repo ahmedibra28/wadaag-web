@@ -127,11 +127,6 @@ const Profile = () => {
           </div>
         )}
 
-        {data && !data.approved && (
-          <div className='alert alert-danger pb-0 pt-1 border-0 rounded-0'>
-            <li>Please wait until you get approved</li>
-          </div>
-        )}
         {data && data.image && (
           <div className='d-flex justify-content-center position-relative'>
             <LazyLoad height={150} once>

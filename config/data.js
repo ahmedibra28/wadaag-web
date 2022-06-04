@@ -38,7 +38,6 @@ const users = {
 const profile = {
   name: 'Ahmed Ibrahim',
   isRider: false,
-  approved: true,
   profileCompleted: true,
   image: 'https://github.com/ahmaat19.png',
 }
@@ -214,13 +213,6 @@ const permissions = [
     auth: true,
     name: 'User Profiles',
     method: 'GET',
-  },
-  {
-    description: 'Update User Profiles',
-    route: '/api/auth/user-profiles/:id',
-    auth: true,
-    name: 'User Profiles',
-    method: 'PUT',
   },
   {
     description: 'Get Profile',

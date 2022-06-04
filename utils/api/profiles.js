@@ -35,13 +35,5 @@ export default function useProfilesHook(props) {
     }
   )
 
-  const updateProfile = useMutation(
-    async (id) => await dynamicAPI('put', `${url}/user-profiles/${id}`, {}),
-    {
-      retry: 0,
-      onSuccess: () => queryClient.invalidateQueries(['user profiles']),
-    }
-  )
-
-  return { getProfile, getUserProfiles, postProfile, updateProfile }
+  return { getProfile, getUserProfiles, postProfile }
 }
