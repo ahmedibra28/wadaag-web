@@ -1,15 +1,7 @@
 import { Search } from '../../'
 import Image from 'next/image'
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
-const ViewUserProfiles = ({
-  data,
-  setQ,
-  q,
-  searchHandler,
-  mutateAsyncUpdate,
-  isLoadingUpdate,
-}) => {
+const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
   return (
     <div className='table-responsive bg-light p-3 mt-2'>
       <div className='d-flex align-items-center flex-column mb-2'>
@@ -33,10 +25,8 @@ const ViewUserProfiles = ({
             <th>Name</th>
             <th>Type</th>
             <th>Phone</th>
-            <th>Approved</th>
             <th>Points</th>
             <th>Expiration</th>
-            <th>Action</th>
           </tr>
         </thead>
 
@@ -66,13 +56,7 @@ const ViewUserProfiles = ({
                   )}
                 </td>
                 <td>{userProfile?.user?.mobileNumber}</td>
-                <td>
-                  {userProfile.approved ? (
-                    <FaCheckCircle className='text-success' />
-                  ) : (
-                    <FaTimesCircle className='text-danger' />
-                  )}
-                </td>
+
                 <td>
                   {userProfile?.points || (
                     <span className='text-danger'>0</span>
@@ -91,23 +75,6 @@ const ViewUserProfiles = ({
                     <span className='text-warning'>
                       {userProfile.expiration} days
                     </span>
-                  )}
-                </td>
-                <td>
-                  {!userProfile.approved && (
-                    <button
-                      onClick={() => mutateAsyncUpdate(userProfile._id)}
-                      disabled={isLoadingUpdate}
-                      className={`btn btn-sm btn-success`}
-                    >
-                      {isLoadingUpdate ? (
-                        <span className='spinner-border spinner-border-sm' />
-                      ) : (
-                        <>
-                          <FaCheckCircle className='mb-1' /> Approve
-                        </>
-                      )}
-                    </button>
                   )}
                 </td>
               </tr>

@@ -28,7 +28,7 @@ const LOGIN_HEADERS = {
   },
 }
 
-const BASE_URL = `https://merchant.hormuud.com/api/account`
+const BASE_URL = process.env.MERCHANT_BASE_URL
 
 const LOGIN_URL = `${BASE_URL}/login`
 const TRANSACTIONS = `${BASE_URL}/transactions`

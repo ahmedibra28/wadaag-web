@@ -22,7 +22,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/auth/otp?otp=${data.otp}&user=${data._id}`)
+      router.push(`/auth/otp?user=${data._id}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess])

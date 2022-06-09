@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"0c5dc2eb306d4fd9ba9150fabb91aec8","collectionName":"rides","type":"collection"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"5a56a884c8be4e2e9fb4f1d568121489","collectionName":"rides","type":"collection"}

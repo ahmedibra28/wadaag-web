@@ -13,7 +13,6 @@ const OTP = () => {
   const router = useRouter()
   const pathName = router.query.next || '/'
 
-  const orpTemp = router.query.otp
   const userId = router.query.user
   const {
     register,
@@ -103,13 +102,6 @@ const OTP = () => {
             'Confirm'
           )}
         </button>
-
-        <div className='text-center mt-3'>
-          <span className='text-primary'>
-            Login with this <span className='fw-bold'> {orpTemp}</span>{' '}
-            temporary OTP
-          </span>
-        </div>
       </form>
     </FormContainer>
   )

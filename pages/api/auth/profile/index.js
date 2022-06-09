@@ -34,9 +34,7 @@ handler.get(async (req, res) => {
       })
       ?.reduce((a, b) => a + b, 0)
 
-    console.log(expirationDays)
-
-    res.status(200).send(objects)
+    res.status(200).send({ ...objects, expiration: expirationDays })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -53,11 +51,6 @@ handler.post(async (req, res) => {
       return res.status(400).json({ error: `${schemaNameString} not found` })
 
     if (name) await User.findOneAndUpdate({ _id }, { name })
-
-    if (object.isRider) {
-      // @TODO: here implement payment logic
-      // if rider is paid, then set approved to true
-    }
 
     object.profileCompleted = true
     object.image = image ? image : object.image

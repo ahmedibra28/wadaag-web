@@ -14,20 +14,12 @@ const UserProfiles = () => {
   const [page, setPage] = useState(1)
   const [q, setQ] = useState('')
 
-  const { getUserProfiles, updateProfile } = useUserProfilesHook({
+  const { getUserProfiles } = useUserProfilesHook({
     page,
     q,
   })
 
   const { data, isLoading, isError, error, refetch } = getUserProfiles
-
-  const {
-    isLoading: isLoadingUpdate,
-    isError: isErrorUpdate,
-    error: errorUpdate,
-    isSuccess: isSuccessUpdate,
-    mutateAsync: mutateAsyncUpdate,
-  } = updateProfile
 
   useEffect(() => {
     refetch()
@@ -52,13 +44,6 @@ const UserProfiles = () => {
         <meta property='og:title' content='User Profiles' key='title' />
       </Head>
 
-      {isSuccessUpdate && (
-        <Message variant='success'>
-          User has been approved successfully.
-        </Message>
-      )}
-      {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
-
       <div className='ms-auto text-end'>
         <Pagination data={data} setPage={setPage} />
       </div>
@@ -73,8 +58,6 @@ const UserProfiles = () => {
           setQ={setQ}
           q={q}
           searchHandler={searchHandler}
-          isLoadingUpdate={isLoadingUpdate}
-          mutateAsyncUpdate={mutateAsyncUpdate}
         />
       )}
     </>
