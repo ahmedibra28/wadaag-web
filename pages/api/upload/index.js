@@ -1,11 +1,19 @@
 import nc from 'next-connect'
 import path from 'path'
 import fileUpload from 'express-fileupload'
-export const config = { api: { bodyParser: false } }
 const __dirname = path.resolve()
+export const config = { api: { bodyParser: false } }
+
+import Cors from 'cors'
 
 const handler = nc()
 handler.use(fileUpload())
+handler.use(
+  Cors({
+    origin: '*',
+    credentials: true,
+  })
+)
 
 handler.post(async (req, res) => {
   // check if there is no files
