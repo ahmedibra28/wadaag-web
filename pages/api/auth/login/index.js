@@ -2,8 +2,14 @@ import nc from 'next-connect'
 import db from '../../../../config/db'
 import User from '../../../../models/User'
 import axios from 'axios'
+import Cors from 'cors'
 
 const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+  })
+)
 
 const schemaName = User
 
@@ -63,30 +69,19 @@ handler.post(async (req, res) => {
 
     const token = await getToken()
 
-    if (!user) {
-      const object = await schemaName.create({ mobileNumber })
-
-      object.getRandomOtp()
-      await object.save()
-
-      const sms = await sendSMS(
-        token.access_token,
-        req.body.mobileNumber,
-        `Your OTP is ${object.otp}`
-      )
-      if (sms) return res.status(200).send(object)
-    }
+    if (!user) return res.status(401).json({ error: 'User not found' })
 
     user.getRandomOtp()
 
     await user.save()
 
-    const sms = await sendSMS(
-      token.access_token,
-      req.body.mobileNumber,
-      `Your OTP is ${user.otp}`
-    )
-    if (sms) return res.status(200).send(user)
+    // const sms = await sendSMS(
+    //   token.access_token,
+    //   req.body.mobileNumber,
+    //   `Your OTP is ${user.otp}`
+    // )
+    // if (sms)
+    return res.status(200).send(user)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

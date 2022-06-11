@@ -166,6 +166,13 @@ const permissions = [
     method: 'POST',
   },
   {
+    description: 'Create User From Mobile',
+    route: '/api/auth/users/register',
+    auth: false,
+    name: 'Users',
+    method: 'POST',
+  },
+  {
     description: 'Update User',
     route: '/api/auth/users/:id',
     auth: true,

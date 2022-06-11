@@ -6,7 +6,14 @@ import { isAuth } from '../../../../utils/auth'
 
 const schemaName = User
 
+import Cors from 'cors'
+
 const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+  })
+)
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
