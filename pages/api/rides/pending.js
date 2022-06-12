@@ -28,8 +28,6 @@ handler.get(async (req, res) => {
       })
       .lean()
 
-    console.log(ride)
-
     return res.status(200).send(ride)
   } catch (error) {
     res.status(500).send({ error: error.message })
