@@ -49,8 +49,7 @@ handler.post(async (req, res) => {
       user: object._id,
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
-      isRider: selected === 'rider' ? true : false,
-      profileCompleted: false,
+      userType: selected,
       plate,
       license,
       level: 0,
@@ -67,9 +66,9 @@ handler.post(async (req, res) => {
     //   `Your OTP is ${object.otp}`
     // )
     // if (sms)
-    return res.status(200).send(object)
 
-    res.status(200).send(object)
+    const { otp, ...userData } = object.toObject()
+    return res.status(200).send(userData)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

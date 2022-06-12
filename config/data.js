@@ -37,8 +37,7 @@ const users = {
 
 const profile = {
   name: 'Ahmed Ibrahim',
-  isRider: false,
-  profileCompleted: true,
+  userType: 'user',
   image: 'https://github.com/ahmaat19.png',
 }
 

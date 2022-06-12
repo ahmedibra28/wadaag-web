@@ -3,14 +3,17 @@ import User from './User'
 
 const profileScheme = mongoose.Schema(
   {
-    isRider: { type: Boolean, default: false },
+    userType: {
+      type: String,
+      enum: ['rider', 'driver', 'user'],
+      required: true,
+    },
     name: String,
     image: String,
     plate: String,
     license: String,
     points: { type: Number, default: 0 },
     level: { type: Number, default: 0 },
-    profileCompleted: { type: Boolean, default: false },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: User,

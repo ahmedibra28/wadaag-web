@@ -3,10 +3,18 @@ import db from '../../../config/db'
 import Profile from '../../../models/Profile'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
+import Cors from 'cors'
 
 const schemaName = Ride
 
 const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+    credentials: true,
+  })
+)
+
 handler.use(isAuth)
 handler.post(async (req, res) => {
   await db()
@@ -67,8 +75,8 @@ handler.post(async (req, res) => {
           name: profile?.name || 'unknown',
           mobileNumber: profile?.user?.mobileNumber,
           image: profile?.image,
-          from: near.from,
-          to: near.to,
+          origin: near.origin,
+          destination: near.destination,
           createdAt: near.createdAt,
         }
       })

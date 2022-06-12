@@ -2,11 +2,18 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
+import Cors from 'cors'
 
 const schemaName = Ride
 const schemaNameString = 'Ride'
 
 const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+    credentials: true,
+  })
+)
 
 handler.use(isAuth)
 

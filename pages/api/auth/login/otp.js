@@ -73,7 +73,7 @@ handler.post(async (req, res) => {
       _id: object._id,
       name: object.name,
       avatar: profile.image,
-      userType: profile.isRider ? 'rider' : 'driver',
+      userType: profile.userType,
       points: Number(profile.points),
       expiration: Number(expirationDays),
       level: Number(profile.level),

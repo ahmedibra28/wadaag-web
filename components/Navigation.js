@@ -28,7 +28,11 @@ const Navigation = () => {
   const { data: profileData } = getProfile
 
   useEffect(() => {
-    if (profileData && profileData.isRider && profileData.expiration === 0) {
+    if (
+      profileData &&
+      profileData.userType === 'rider' &&
+      profileData.expiration === 0
+    ) {
       if (router.pathname !== '/account/profile') {
         router.push('/account/profile')
       }

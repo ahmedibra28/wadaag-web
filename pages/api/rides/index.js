@@ -2,10 +2,18 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
+import Cors from 'cors'
+
+const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+    credentials: true,
+  })
+)
 
 const schemaName = Ride
 
-const handler = nc()
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
@@ -44,21 +52,34 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db()
   try {
-    const { from, to, distance, duration, originLatLng, destinationLatLng } =
-      req.body
+    const {
+      origin,
+      destination,
+      distance,
+      duration,
+      originLatLng,
+      destinationLatLng,
+    } = req.body
     const rider = req.user._id
 
     if (
-      (!from || !to || !distance || !duration,
+      (!origin || !destination || !distance || !duration,
       !originLatLng,
       !destinationLatLng)
     )
       return res.status(400).json({ error: 'Please fill all the fields' })
 
+    const ride = await schemaName.findOne({
+      status: 'pending',
+      rider,
+    })
+    if (ride)
+      return res.status(400).json({ error: 'You have a uncompleted ride' })
+
     const object = await schemaName.create({
       rider,
-      from,
-      to,
+      origin,
+      destination,
       distance,
       duration,
       originLatLng,

@@ -1,5 +1,4 @@
 import { Search } from '../../'
-import Image from 'next/image'
 
 const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
   return (
@@ -26,7 +25,7 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
             <th>Type</th>
             <th>Phone</th>
             <th>Points</th>
-            <th>Expiration</th>
+            {/* <th>Expiration</th> */}
           </tr>
         </thead>
 
@@ -35,7 +34,7 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
             data.data.map((userProfile) => (
               <tr key={userProfile._id}>
                 <td>
-                  <Image
+                  <img
                     width='30'
                     height='30'
                     src={userProfile.image}
@@ -49,10 +48,18 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
                   )}
                 </td>
                 <td>
-                  {userProfile.isRider ? (
-                    <span className='badge bg-primary'>RIDER</span>
+                  {userProfile.userType === 'rider' ? (
+                    <span className='badge bg-primary'>
+                      {userProfile.userType.toUpperCase()}
+                    </span>
+                  ) : userProfile.userType === 'driver' ? (
+                    <span className='badge bg-warning'>
+                      {userProfile.userType.toUpperCase()}
+                    </span>
                   ) : (
-                    <span className='badge bg-success'>ADMIN</span>
+                    <span className='badge bg-success'>
+                      {userProfile.userType.toUpperCase()}
+                    </span>
                   )}
                 </td>
                 <td>{userProfile?.user?.mobileNumber}</td>
@@ -62,7 +69,7 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
                     <span className='text-danger'>0</span>
                   )}
                 </td>
-                <td>
+                {/* <td>
                   {userProfile.expiration <= 10 ? (
                     <span className='text-danger'>
                       {userProfile.expiration} days
@@ -76,7 +83,7 @@ const ViewUserProfiles = ({ data, setQ, q, searchHandler }) => {
                       {userProfile.expiration} days
                     </span>
                   )}
-                </td>
+                </td> */}
               </tr>
             ))}
         </tbody>

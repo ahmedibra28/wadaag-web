@@ -2,10 +2,18 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
+import Cors from 'cors'
 
 const schemaName = Ride
 
 const handler = nc()
+handler.use(
+  Cors({
+    origin: '*',
+    credentials: true,
+  })
+)
+
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
@@ -19,6 +27,8 @@ handler.get(async (req, res) => {
         rider: _id,
       })
       .lean()
+
+    console.log(ride)
 
     return res.status(200).send(ride)
   } catch (error) {

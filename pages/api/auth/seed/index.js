@@ -48,9 +48,12 @@ handler.get(async (req, res) => {
     await Profile.create({
       user: userObject._id,
       name: profile.name,
-      type: profile.type,
-      profileCompleted: profile.profileCompleted,
+      userType: profile.userType,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${userObject.name}&background=random&color=random&size=128`,
+      plate: undefined,
+      license: undefined,
+      points: undefined,
+      level: undefined,
     })
 
     // Check duplicate permissions

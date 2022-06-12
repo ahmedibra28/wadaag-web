@@ -100,7 +100,7 @@ const Profile = () => {
 
       {isLoading && <Spinner />}
       <form onSubmit={handleSubmit(submitHandler)}>
-        {data && data.isRider && data.expiration < 10 && (
+        {data && data.userType === 'rider' && data.expiration < 10 && (
           <>
             <button
               type='button'
