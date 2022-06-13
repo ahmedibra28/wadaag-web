@@ -84,6 +84,9 @@ handler.post(async (req, res) => {
 
     const objects = await results
 
+    if (objects.length === 0)
+      return res.status(400).json({ error: 'No riders found at your location' })
+
     return res.status(200).send(objects)
   } catch (error) {
     res.status(500).send({ error: error.message })
