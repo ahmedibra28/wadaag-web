@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "d": "nodemon server.js"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",

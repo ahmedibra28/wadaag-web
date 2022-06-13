@@ -1,24 +1,47 @@
 const express = require('express')
-const next = require('next')
 const path = require('path')
+const http = require('http')
+const next = require('next')
+const socketio = require('socket.io')
+const cors = require('cors')
 
-const port = parseInt(process.env.PORT, 10) || 3000
+const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const nextApp = next({ dev })
+const nextHandler = nextApp.getRequestHandler()
 
-app.prepare().then(() => {
-  const server = express()
+nextApp.prepare().then(async () => {
+  let app = express()
 
-  server.use(express.static(path.join(__dirname, './public')))
-  server.use('/_next', express.static(path.join(__dirname, './.next')))
+  app.use(cors())
 
-  server.all('*', (req, res) => {
-    return handle(req, res)
+  const server = http.createServer(app)
+  const io = new socketio.Server({
+    cors: {
+      origin: '*',
+      methods: 'GET,POST',
+    },
+  })
+  io.attach(server)
+
+  app.use(express.static(path.join(__dirname, './public')))
+  app.use('/_next', express.static(path.join(__dirname, './.next')))
+
+  io.on('connection', (socket) => {
+    console.log('connection')
+    socket.on('ride-request', (data) => {
+      console.log('ride-request', data)
+      io.emit('ride-request', data)
+    })
+
+    socket.on('disconnect', () => {
+      console.log('client disconnected')
+    })
   })
 
-  server.listen(port, (err) => {
-    if (err) throw err
+  app.all('*', (req, res) => nextHandler(req, res))
+
+  server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
