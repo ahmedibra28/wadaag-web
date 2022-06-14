@@ -4,6 +4,7 @@ const http = require('http')
 const next = require('next')
 const socketio = require('socket.io')
 const cors = require('cors')
+const axios = require('axios')
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -30,8 +31,31 @@ nextApp.prepare().then(async () => {
   io.on('connection', (socket) => {
     console.log('connection')
     socket.on('ride-request', (data) => {
-      console.log('ride-request', data)
-      io.emit('ride-request', data)
+      const riderTwoId = data.user._id
+      const riderTwoName = data.user.name
+      const riderTwoMobile = data.user.mobile
+      const rideId = data._id
+      const requestType = data.requestType
+
+      const rideFun = async () => {
+        try {
+          const { data } = await axios.post(
+            'http://localhost:3000/api/socketio',
+            {
+              riderTwoId,
+              riderTwoName,
+              riderTwoMobile,
+              rideId,
+              requestType,
+            },
+            {}
+          )
+          io.emit('ride-response', data)
+        } catch (error) {
+          console.log({ error: error.message })
+        }
+      }
+      rideFun()
     })
 
     socket.on('disconnect', () => {

@@ -19,6 +19,7 @@ const rideScheme = mongoose.Schema(
       enum: ['pending', 'completed', 'cancelled'],
       default: 'pending',
     },
+    chat: [],
   },
   { timestamps: true }
 )

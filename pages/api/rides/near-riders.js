@@ -78,6 +78,7 @@ handler.post(async (req, res) => {
           origin: near.origin,
           destination: near.destination,
           createdAt: near.createdAt,
+          duration: near.duration,
         }
       })
     )
