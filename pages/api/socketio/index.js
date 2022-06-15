@@ -16,9 +16,11 @@ handler.use(
 
 handler.post(async (req, res) => {
   await db()
+
   try {
     const { riderTwoId, riderTwoName, riderTwoMobile, rideId, requestType } =
       req.body
+    console.log('++++++++++++++++', req.body)
 
     // get ride
     const ride = await schemaName.findOne({ _id: rideId, status: 'pending' })
@@ -44,6 +46,32 @@ handler.post(async (req, res) => {
       ]
 
       if (ride.chat.length === 0) {
+        ride.chat = [...ride.chat, ...chat]
+        await ride.save()
+      }
+
+      return res.status(200).send(ride)
+    }
+
+    // check if accept
+    if (acceptType === 'accept') {
+      const calculatePriceBasedOnDistance = (distance) => {
+        const km = Number(distance.split('km')[0])
+        const price = km * 0.5
+        return price
+      }
+
+      const chat = [
+        {
+          requestedBy: riderTwoId,
+          name: riderTwoName,
+          mobile: riderTwoMobile,
+          status: 'accept',
+          price: calculatePriceBasedOnDistance(ride.distance),
+        },
+      ]
+
+      if (ride.chat.length === 1) {
         ride.chat = [...ride.chat, ...chat]
         await ride.save()
       }

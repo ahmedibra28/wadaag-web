@@ -58,6 +58,40 @@ nextApp.prepare().then(async () => {
       rideFun()
     })
 
+    socket.on('ride-accept', (data) => {
+      console.log('==========================')
+      console.log(data)
+      console.log('==========================')
+      const riderTwoId = data.user._id
+      const riderTwoName = data.user.name
+      const riderTwoMobile = data.user.mobile
+      const rideId = data._id
+      const requestType = data.requestType
+      try {
+        const rideFun = async () => {
+          try {
+            const { data } = await axios.post(
+              'http://localhost:3000/api/socketio',
+              {
+                riderTwoId,
+                riderTwoName,
+                riderTwoMobile,
+                rideId,
+                requestType,
+              },
+              {}
+            )
+            io.emit('ride-accept-response', data)
+          } catch (error) {
+            console.log({ error: error.message })
+          }
+        }
+        rideFun()
+      } catch (error) {
+        console.log({ error: error.message })
+      }
+    })
+
     socket.on('disconnect', () => {
       console.log('client disconnected')
     })
