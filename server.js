@@ -33,55 +33,27 @@ nextApp.prepare().then(async () => {
 
     // ======================= start ==========================
 
-    socket.on('send-ride-request', (info) => {
-      console.log(info)
-      io.emit('response-ride-request', info)
-    })
-
-    // socket.on('send-request', (info) => {
-    //   const rideFun = async () => {
-    //     try {
-    //       const { data } = await axios.post(
-    //         'http://localhost:3000/api/socketio',
-    //         {
-    //           _id: info._id,
-    //           riderOne: info.riderOne,
-    //           riderTwo: info.riderTwo,
-    //           requestType: info.requestType,
-    //         },
-    //         {}
-    //       )
-
-    //       io.emit('send-response', data)
-    //     } catch (error) {
-    //       console.log({ error: error.message })
-    //     }
-    //   }
-    //   rideFun()
-    // })
-
-    // ========================= end ==========================
-    socket.on('ride-request', (data) => {
-      const riderTwoId = data.user._id
-      const riderTwoName = data.user.name
-      const riderTwoMobile = data.user.mobile
-      const rideId = data._id
-      const requestType = data.requestType
-
+    socket.on('ride-request', (info) => {
       const rideFun = async () => {
         try {
           const { data } = await axios.post(
             'http://localhost:3000/api/socketio',
             {
-              riderTwoId,
-              riderTwoName,
-              riderTwoMobile,
-              rideId,
-              requestType,
+              _id: info._id,
+              riderOne: info.riderOne,
+              riderTwo: info.riderTwo,
+              riderTwoName: info.riderTwoName,
+              riderTwoMobile: info.riderTwoMobile,
+              requestType: info.requestType,
             },
             {}
           )
-          io.emit('ride-response', data)
+
+          console.log(data)
+          if (data) {
+            io.emit(data.riderOne, data)
+            // io.emit(redi, data)
+          }
         } catch (error) {
           console.log({ error: error.message })
         }
@@ -89,39 +61,68 @@ nextApp.prepare().then(async () => {
       rideFun()
     })
 
-    socket.on('ride-accept', (data) => {
-      console.log('==========================')
-      console.log(data)
-      console.log('==========================')
-      const riderTwoId = data.user._id
-      const riderTwoName = data.user.name
-      const riderTwoMobile = data.user.mobile
-      const rideId = data._id
-      const requestType = data.requestType
-      try {
-        const rideFun = async () => {
-          try {
-            const { data } = await axios.post(
-              'http://localhost:3000/api/socketio',
-              {
-                riderTwoId,
-                riderTwoName,
-                riderTwoMobile,
-                rideId,
-                requestType,
-              },
-              {}
-            )
-            io.emit('ride-accept-response', data)
-          } catch (error) {
-            console.log({ error: error.message })
-          }
-        }
-        rideFun()
-      } catch (error) {
-        console.log({ error: error.message })
-      }
-    })
+    // ========================= end ==========================
+    // socket.on('ride-request', (data) => {
+    //   const riderTwoId = data.user._id
+    //   const riderTwoName = data.user.name
+    //   const riderTwoMobile = data.user.mobile
+    //   const rideId = data._id
+    //   const requestType = data.requestType
+
+    //   const rideFun = async () => {
+    //     try {
+    //       const { data } = await axios.post(
+    //         'http://localhost:3000/api/socketio',
+    //         {
+    //           riderTwoId,
+    //           riderTwoName,
+    //           riderTwoMobile,
+    //           rideId,
+    //           requestType,
+    //         },
+    //         {}
+    //       )
+    //       io.emit(riderTwo, data)
+    //     } catch (error) {
+    //       console.log({ error: error.message })
+    //     }
+    //   }
+    //   rideFun()
+    // })
+
+    // socket.on('ride-accept', (data) => {
+    //   console.log('==========================')
+    //   console.log(data)
+    //   console.log('==========================')
+    //   const riderTwoId = data.user._id
+    //   const riderTwoName = data.user.name
+    //   const riderTwoMobile = data.user.mobile
+    //   const rideId = data._id
+    //   const requestType = data.requestType
+    //   try {
+    //     const rideFun = async () => {
+    //       try {
+    //         const { data } = await axios.post(
+    //           'http://localhost:3000/api/socketio',
+    //           {
+    //             riderTwoId,
+    //             riderTwoName,
+    //             riderTwoMobile,
+    //             rideId,
+    //             requestType,
+    //           },
+    //           {}
+    //         )
+    //         io.emit('ride-accept-response', data)
+    //       } catch (error) {
+    //         console.log({ error: error.message })
+    //       }
+    //     }
+    //     rideFun()
+    //   } catch (error) {
+    //     console.log({ error: error.message })
+    //   }
+    // })
 
     socket.on('disconnect', () => {
       console.log('client disconnected')
