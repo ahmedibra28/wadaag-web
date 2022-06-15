@@ -18,68 +18,63 @@ handler.post(async (req, res) => {
   await db()
 
   try {
-    const { riderTwoId, riderTwoName, riderTwoMobile, rideId, requestType } =
-      req.body
-    console.log('++++++++++++++++', req.body)
+    const { _id, riderOne, riderTwo, requestType } = req.body
 
     // get ride
-    const ride = await schemaName.findOne({ _id: rideId, status: 'pending' })
+    const ride = await schemaName.findOne({ _id, status: 'pending' })
 
     if (!ride) return res.status(400).json({ message: 'Ride not found' })
 
-    // check if request
     if (requestType === 'request') {
-      const calculatePriceBasedOnDistance = (distance) => {
-        const km = Number(distance.split('km')[0])
-        const price = km * 0.5
-        return price
-      }
-
+      console.log('------------------------')
       const chat = [
         {
-          requestedBy: riderTwoId,
-          name: riderTwoName,
-          mobile: riderTwoMobile,
-          status: 'request',
-          price: calculatePriceBasedOnDistance(ride.distance),
+          rideId: _id,
+          riderOne: riderOne,
+          riderTwo: riderTwo,
+          requestType: requestType,
+          price: Number(ride.distance.split('km')[0]) * 0.5,
         },
       ]
+
+      console.log(chat)
 
       if (ride.chat.length === 0) {
-        ride.chat = [...ride.chat, ...chat]
+        ride.chat = chat
         await ride.save()
       }
 
-      return res.status(200).send(ride)
+      return res.status(200).send(ride.chat)
     }
 
-    // check if accept
-    if (acceptType === 'accept') {
-      const calculatePriceBasedOnDistance = (distance) => {
-        const km = Number(distance.split('km')[0])
-        const price = km * 0.5
-        return price
-      }
+    // // check if accept
+    // if (acceptType === 'accept') {
+    //   const calculatePriceBasedOnDistance = (distance) => {
+    //     const km = Number(distance.split('km')[0])
+    //     const price = km * 0.5
+    //     return price
+    //   }
 
-      const chat = [
-        {
-          requestedBy: riderTwoId,
-          name: riderTwoName,
-          mobile: riderTwoMobile,
-          status: 'accept',
-          price: calculatePriceBasedOnDistance(ride.distance),
-        },
-      ]
+    //   const chat = [
+    //     {
+    //       requestedBy: riderTwoId,
+    //       name: riderTwoName,
+    //       mobile: riderTwoMobile,
+    //       status: 'accept',
+    //       price: calculatePriceBasedOnDistance(ride.distance),
+    //     },
+    //   ]
 
-      if (ride.chat.length === 1) {
-        ride.chat = [...ride.chat, ...chat]
-        await ride.save()
-      }
+    //   if (ride.chat.length === 1) {
+    //     ride.chat = [...ride.chat, ...chat]
+    //     await ride.save()
+    //   }
 
-      return res.status(200).send(ride)
-    }
+    //   return res.status(200).send(ride)
+    // }
 
-    res.send(ride)
+    res.status(400).json({ message: 'Invalid request' })
+    res.send(ride.chat)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

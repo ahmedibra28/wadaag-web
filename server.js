@@ -30,6 +30,37 @@ nextApp.prepare().then(async () => {
 
   io.on('connection', (socket) => {
     console.log('connection')
+
+    // ======================= start ==========================
+
+    socket.on('send-ride-request', (info) => {
+      console.log(info)
+      io.emit('response-ride-request', info)
+    })
+
+    // socket.on('send-request', (info) => {
+    //   const rideFun = async () => {
+    //     try {
+    //       const { data } = await axios.post(
+    //         'http://localhost:3000/api/socketio',
+    //         {
+    //           _id: info._id,
+    //           riderOne: info.riderOne,
+    //           riderTwo: info.riderTwo,
+    //           requestType: info.requestType,
+    //         },
+    //         {}
+    //       )
+
+    //       io.emit('send-response', data)
+    //     } catch (error) {
+    //       console.log({ error: error.message })
+    //     }
+    //   }
+    //   rideFun()
+    // })
+
+    // ========================= end ==========================
     socket.on('ride-request', (data) => {
       const riderTwoId = data.user._id
       const riderTwoName = data.user.name
