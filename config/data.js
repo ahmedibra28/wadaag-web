@@ -431,11 +431,11 @@ const permissions = [
     method: 'GET',
   },
   {
-    description: 'Get Payment Transactions From Merchant',
+    description: 'Verify Payment Transactions From Merchant',
     route: '/api/payments',
     auth: true,
     name: 'Payments',
-    method: 'GET',
+    method: 'POST',
   },
   {
     description: 'Get Payments Report',

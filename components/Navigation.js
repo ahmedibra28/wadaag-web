@@ -8,7 +8,6 @@ import {
   FaBell,
 } from 'react-icons/fa'
 import useAuthHook from '../utils/api/auth'
-import usePaymentsHook from '../utils/api/payments'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import useProfilesHook from '../utils/api/profiles'
@@ -18,7 +17,6 @@ const Navigation = () => {
   const router = useRouter()
 
   const { postLogout } = useAuthHook()
-  const { getPayments } = usePaymentsHook()
   const { getProfile } = useProfilesHook({
     page: 1,
     q: '',
@@ -40,11 +38,6 @@ const Navigation = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, profileData])
-
-  const { data: merchantData, error: merchantError, isError } = getPayments
-
-  merchantData && console.log('🔥🔥💖💖 ', merchantData)
-  isError && console.log('⚠⚠ 🔐🔐  ', merchantError)
 
   const { mutateAsync } = useMutation(postLogout, {
     onSuccess: () => router.push('/auth/login'),

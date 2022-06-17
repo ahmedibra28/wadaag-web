@@ -103,6 +103,47 @@ nextApp.prepare().then(async () => {
 
     // ========================= End Rider One Ride ==========================
 
+    // ======================= Start Rider One Ride ==========================
+
+    socket.on('send-message', (info) => {
+      const rideFun = async () => {
+        try {
+          const { data } = await axios.post(
+            'http://localhost:3000/api/socketio',
+            {
+              _id: info._id,
+              riderOneId: info.riderOneId,
+              riderOneName: info.riderOneName,
+              riderOneAvatar: info.riderOneAvatar,
+              riderOneMobile: info.riderOneMobile,
+
+              riderTwoId: info.riderTwoId,
+              riderTwoName: info.riderTwoName,
+              riderTwoAvatar: info.riderTwoAvatar,
+              riderTwoMobile: info.riderTwoMobile,
+
+              message: info.message,
+            },
+            {}
+          )
+
+          if (data) {
+            io.emit(
+              info.sender === data.riderOneId
+                ? `${data.riderTwoId}message1`
+                : `${data.riderOneId}message2`,
+              data
+            )
+          }
+        } catch (error) {
+          console.log({ error: error.message })
+        }
+      }
+      rideFun()
+    })
+
+    // ========================= End Rider One Ride ==========================
+
     socket.on('disconnect', () => {
       console.log('client disconnected')
     })
