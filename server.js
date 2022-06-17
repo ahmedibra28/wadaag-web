@@ -31,27 +31,32 @@ nextApp.prepare().then(async () => {
   io.on('connection', (socket) => {
     console.log('connection')
 
-    // ======================= Start Request Ride ==========================
+    // ======================= Start Rider Two Ride ==========================
 
-    socket.on('ride-request', (info) => {
+    socket.on('rider-two-chat', (info) => {
       const rideFun = async () => {
         try {
           const { data } = await axios.post(
             'http://localhost:3000/api/socketio',
             {
               _id: info._id,
-              riderOne: info.riderOne,
-              riderTwo: info.riderTwo,
+              riderOneId: info.riderOneId,
+              riderOneName: info.riderOneName,
+              riderOneAvatar: info.riderOneAvatar,
+              riderOneMobile: info.riderOneMobile,
+
+              riderTwoId: info.riderTwoId,
               riderTwoName: info.riderTwoName,
+              riderTwoAvatar: info.riderTwoAvatar,
               riderTwoMobile: info.riderTwoMobile,
-              requestType: info.requestType,
+
+              message: info.message,
             },
             {}
           )
 
           if (data) {
-            io.emit(data.riderOne, data)
-            // io.emit(redi, data)
+            io.emit(`${data.riderOneId}1`, data)
           }
         } catch (error) {
           console.log({ error: error.message })
@@ -60,15 +65,43 @@ nextApp.prepare().then(async () => {
       rideFun()
     })
 
-    // ========================= End Request Ride ==========================
+    // ========================= End Rider Two Ride ==========================
 
-    // ======================= Start Accept Ride ==========================
+    // ======================= Start Rider One Ride ==========================
 
-    socket.on('ride-accept', (info) => {
-      io.emit(info.riderTwo, info)
+    socket.on('rider-one-chat', (info) => {
+      const rideFun = async () => {
+        try {
+          const { data } = await axios.post(
+            'http://localhost:3000/api/socketio',
+            {
+              _id: info._id,
+              riderOneId: info.riderOneId,
+              riderOneName: info.riderOneName,
+              riderOneAvatar: info.riderOneAvatar,
+              riderOneMobile: info.riderOneMobile,
+
+              riderTwoId: info.riderTwoId,
+              riderTwoName: info.riderTwoName,
+              riderTwoAvatar: info.riderTwoAvatar,
+              riderTwoMobile: info.riderTwoMobile,
+
+              message: info.message,
+            },
+            {}
+          )
+
+          if (data) {
+            io.emit(`${data.riderTwoId}2`, data)
+          }
+        } catch (error) {
+          console.log({ error: error.message })
+        }
+      }
+      rideFun()
     })
 
-    // ========================= End Accept Ride ==========================
+    // ========================= End Rider One Ride ==========================
 
     socket.on('disconnect', () => {
       console.log('client disconnected')
