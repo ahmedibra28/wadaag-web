@@ -4,6 +4,7 @@ import Profile from '../../../models/Profile'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
 import Cors from 'cors'
+import { subscription, userType } from '../../../utils/subscription'
 
 const schemaName = Ride
 
@@ -21,7 +22,13 @@ handler.post(async (req, res) => {
 
   try {
     const { originLatLng, destinationLatLng } = req.body
-    const { _id } = req.user
+    const { _id, mobileNumber } = req.user
+
+    if ((await subscription(mobileNumber)) === 0)
+      return res.status(400).json({ error: 'Subscription expired' })
+
+    if (!(await userType(mobileNumber)))
+      return res.status(400).json({ error: 'User type not allowed' })
 
     const rides = await schemaName
       .find({

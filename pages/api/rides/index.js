@@ -3,6 +3,7 @@ import db from '../../../config/db'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
 import Cors from 'cors'
+import { subscription, userType } from '../../../utils/subscription'
 
 const handler = nc()
 handler.use(
@@ -61,6 +62,14 @@ handler.post(async (req, res) => {
       destinationLatLng,
     } = req.body
     const rider = req.user._id
+
+    const { mobileNumber } = req.user
+
+    if ((await subscription(mobileNumber)) === 0)
+      return res.status(400).json({ error: 'Subscription expired' })
+
+    if (!(await userType(mobileNumber)))
+      return res.status(400).json({ error: 'User type not allowed' })
 
     if (
       (!origin || !destination || !distance || !duration,

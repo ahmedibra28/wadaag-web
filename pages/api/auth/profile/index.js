@@ -9,6 +9,7 @@ const schemaName = Profile
 const schemaNameString = 'Profile'
 
 import Cors from 'cors'
+import { subscription } from '../../../../utils/subscription'
 
 const handler = nc()
 handler.use(
@@ -20,28 +21,16 @@ handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
   try {
-    const { _id } = req.user
+    const { _id, mobileNumber } = req.user
     const objects = await schemaName
       .findOne({ user: _id })
       .lean()
       .sort({ createdAt: -1 })
       .populate('user', ['mobileNumber'])
 
-    const payments = await Payment.find({
-      mobileNumber: objects.user.mobileNumber,
-    })
+    const expiration = await subscription(mobileNumber)
 
-    const expirationDays = payments
-      .map((payment) => {
-        const date = new Date(payment.date)
-        const now = new Date()
-        const diff = now - date
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-        return days < 31 && 31 - days
-      })
-      ?.reduce((a, b) => a + b, 0)
-
-    res.status(200).send({ ...objects, expiration: expirationDays })
+    res.status(200).send({ ...objects, expiration })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
