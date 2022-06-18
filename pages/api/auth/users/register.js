@@ -16,6 +16,37 @@ handler.use(
 )
 // handler.use(isAuth)
 
+const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
+const username = MY_SMS_USERNAME
+const password = MY_SMS_API_KEY
+const grant_type = 'password'
+const tokenURL = `${MY_SMS_BASE_URL}/token`
+const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
+
+// get access token
+const getToken = async () => {
+  const { data } = await axios.post(
+    tokenURL,
+    `username=${username}&password=${password}&grant_type=${grant_type}`
+  )
+  return data
+}
+
+// send SMS
+const sendSMS = async (token, mobile, message) => {
+  const { data } = await axios.post(
+    sendSMS_URL,
+    { mobile, message },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  return data
+}
+
 handler.post(async (req, res) => {
   await db()
   try {
@@ -56,19 +87,20 @@ handler.post(async (req, res) => {
       points: 0,
     })
 
+    const token = await getToken()
+
     object.getRandomOtp()
 
     await object.save()
 
-    // const sms = await sendSMS(
-    //   token.access_token,
-    //   req.body.mobile,
-    //   `Your OTP is ${object.otp}`
-    // )
-    // if (sms)
+    const sms = await sendSMS(
+      token.access_token,
+      req.body.mobileNumber,
+      `Your OTP is ${user.otp}`
+    )
 
     const { otp, ...userData } = object.toObject()
-    return res.status(200).send(userData)
+    if (sms) return res.status(200).send(userData)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

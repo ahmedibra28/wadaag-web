@@ -40,7 +40,7 @@ handler.post(async (req, res) => {
   await db()
   try {
     const { _id } = req.user
-    const { name, image } = req.body
+    const { name, image, userType, plate, license } = req.body
 
     const object = await schemaName.findOne({ user: _id }).populate('user')
     if (!object)
@@ -50,8 +50,11 @@ handler.post(async (req, res) => {
 
     object.profileCompleted = true
     object.image = image ? image : object.image
+    object.userType = userType ? userType : object.userType
     object.name = name ? name : object.name
     object.user = _id
+    object.plate = userType === 'driver' ? plate : object.plate
+    object.license = userType === 'driver' ? license : object.license
 
     await object.save()
     res.status(200).send(`${schemaNameString} updated`)
