@@ -66,7 +66,7 @@ handler.post(async (req, res) => {
       user: object._id,
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
-      userType: 'user',
+      userType: 'rider',
       plate: undefined,
       license: undefined,
       level: undefined,

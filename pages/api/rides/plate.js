@@ -3,6 +3,7 @@ import db from '../../../config/db'
 import Profile from '../../../models/Profile'
 import { isAuth } from '../../../utils/auth'
 import Cors from 'cors'
+import User from '../../../models/User'
 
 const handler = nc()
 handler.use(
@@ -26,9 +27,11 @@ handler.post(async (req, res) => {
       userType: 'driver',
     })
 
-    console.log(profile)
+    if (!profile) return res.status(400).json({ error: 'Driver not found' })
 
-    res.status(200).send(profile)
+    const user = await User.findOne({ _id: profile.user }, { mobileNumber: 1 })
+
+    res.status(200).send(user)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

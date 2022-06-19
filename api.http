@@ -4,7 +4,9 @@ content-type: application/json
 {
    " name": "Ala", 
    "selected": "rider",
-   "mobile": "615301501"
+   "mobile": "615301501",
+   "plate": "",
+   "license": ""
 
 }
 
@@ -19,7 +21,9 @@ content-type: application/json
 {
    " name": "Asif", 
    "selected": "rider",
-   "mobile": "615301502"
+   "mobile": "615301502",
+   "plate": "615301502",
+   "license": ""
 
 }
 
@@ -33,6 +37,8 @@ content-type: application/json
 {
    " name": "Suu", 
    "selected": "rider",
-   "mobile": "615301503"
+   "mobile": "615301503",
+   "plate": "615301503",
+   "license": ""
 
 }

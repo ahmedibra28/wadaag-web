@@ -5,7 +5,7 @@ const profileScheme = mongoose.Schema(
   {
     userType: {
       type: String,
-      enum: ['rider', 'driver', 'user'],
+      enum: ['rider', 'driver', 'admin'],
       required: true,
     },
     name: String,
@@ -15,7 +15,6 @@ const profileScheme = mongoose.Schema(
       uppercase: true,
       trim: true,
       unique: true,
-      default: 'NA',
     },
     license: String,
     points: { type: Number, default: 0 },
