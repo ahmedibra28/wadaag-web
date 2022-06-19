@@ -60,6 +60,7 @@ handler.post(async (req, res) => {
       duration,
       originLatLng,
       destinationLatLng,
+      plate,
     } = req.body
     const rider = req.user._id
 
@@ -93,6 +94,7 @@ handler.post(async (req, res) => {
       duration,
       originLatLng,
       destinationLatLng,
+      plate,
     })
     res.status(200).send(object)
   } catch (error) {

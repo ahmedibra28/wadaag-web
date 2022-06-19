@@ -67,6 +67,12 @@ handler.post(async (req, res) => {
 
     if (user) return res.status(400).json({ error: 'User already exists' })
 
+    const prof = await Profile.findOne({
+      plate: plate.upperCase(),
+    })
+
+    if (prof) return res.status(400).json({ error: 'Plate already existed' })
+
     const object = await schemaName.create({
       name,
       mobileNumber: mobile,

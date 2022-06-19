@@ -41,6 +41,20 @@ handler.post(async (req, res) => {
   try {
     const { _id } = req.user
     const { name, image, userType, plate, license } = req.body
+    console.log(req.body)
+
+    if (plate && userType === 'driver') {
+      console.log('---------------')
+      const plateExist = await schemaName.findOne({
+        plate: plate.toUpperCas(),
+        _id: { $ne: _id },
+      })
+
+      console.log('plateExist', plateExist)
+
+      if (plateExist)
+        return res.status(400).json({ error: 'Plate already exist' })
+    }
 
     const object = await schemaName.findOne({ user: _id }).populate('user')
     if (!object)

@@ -444,6 +444,13 @@ const permissions = [
     name: 'Payments Report',
     method: 'POST',
   },
+  {
+    description: 'Plate Check',
+    route: '/api/rides/plate',
+    auth: true,
+    name: 'Plate Check',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }
