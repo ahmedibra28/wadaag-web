@@ -68,7 +68,7 @@ handler.post(async (req, res) => {
     if (user) return res.status(400).json({ error: 'User already exists' })
 
     const prof = await Profile.findOne({
-      plate: plate.upperCase(),
+      plate: plate.toUpperCase(),
     })
 
     if (prof) return res.status(400).json({ error: 'Plate already existed' })
