@@ -1,12 +1,15 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
+import UserRole from '../../../../models/UserRole'
 import User from '../../../../models/User'
+import axios from 'axios'
 // import { isAuth } from '../../../../utils/auth'
 
 const schemaName = User
 
 import Cors from 'cors'
+import Role from '../../../../models/Role'
 
 const handler = nc()
 handler.use(
@@ -87,10 +90,16 @@ handler.post(async (req, res) => {
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
       userType: selected,
-      plate,
-      license,
+      plate: plate ? plate.toUpperCase() : mobile,
+      license: license ? license.toUpperCase() : mobile,
       level: 0,
       points: 0,
+    })
+
+    const userRole = await Role.findOne({ type: 'AUTHENTICATED' }, { _id: 1 })
+    await UserRole.create({
+      user: object._id,
+      role: userRole._id,
     })
 
     const token = await getToken()
@@ -104,7 +113,6 @@ handler.post(async (req, res) => {
       req.body.mobileNumber,
       `Your OTP is ${user.otp}`
     )
-
     const { otp, ...userData } = object.toObject()
     if (sms) return res.status(200).send(userData)
   } catch (error) {
