@@ -6,18 +6,19 @@ export const subscription = async (mobile) => {
     mobileNumber: mobile,
   })
 
-  const last30Days = payments.filter(
-    (payment) =>
-      new Date(payment.date).getTime() >
-      new Date().getTime() - 30 * 24 * 60 * 60 * 1000
-  )
-  const totalAmountLast30Days = last30Days.reduce(
-    (acc, curr) => acc + curr.amount,
-    0
+  const perDayAmount = 1 / 30
+
+  const lastPayment = payments[payments.length - 1]
+
+  const lastPaidAmount = lastPayment?.amount
+
+  const days = Math.ceil(
+    (new Date(Date.now()) - new Date(lastPayment.date)) / (1000 * 60 * 60 * 24)
   )
 
-  const daysLeft = totalAmountLast30Days * 30
-  return daysLeft
+  if (days * perDayAmount > lastPaidAmount) return 0
+
+  return Math.round(lastPaidAmount / perDayAmount - days)
 }
 
 export const userType = async (mobile) => {

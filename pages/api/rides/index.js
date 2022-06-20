@@ -66,8 +66,8 @@ handler.post(async (req, res) => {
 
     const { mobileNumber } = req.user
 
-    if ((await subscription(mobileNumber)) === 0)
-      return res.status(400).json({ error: 'Subscription expired' })
+    // if ((await subscription(mobileNumber)) === 0)
+    //   return res.status(400).json({ error: 'Subscription expired' })
 
     if (!(await userType(mobileNumber)))
       return res.status(400).json({ error: 'User type not allowed' })
