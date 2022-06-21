@@ -111,7 +111,7 @@ handler.post(async (req, res) => {
     const sms = await sendSMS(
       token.access_token,
       req.body.mobileNumber,
-      `Your OTP is ${user.otp}`
+      `Your OTP is ${object.otp}`
     )
 
     const { otp, ...userData } = object.toObject()
