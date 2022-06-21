@@ -113,6 +113,7 @@ handler.post(async (req, res) => {
       req.body.mobileNumber,
       `Your OTP is ${user.otp}`
     )
+
     const { otp, ...userData } = object.toObject()
     if (sms) return res.status(200).send(userData)
   } catch (error) {

@@ -6,6 +6,8 @@ export const subscription = async (mobile) => {
     mobileNumber: mobile,
   })
 
+  if (payments.length === 0) return 0
+
   const perDayAmount = 1 / 30
 
   const lastPayment = payments[payments.length - 1]
