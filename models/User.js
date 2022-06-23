@@ -19,10 +19,8 @@ userScheme.methods.getRandomOtp = function () {
       ? Math.floor(Math.random() * 10000)
       : resetToken
 
-  if (resetToken.length === 4) {
-    this.otp = resetToken.toString()
-    this.otpExpire = Date.now() + 10 * (60 * 1000) // Ten Minutes
-  }
+  this.otp = resetToken.toString()
+  this.otpExpire = Date.now() + 10 * (60 * 1000) // Ten Minutes
   return resetToken
 }
 
