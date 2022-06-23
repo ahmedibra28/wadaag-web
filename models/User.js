@@ -13,10 +13,16 @@ const userScheme = mongoose.Schema(
 )
 
 userScheme.methods.getRandomOtp = function () {
-  const resetToken = Math.floor(Math.random() * 1000000)
-  this.otp = resetToken.toString()
-  this.otpExpire = Date.now() + 10 * (60 * 1000) // Ten Minutes
+  let resetToken = Math.floor(Math.random() * 10000)
+  resetToken =
+    resetToken.toString().length !== 4
+      ? Math.floor(Math.random() * 10000)
+      : resetToken
 
+  if (resetToken.length === 4) {
+    this.otp = resetToken.toString()
+    this.otpExpire = Date.now() + 10 * (60 * 1000) // Ten Minutes
+  }
   return resetToken
 }
 
