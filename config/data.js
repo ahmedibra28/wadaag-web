@@ -445,6 +445,13 @@ const permissions = [
     method: 'POST',
   },
   {
+    description: 'Get Payments Transaction Report',
+    route: '/api/reports/payments/transactions',
+    auth: true,
+    name: 'Payments Transaction Report',
+    method: 'GET',
+  },
+  {
     description: 'Plate Check',
     route: '/api/rides/plate',
     auth: true,
