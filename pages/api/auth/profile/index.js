@@ -1,7 +1,6 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
-import Payment from '../../../../models/Payment'
 import User from '../../../../models/User'
 import { isAuth } from '../../../../utils/auth'
 

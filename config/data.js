@@ -37,7 +37,7 @@ const users = {
 
 const profile = {
   name: 'Ahmed Ibrahim',
-  userType: 'user',
+  userType: 'admin',
   image: 'https://github.com/ahmaat19.png',
 }
 
