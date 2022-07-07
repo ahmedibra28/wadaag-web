@@ -14,7 +14,10 @@ handler.get(async (req, res) => {
     const { id } = req.user
     const user = await User.findById(id)
 
-    const payments = await schemaName.find({ mobileNumber: user.mobileNumber })
+    const payments = await schemaName
+      .find({ mobileNumber: user.mobileNumber })
+      .lean()
+      .sort({ date: -1 })
 
     const last3PaymentTransactions = payments && payments.slice(0, 3)
 

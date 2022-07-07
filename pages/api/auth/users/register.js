@@ -115,6 +115,7 @@ handler.post(async (req, res) => {
     )
 
     const { otp, ...userData } = object.toObject()
+
     if (sms) return res.status(200).send(userData)
   } catch (error) {
     res.status(500).json({ error: error.message })

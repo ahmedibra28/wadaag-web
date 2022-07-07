@@ -78,16 +78,28 @@ handler.get(async (req, res) => {
       )
       const paymentsId = payments.map((payment) => payment.transactionId)
 
-      const filteredData = data.transactionInfo.filter(
+      let filteredData = data.transactionInfo.filter(
         (transaction) => !paymentsId.includes(transaction.tranID.toString())
       )
+
+      const thirtyDaysBefore = moment()
+        .subtract(30, 'days')
+        .format('YYYY-MM-DD HH:mm:ss')
+
+      filteredData = filteredData.filter((payment) => {
+        payment.tranDate = moment(payment.tranDate, 'DD/MM/YY HH:mm:ss').format(
+          'YYYY-MM-DD HH:mm:ss'
+        )
+        return payment.tranDate > thirtyDaysBefore
+      })
+
       filteredData.forEach(async (transaction) => {
         await schemaName.create({
           mobileNumber: transaction.sender,
           transactionId: transaction.tranID,
           amount: transaction.credit,
           paymentMethod: 'MERCHANT',
-          date: moment(transaction.tranDate, 'DD/MM/YY HH:mm:ss').format(),
+          date: transaction.tranDate,
         })
       })
 
@@ -145,16 +157,28 @@ handler.post(async (req, res) => {
       )
       const paymentsId = payments.map((payment) => payment.transactionId)
 
-      const filteredData = data.transactionInfo.filter(
+      let filteredData = data.transactionInfo.filter(
         (transaction) => !paymentsId.includes(transaction.tranID.toString())
       )
+
+      const thirtyDaysBefore = moment()
+        .subtract(30, 'days')
+        .format('YYYY-MM-DD HH:mm:ss')
+
+      filteredData = filteredData.filter((payment) => {
+        payment.tranDate = moment(payment.tranDate, 'DD/MM/YY HH:mm:ss').format(
+          'YYYY-MM-DD HH:mm:ss'
+        )
+        return payment.tranDate > thirtyDaysBefore
+      })
+
       filteredData.forEach(async (transaction) => {
         await schemaName.create({
           mobileNumber: transaction.sender,
           transactionId: transaction.tranID,
           amount: transaction.credit,
           paymentMethod: 'MERCHANT',
-          date: moment(transaction.tranDate, 'DD/MM/YY HH:mm:ss').format(),
+          date: transaction.tranDate,
         })
       })
 
