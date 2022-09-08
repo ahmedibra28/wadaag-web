@@ -75,6 +75,8 @@ handler.post(async (req, res) => {
 
     await user.save()
 
+    console.log(`Your OTP is ${user.otp}`)
+
     const sms = await sendSMS(
       token.access_token,
       req.body.mobileNumber,

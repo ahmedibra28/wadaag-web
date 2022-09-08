@@ -107,7 +107,7 @@ handler.post(async (req, res) => {
     object.getRandomOtp()
 
     await object.save()
-
+    console.log(`Your OTP is ${object.otp}`)
     const sms = await sendSMS(
       token.access_token,
       req.body.mobileNumber,

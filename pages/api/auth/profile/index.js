@@ -9,6 +9,7 @@ const schemaNameString = 'Profile'
 
 import Cors from 'cors'
 import { subscription } from '../../../../utils/subscription'
+import Transaction from '../../../../models/Transaction'
 
 const handler = nc()
 handler.use(
@@ -27,9 +28,19 @@ handler.get(async (req, res) => {
       .sort({ createdAt: -1 })
       .populate('user', ['mobileNumber'])
 
-    const expiration = await subscription(mobileNumber)
+    const expiration = await subscription(
+      `0${mobileNumber?.toString()?.slice(-9)}`
+    )
 
-    res.status(200).send({ ...objects, expiration })
+    const payments = await Transaction.find({
+      mobileNumber: `0${mobileNumber?.toString()?.slice(-9)}`,
+    })
+      .lean()
+      .sort({ paidDate: -1 })
+
+    const last3PaymentTransactions = payments && payments.slice(0, 3)
+
+    res.status(200).send({ ...objects, expiration, last3PaymentTransactions })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

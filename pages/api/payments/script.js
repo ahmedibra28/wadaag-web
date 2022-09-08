@@ -2,10 +2,9 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
+import Transaction from '../../../models/Transaction'
 
-// import User from '../../../models/User'
-
-// const schemaName = User
+const schemaName = Transaction
 
 import Cors from 'cors'
 
@@ -13,13 +12,14 @@ const handler = nc()
 handler.use(
   Cors({
     origin: '*',
+    // origin: ['http://10.0.2.2'],
   })
 )
 
 handler.post(async (req, res) => {
   await db()
   try {
-    const { timestamp, body, originatingAddress } = req.body
+    let { timestamp, body, originatingAddress } = req.body
 
     // authentications
     const token = req.headers.authorization.split(' ')[1]
@@ -39,7 +39,7 @@ handler.post(async (req, res) => {
       return res.status(400).json({ error: 'All fields are required' })
 
     // checking request address
-    if (originatingAddress !== '192s')
+    if (originatingAddress !== '192')
       return res.status(400).json({ error: 'Invalid address' })
 
     // calculating difference between sent date and current date
@@ -69,6 +69,23 @@ handler.post(async (req, res) => {
     // checking body message if its received or sent
     if (body.startsWith('[-EVCPlus-] waxaad ')) {
       const [amount, mobile] = body.match(/[0-9.]+/g)
+
+      const amountPerDay = 1 / 30
+      const noOfDays = Math.round(Number(amount) / amountPerDay)
+
+      const data = {
+        amount,
+        mobileNumber: mobile,
+        paidDate: moment(timestamp).format(),
+        expireDate: moment(timestamp).add(Number(noOfDays), 'days').format(),
+      }
+
+      const obj = await schemaName.create(data)
+      if (!obj)
+        return res
+          .status(400)
+          .json({ error: 'No transaction has been created.' })
+
       return res.status(200).json({ amount, mobile })
     }
 

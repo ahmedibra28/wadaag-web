@@ -113,80 +113,89 @@ handler.get(async (req, res) => {
   }
 })
 
+// handler.post(async (req, res) => {
+//   try {
+//     await db()
+
+//     // Login
+//     const response = await axios.post(LOGIN_URL, REQUEST_PAYLOAD, LOGIN_HEADERS)
+//     const loginData = response.data
+//     const loginCookie = response.headers['set-cookie']
+//     const { sessionId } = loginData
+
+//     const headers = {
+//       Accept: 'application/json; charset=utf-8',
+//       'Content-Type': 'application/json;charset=UTF-8',
+//       Cookie: loginCookie,
+//       Referer: 'https://merchant.hormuud.com/',
+//       'Referrer-Policy': 'strict-origin-when-cross-origin',
+//     }
+
+//     if (loginData.replyMessage !== 'Success')
+//       return res.status(401).json({ error: 'Authentication Error' })
+
+//     // Transactions
+//     const { data } = await axios.post(
+//       TRANSACTIONS,
+//       '{"userNature":"MERCHANT","sessionId":"' + sessionId + '"}',
+//       {
+//         headers,
+//       }
+//     )
+
+//     if (data.replyMessage !== 'Success')
+//       return res.status(401).json({ error: 'Fetching Transactions Error' })
+
+//     if (data) {
+//       const payments = await schemaName.find(
+//         {
+//           date: {
+//             $gte: moment().subtract(30, 'days').toDate(),
+//           },
+//         },
+//         { transactionId: 1 }
+//       )
+//       const paymentsId = payments.map((payment) => payment.transactionId)
+
+//       let filteredData = data.transactionInfo.filter(
+//         (transaction) => !paymentsId.includes(transaction.tranID.toString())
+//       )
+
+//       const thirtyDaysBefore = moment()
+//         .subtract(30, 'days')
+//         .format('YYYY-MM-DD HH:mm:ss')
+
+//       filteredData = filteredData.filter((payment) => {
+//         payment.tranDate = moment(payment.tranDate, 'DD/MM/YY HH:mm:ss').format(
+//           'YYYY-MM-DD HH:mm:ss'
+//         )
+//         return payment.tranDate > thirtyDaysBefore
+//       })
+
+//       filteredData.forEach(async (transaction) => {
+//         await schemaName.create({
+//           mobileNumber: transaction.sender,
+//           transactionId: transaction.tranID,
+//           amount: transaction.credit,
+//           paymentMethod: 'MERCHANT',
+//           date: transaction.tranDate,
+//         })
+//       })
+
+//       return res.status(200).json({
+//         newTransactions: filteredData.length,
+//         totalTransactions: data.transactionInfo.length,
+//       })
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message })
+//   }
+// })
+
 handler.post(async (req, res) => {
   try {
     await db()
-
-    // Login
-    const response = await axios.post(LOGIN_URL, REQUEST_PAYLOAD, LOGIN_HEADERS)
-    const loginData = response.data
-    const loginCookie = response.headers['set-cookie']
-    const { sessionId } = loginData
-
-    const headers = {
-      Accept: 'application/json; charset=utf-8',
-      'Content-Type': 'application/json;charset=UTF-8',
-      Cookie: loginCookie,
-      Referer: 'https://merchant.hormuud.com/',
-      'Referrer-Policy': 'strict-origin-when-cross-origin',
-    }
-
-    if (loginData.replyMessage !== 'Success')
-      return res.status(401).json({ error: 'Authentication Error' })
-
-    // Transactions
-    const { data } = await axios.post(
-      TRANSACTIONS,
-      '{"userNature":"MERCHANT","sessionId":"' + sessionId + '"}',
-      {
-        headers,
-      }
-    )
-
-    if (data.replyMessage !== 'Success')
-      return res.status(401).json({ error: 'Fetching Transactions Error' })
-
-    if (data) {
-      const payments = await schemaName.find(
-        {
-          date: {
-            $gte: moment().subtract(30, 'days').toDate(),
-          },
-        },
-        { transactionId: 1 }
-      )
-      const paymentsId = payments.map((payment) => payment.transactionId)
-
-      let filteredData = data.transactionInfo.filter(
-        (transaction) => !paymentsId.includes(transaction.tranID.toString())
-      )
-
-      const thirtyDaysBefore = moment()
-        .subtract(30, 'days')
-        .format('YYYY-MM-DD HH:mm:ss')
-
-      filteredData = filteredData.filter((payment) => {
-        payment.tranDate = moment(payment.tranDate, 'DD/MM/YY HH:mm:ss').format(
-          'YYYY-MM-DD HH:mm:ss'
-        )
-        return payment.tranDate > thirtyDaysBefore
-      })
-
-      filteredData.forEach(async (transaction) => {
-        await schemaName.create({
-          mobileNumber: transaction.sender,
-          transactionId: transaction.tranID,
-          amount: transaction.credit,
-          paymentMethod: 'MERCHANT',
-          date: transaction.tranDate,
-        })
-      })
-
-      return res.status(200).json({
-        newTransactions: filteredData.length,
-        totalTransactions: data.transactionInfo.length,
-      })
-    }
+    return res.status(200).send('success')
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }
