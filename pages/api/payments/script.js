@@ -67,7 +67,7 @@ handler.post(async (req, res) => {
         .json({ error: 'You are not authorized to perform this action.' })
 
     // checking body message if its received or sent
-    if (body.startsWith('[-EVCPlus-] waxaad ')) {
+    if (body.startsWith('[-EVCPlus-] Waxaad ')) {
       const [amount, mobile] = body.match(/[0-9.]+/g)
 
       const amountPerDay = 1 / 30

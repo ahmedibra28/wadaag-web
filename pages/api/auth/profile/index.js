@@ -28,12 +28,10 @@ handler.get(async (req, res) => {
       .sort({ createdAt: -1 })
       .populate('user', ['mobileNumber'])
 
-    const expiration = await subscription(
-      `0${mobileNumber?.toString()?.slice(-9)}`
-    )
+    const expiration = await subscription(mobileNumber?.toString())
 
     const payments = await Transaction.find({
-      mobileNumber: `0${mobileNumber?.toString()?.slice(-9)}`,
+      mobileNumber: mobileNumber?.toString(),
     })
       .lean()
       .sort({ paidDate: -1 })
