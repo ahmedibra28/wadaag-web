@@ -54,7 +54,7 @@ handler.post(async (req, res) => {
   await db()
   try {
     const { name, plate, license, selected } = req.body
-    let mobile = req.body.mobile
+    let mobile = req.body.mobileNumber
 
     if (!mobile || mobile.toString().length !== 9)
       return res.status(400).json({ error: 'Invalid mobile number' })
@@ -70,11 +70,13 @@ handler.post(async (req, res) => {
 
     if (user) return res.status(400).json({ error: 'User already exists' })
 
-    const prof = await Profile.findOne({
-      plate: plate.toUpperCase(),
-    })
+    if (selected === 'driver') {
+      const prof = await Profile.findOne({
+        plate: plate.toUpperCase(),
+      })
 
-    if (prof) return res.status(400).json({ error: 'Plate already existed' })
+      if (prof) return res.status(400).json({ error: 'Plate already existed' })
+    }
 
     const object = await schemaName.create({
       name,
@@ -85,18 +87,24 @@ handler.post(async (req, res) => {
 
     if (!object) return res.status(400).json({ error: 'User not created' })
 
+    const userRole = await Role.findOne(
+      selected === 'driver' ? { type: 'DRIVER' } : { type: 'RIDER' },
+      { _id: 1 }
+    )
+
+    if (!userRole) return res.status(400).json({ error: 'Role not found' })
+
     await Profile.create({
       user: object._id,
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
       userType: selected,
-      plate: plate ? plate.toUpperCase() : mobile,
-      license: license ? license.toUpperCase() : mobile,
+      plate: selected === 'driver' ? 'driver' : mobile,
+      license: selected === 'driver' ? license : undefined,
       level: 0,
       points: 0,
     })
 
-    const userRole = await Role.findOne({ type: 'AUTHENTICATED' }, { _id: 1 })
     await UserRole.create({
       user: object._id,
       role: userRole._id,
@@ -108,15 +116,22 @@ handler.post(async (req, res) => {
 
     await object.save()
     console.log(`Your OTP is ${object.otp}`)
-    const sms = await sendSMS(
-      token.access_token,
-      req.body.mobileNumber,
-      `Your OTP is ${object.otp}`
-    )
+    // const sms = await sendSMS(
+    //   token.access_token,
+    //   req.body.mobileNumber,
+    //   `Your OTP is ${object.otp}`
+    // )
 
-    const { otp, ...userData } = object.toObject()
+    // const { otp, ...userData } = object.toObject()
 
-    if (sms) return res.status(200).send(userData)
+    // if (sms) return res.status(200).send(userData)
+
+    return res.status(200).send({
+      otp: object.otp,
+      mobileNumber: object.mobileNumber,
+      name: object.name,
+      _id: object._id,
+    })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

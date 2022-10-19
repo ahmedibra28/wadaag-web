@@ -1,1 +1,0 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"mobileNumber":{"$numberInt":"1"}},"name":"mobileNumber_1","background":true,"unique":true}],"uuid":"fc0ef8d631b94a288becd78f4fb3a4f2","collectionName":"users","type":"collection"}

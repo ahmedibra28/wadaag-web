@@ -30,15 +30,17 @@ handler.get(async (req, res) => {
 
     const expiration = await subscription(mobileNumber?.toString())
 
-    const payments = await Transaction.find({
-      mobileNumber: mobileNumber?.toString(),
-    })
-      .lean()
-      .sort({ paidDate: -1 })
+    // const payments = await Transaction.find({
+    //   mobileNumber: mobileNumber?.toString(),
+    // })
+    //   .lean()
+    //   .sort({ paidDate: -1 })
 
-    const last3PaymentTransactions = payments && payments.slice(0, 3)
+    // const last3PaymentTransactions = payments && payments.slice(0, 3)
 
-    res.status(200).send({ ...objects, expiration, last3PaymentTransactions })
+    console.log({ ...objects, expiration })
+
+    res.status(200).send({ ...objects, expiration })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -70,7 +72,7 @@ handler.post(async (req, res) => {
     }
 
     await object.save()
-    res.status(200).send(`${schemaNameString} updated`)
+    res.status(200).send(object)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

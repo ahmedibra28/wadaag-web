@@ -77,15 +77,27 @@ handler.post(async (req, res) => {
 
     console.log(`Your OTP is ${user.otp}`)
 
-    const sms = await sendSMS(
-      token.access_token,
-      req.body.mobileNumber,
-      `Your OTP is ${user.otp}`
-    )
+    // const sms = await sendSMS(
+    //   token.access_token,
+    //   req.body.mobileNumber,
+    //   `Your OTP is ${user.otp}`
+    // )
 
-    const { otp, ...userData } = user.toObject()
+    // const { otp, ...userData } = user.toObject()
 
-    if (sms) return res.status(200).send(userData)
+    console.log({
+      otp: user.otp,
+      mobileNumber: user.mobileNumber,
+      name: user.name,
+      _id: user._id,
+    })
+
+    return res.status(200).send({
+      otp: user.otp,
+      mobileNumber: user.mobileNumber,
+      name: user.name,
+      _id: user._id,
+    })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

@@ -58,7 +58,7 @@ const OTP = () => {
   const submitHandler = async (data) => {
     mutateAsync({
       otp: data.otp,
-      userId,
+      _id: userId,
     })
   }
 

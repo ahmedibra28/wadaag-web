@@ -3,6 +3,7 @@ import db from '../../../../config/db'
 import Transaction from '../../../../models/Transaction'
 import User from '../../../../models/User'
 import { isAuth } from '../../../../utils/auth'
+import { subscription } from '../../../../utils/subscription'
 
 const schemaName = Transaction
 
@@ -16,13 +17,15 @@ handler.get(async (req, res) => {
     const user = await User.findById(id)
 
     const payments = await schemaName
-      .find({ mobileNumber: `0${user.mobileNumber?.toString()?.slice(-9)}` })
+      .find({ mobileNumber: user.mobileNumber.toString() })
       .lean()
       .sort({ paidDate: -1 })
 
-    const last3PaymentTransactions = payments && payments.slice(0, 3)
+    const transactions = payments && payments.slice(0, 20)
 
-    return res.status(200).json(last3PaymentTransactions)
+    const expirationDays = await subscription(user.mobileNumber)
+
+    return res.status(200).json({ transactions, expirationDays })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

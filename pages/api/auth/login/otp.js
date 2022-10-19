@@ -1,15 +1,13 @@
 import nc from 'next-connect'
 import db from '../../../../config/db'
 import User from '../../../../models/User'
-import Profile from '../../../../models/Profile'
 import { generateToken } from '../../../../utils/auth'
-import UserRole from '../../../../models/UserRole'
-import Role from '../../../../models/Role'
 
 const schemaName = User
 
 import Cors from 'cors'
 import Payment from '../../../../models/Payment'
+import Profile from '../../../../models/Profile'
 
 const handler = nc()
 handler.use(
@@ -21,13 +19,15 @@ handler.use(
 handler.post(async (req, res) => {
   await db()
   try {
-    const { otp } = req.body
+    const { otp, _id } = req.body
+
+    console.log(req.body)
 
     if (!otp) return res.status(400).json({ error: 'Please enter your OTP' })
     // if (!userId) return res.status(400).json({ error: 'User not found' })
 
     const object = await schemaName.findOne({
-      // _id: userId,
+      _id,
       otp,
       otpExpire: { $gt: Date.now() },
     })
@@ -45,19 +45,11 @@ handler.post(async (req, res) => {
 
     await object.save()
 
-    const profile = await Profile.findOne({ user: object._id })
-
-    const role = await Role.findOne({ type: 'AUTHENTICATED' }).lean()
-    if (role) {
-      const userRole = await UserRole.findOne({ user: object._id })
-      if (!userRole) {
-        await UserRole.create({ user: object._id, role: role._id })
-      }
-    }
-
     const payments = await Payment.find({
       mobileNumber: object.mobileNumber,
     })
+
+    const profile = await Profile.findOne({ user: object._id })
 
     const expirationDays = payments
       .map((payment) => {

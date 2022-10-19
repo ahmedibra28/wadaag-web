@@ -26,6 +26,16 @@ const roles = [
     description: 'Default role given to authenticated user.',
     type: 'AUTHENTICATED',
   },
+  {
+    name: 'Driver',
+    description: 'Default role given to driver user.',
+    type: 'DRIVER',
+  },
+  {
+    name: 'Rider',
+    description: 'Default role given to rider user.',
+    type: 'RIDER',
+  },
 ]
 
 const users = {
