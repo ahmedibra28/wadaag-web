@@ -49,7 +49,7 @@ export const userType = async (mobile) => {
 
   if (!profile) return false
 
-  if (profile.userType === 'rider' || profile.userType === 'admin') return true
+  if (profile.userType === 'rider') return true
 
   return false
 }

@@ -3,7 +3,8 @@ import db from '../../../config/db'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
 import Cors from 'cors'
-import { subscription, userType } from '../../../utils/subscription'
+import { subscription } from '../../../utils/subscription'
+import Profile from '../../../models/Profile'
 
 const handler = nc()
 handler.use(
@@ -53,38 +54,31 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db()
   try {
-    const {
-      origin,
-      destination,
-      distance,
-      duration,
-      originLatLng,
-      destinationLatLng,
-      plate,
-    } = req.body
-    const rider = req.user._id
+    const { origin, destination, distance, duration, plate } = req.body
+    const { _id: rider, mobileNumber } = req.user
 
-    const { mobileNumber } = req.user
-
-    // if ((await subscription(mobileNumber)) === 0)
-    //   return res.status(400).json({ error: 'Subscription expired' })
-
-    if (!(await userType(mobileNumber)))
-      return res.status(400).json({ error: 'User type not allowed' })
+    const originLatLng = `${origin?.location?.lat},${origin?.location?.lng}`
+    const destinationLatLng = `${destination?.location?.lat},${destination?.location?.lng}`
 
     if (
-      (!origin || !destination || !distance || !duration,
-      !originLatLng,
-      !destinationLatLng)
+      (!origin || !destination || !distance || !duration, !plate, !mobileNumber)
     )
       return res.status(400).json({ error: 'Please fill all the fields' })
 
-    const ride = await schemaName.findOne({
+    const subscriptionRemainingDays = await subscription(mobileNumber)
+
+    if (Number(subscriptionRemainingDays) <= 0)
+      return res.status(400).json({ error: 'Subscription expired' })
+
+    const isRider = await Profile.findOne({ user: rider, userType: 'rider' })
+    if (!isRider) return res.status(400).json({ error: 'You are not a rider' })
+
+    const isRiderPending = await schemaName.findOne({
       status: 'pending',
       rider,
     })
-    if (ride)
-      return res.status(400).json({ error: 'You have a uncompleted ride' })
+    if (isRiderPending)
+      return res.status(400).json({ error: 'You have a uncompleted trip' })
 
     const object = await schemaName.create({
       rider,

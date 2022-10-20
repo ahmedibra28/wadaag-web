@@ -4,7 +4,7 @@ import Profile from '../../../models/Profile'
 import Ride from '../../../models/Ride'
 import { isAuth } from '../../../utils/auth'
 import Cors from 'cors'
-import { subscription, userType } from '../../../utils/subscription'
+import { subscription } from '../../../utils/subscription'
 
 const schemaName = Ride
 
@@ -22,18 +22,26 @@ handler.post(async (req, res) => {
 
   try {
     const { originLatLng, destinationLatLng } = req.body
-    const { _id, mobileNumber } = req.user
+    const { _id: riderTwo, mobileNumber } = req.user
 
-    // if ((await subscription(mobileNumber)) === 0)
-    //   return res.status(400).json({ error: 'Subscription expired' })
+    const subscriptionRemainingDays = await subscription(mobileNumber)
 
-    if (!(await userType(mobileNumber)))
-      return res.status(400).json({ error: 'User type not allowed' })
+    if (Number(subscriptionRemainingDays) <= 0)
+      return res.status(400).json({ error: 'Subscription expired' })
+
+    const isRider = await Profile.findOne({ user: riderTwo, userType: 'rider' })
+    if (!isRider) return res.status(400).json({ error: 'You are not a rider' })
+
+    const isRiderPending = await schemaName.findOne({
+      status: 'pending',
+      rider: riderTwo,
+    })
+    if (isRiderPending)
+      return res.status(400).json({ error: 'You have a uncompleted trip' })
 
     const rides = await schemaName
       .find({
         status: 'pending',
-        _id: { $ne: _id },
       })
       .lean()
 
@@ -86,6 +94,7 @@ handler.post(async (req, res) => {
           destination: near.destination,
           createdAt: near.createdAt,
           duration: near.duration,
+          distance: near.distance,
         }
       })
     )

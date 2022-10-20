@@ -27,6 +27,7 @@ handler.get(async (req, res) => {
         rider: _id,
       })
       .lean()
+      .populate('rider')
 
     return res.status(200).send(ride)
   } catch (error) {

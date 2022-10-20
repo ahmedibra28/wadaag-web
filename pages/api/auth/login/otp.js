@@ -21,8 +21,6 @@ handler.post(async (req, res) => {
   try {
     const { otp, _id } = req.body
 
-    console.log(req.body)
-
     if (!otp) return res.status(400).json({ error: 'Please enter your OTP' })
     // if (!userId) return res.status(400).json({ error: 'User not found' })
 

@@ -38,8 +38,6 @@ handler.get(async (req, res) => {
 
     // const last3PaymentTransactions = payments && payments.slice(0, 3)
 
-    console.log({ ...objects, expiration })
-
     res.status(200).send({ ...objects, expiration })
   } catch (error) {
     res.status(500).json({ error: error.message })
@@ -51,7 +49,7 @@ handler.post(async (req, res) => {
   try {
     const { _id } = req.user
     const { name, image, userType, plate, license } = req.body
-
+    return res.status(400).json({ error: `${schemaNameString} not found` })
     const object = await schemaName.findOne({ user: _id }).populate('user')
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })
