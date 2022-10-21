@@ -47,6 +47,7 @@ const sendSMS = async (token, mobile, message) => {
 handler.post(async (req, res) => {
   await db()
   try {
+    console.log('new request ========================== ')
     let mobileNumber = req.body.mobileNumber
       ? Number(req.body.mobileNumber)
       : ''

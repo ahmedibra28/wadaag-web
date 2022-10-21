@@ -31,6 +31,18 @@ nextApp.prepare().then(async () => {
   io.on('connection', (socket) => {
     console.log('connection')
 
+    socket.on('joinRoom', (info) => {
+      console.log('=============== connected')
+      console.log(info)
+    })
+
+    socket.on('message', (info) => {
+      console.log('=============== connected message')
+      console.log(info)
+
+      io.emit('message', info)
+    })
+
     // ======================= Start Rider Two Ride ==========================
 
     socket.on('rider-two-chat', (info) => {
