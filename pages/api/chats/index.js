@@ -40,28 +40,18 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   await db()
   try {
-    const { user, text } = req.body
+    const { user, text, createdAt, secondUser } = req.body
 
-    const currentUser = req.user._id
-
-    const chat = await schemaName.findOne({
-      users: { $all: [currentUser, user] },
-    })
-    if (chat) {
-      chat.messages.push({ text, user: currentUser, createdAt: Date.now() })
-
-      await chat.save()
-      return res.status(200).json({ message: 'Message added to chat' })
+    const newPost = {
+      text,
+      createdAt,
+      sender: user,
+      receiver: secondUser,
     }
 
-    const newChat = await schemaName.create({
-      users: [currentUser, user],
-      messages: [{ text, user: currentUser, createdAt: Date.now() }],
-    })
+    const newChat = await schemaName.create(newPost)
 
-    if (!newChat) return res.status(400).json({ error: 'Chat not created' })
-
-    return res.status(200).send('Chat has been started')
+    return res.status(200).send(newChat)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

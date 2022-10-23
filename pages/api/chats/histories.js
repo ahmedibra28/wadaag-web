@@ -11,57 +11,57 @@ handler.use(isAuth)
 handler.get(async (req, res) => {
   await db()
   try {
-    const { _id } = req.user
+    const { _id: currentUser } = req.user
 
-    let query = schemaName.find({ users: { $all: [_id] } })
+    let query = schemaName.find({
+      $or: [{ sender: currentUser }, { receiver: currentUser }],
+    })
 
     const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 25
     const skip = (page - 1) * pageSize
-    const total = await schemaName.countDocuments({ users: { $all: [_id] } })
+    const total = await schemaName.countDocuments({ secondUser: currentUser })
 
     const pages = Math.ceil(total / pageSize)
 
     query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 }).lean()
 
-    const result = await query
+    let result = await query
 
-    const results = result.map((r) => ({
-      _id: r._id,
-      user: r.users.find((u) => u.toString() !== _id.toString()),
-      updatedAt: r.updatedAt,
-    }))
+    const noDuplicates = []
+    result.forEach((d) => {
+      !noDuplicates
+        .map((n) => n?.sender.toString())
+        .includes(d.sender.toString()) && noDuplicates.push(d)
+    })
 
-    const data = Promise.all(
-      results.map(async (r) => {
-        const profile = await Profile.findOne(
-          {
-            user: r.user,
-          },
-          { image: 1, name: 1 }
-        )
-          .populate('user', ['mobileNumber'])
-          .lean()
-
+    const newPromiseResult = Promise.all(
+      noDuplicates?.map(async (result) => {
+        const profile = await Profile.findOne({ user: result.sender }).lean()
         return {
-          _id: r._id,
-          user: profile,
-          mobileNumber: profile.user.mobileNumber,
-          updatedAt: r.updatedAt,
+          _id: result.sender,
+          name: profile?.name,
+          lastMessage: 'Hi there!',
+          createdAt: new Date(),
+          image: profile?.image,
         }
       })
     )
 
-    const objects = await data
+    let newResult = await newPromiseResult
+
+    newResult = newResult?.filter(
+      (result) => result._id?.toString() !== currentUser?.toString()
+    )
 
     res.status(200).json({
       startIndex: skip + 1,
-      endIndex: skip + objects.length,
-      count: objects.length,
+      endIndex: skip + newResult.length,
+      count: newResult.length,
       page,
       pages,
       total,
-      data: objects,
+      data: newResult,
     })
   } catch (error) {
     res.status(500).json({ error: error.message })

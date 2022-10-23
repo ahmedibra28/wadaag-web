@@ -47,7 +47,6 @@ const sendSMS = async (token, mobile, message) => {
 handler.post(async (req, res) => {
   await db()
   try {
-    console.log('new request ========================== ')
     let mobileNumber = req.body.mobileNumber
       ? Number(req.body.mobileNumber)
       : ''
@@ -68,7 +67,7 @@ handler.post(async (req, res) => {
     if (user && !user.isActive)
       return res.status(401).json({ error: 'User is not active' })
 
-    const token = await getToken()
+    // const token = await getToken()
 
     if (!user) return res.status(401).json({ error: 'User not found' })
 

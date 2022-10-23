@@ -468,6 +468,13 @@ const permissions = [
     name: 'Plate Check',
     method: 'POST',
   },
+  {
+    description: 'Driver transportation transactions',
+    route: '/api/reports/drivers',
+    auth: true,
+    name: 'Driver Transactions',
+    method: 'GET',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

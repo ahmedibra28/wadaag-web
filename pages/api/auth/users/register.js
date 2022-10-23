@@ -99,7 +99,7 @@ handler.post(async (req, res) => {
       name: object.name,
       image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
       userType: selected,
-      plate: selected === 'driver' ? 'driver' : mobile,
+      plate: selected === 'driver' ? plate : mobile,
       license: selected === 'driver' ? license : undefined,
       level: 0,
       points: 0,

@@ -1,6 +1,7 @@
 import nc from 'next-connect'
 import db from '../../../config/db'
 import Chat from '../../../models/Chat'
+import Profile from '../../../models/Profile'
 import { isAuth } from '../../../utils/auth'
 
 const schemaName = Chat
@@ -12,11 +13,43 @@ handler.get(async (req, res) => {
   await db()
 
   try {
-    const user = req.query.id
-    const currentUser = req.user._id
+    const sender = req.query.id
+    const receiver = req.user._id
 
-    const chat = await schemaName.findOne({
-      users: { $all: [currentUser, user] },
+    let chat = await schemaName
+      .find({
+        $or: [
+          { sender: receiver, receiver: sender },
+          { sender, receiver },
+        ],
+      })
+      .lean()
+
+    const receiverProfile = await Profile.findOne({ user: receiver })
+    const senderProfile = await Profile.findOne({ user: sender })
+
+    chat = chat?.map((c) => {
+      return {
+        _id: c._id,
+        text: c.text,
+        createdAt: c.createdAt,
+        user: {
+          _id:
+            sender.toString() === c.sender.toString()
+              ? senderProfile.user
+              : receiverProfile.user,
+
+          name:
+            sender.toString() === c.sender.toString()
+              ? senderProfile.name
+              : receiverProfile.name,
+
+          avatar:
+            sender.toString() === c.sender.toString()
+              ? senderProfile.image
+              : receiverProfile.image,
+        },
+      }
     })
 
     res.status(200).send(chat)

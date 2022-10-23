@@ -49,7 +49,7 @@ handler.post(async (req, res) => {
   try {
     const { _id } = req.user
     const { name, image, userType, plate, license } = req.body
-    return res.status(400).json({ error: `${schemaNameString} not found` })
+
     const object = await schemaName.findOne({ user: _id }).populate('user')
     if (!object)
       return res.status(400).json({ error: `${schemaNameString} not found` })

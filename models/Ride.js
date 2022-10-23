@@ -14,7 +14,7 @@ const rideScheme = mongoose.Schema(
     duration: { type: String, required: true },
     originLatLng: { type: String, required: true },
     destinationLatLng: { type: String, required: true },
-    plate: { type: String, required: true },
+    plate: { type: String, required: true, uppercase: true },
     status: {
       type: String,
       enum: ['pending', 'completed', 'cancelled'],
