@@ -67,7 +67,7 @@ handler.post(async (req, res) => {
     if (user && !user.isActive)
       return res.status(401).json({ error: 'User is not active' })
 
-    // const token = await getToken()
+    const token = await getToken()
 
     if (!user) return res.status(401).json({ error: 'User not found' })
 
@@ -75,11 +75,13 @@ handler.post(async (req, res) => {
 
     await user.save()
 
-    // const sms = await sendSMS(
-    //   token.access_token,
-    //   req.body.mobileNumber,
-    //   `Your OTP is ${user.otp}`
-    // )
+    const sms = await sendSMS(
+      token.access_token,
+      req.body.mobileNumber,
+      `Your OTP is ${user.otp}`
+    )
+
+    console.log(sms)
 
     // const { otp, ...userData } = user.toObject()
 
