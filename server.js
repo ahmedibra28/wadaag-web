@@ -4,7 +4,6 @@ const http = require('http')
 const next = require('next')
 const socketio = require('socket.io')
 const cors = require('cors')
-const axios = require('axios')
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -32,6 +31,7 @@ nextApp.prepare().then(async () => {
     console.log('connection')
 
     socket.on('message', (info) => {
+      console.log(info)
       io.emit('message', info)
     })
 

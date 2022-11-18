@@ -27,10 +27,13 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.env
 
 # vercel
 .vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 # uploads
 /public/uploads/*.png
@@ -39,4 +42,3 @@ yarn-error.log*
 /public/uploads/*.pdf
 /public/uploads/*.docx
 /public/uploads/*.doc
-

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { customLocalStorage } from '../utils/customLocalStorage'
+import { userInfo } from '../api/api'
 
 const withAuth = async (WrappedComponent) => {
   // eslint-disable-next-line react/display-name
@@ -9,15 +9,13 @@ const withAuth = async (WrappedComponent) => {
 
       const pathName = router.pathname
       const accessToken =
-        customLocalStorage() &&
-        customLocalStorage().userInfo &&
-        customLocalStorage().userInfo.token
+        userInfo() && userInfo().userInfo && userInfo().userInfo.token
 
       if (
-        customLocalStorage() &&
-        customLocalStorage().userAccessRoutes &&
-        !customLocalStorage()
-          .userAccessRoutes.clientPermission.map((g) => g.path)
+        userInfo() &&
+        userInfo().userInfo &&
+        !userInfo()
+          .userInfo.routes.map((g) => g.path)
           .includes(pathName)
       ) {
         router.push('/')
