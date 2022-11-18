@@ -127,13 +127,13 @@ const clientPermissions = [
     sort: sort.normal,
     description: 'Trips page',
   },
-  {
-    name: 'Chats',
-    path: '/chats',
-    menu: 'normal',
-    sort: sort.normal,
-    description: 'Chats page',
-  },
+  // {
+  //   name: 'Chats',
+  //   path: '/chats',
+  //   menu: 'normal',
+  //   sort: sort.normal,
+  //   description: 'Chats page',
+  // },
   {
     name: 'Payments',
     path: '/reports/payments',

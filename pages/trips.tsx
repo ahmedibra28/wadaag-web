@@ -94,6 +94,7 @@ const Trips = () => {
                 <th>Driver</th>
                 <th>Origin</th>
                 <th>Destination</th>
+                <th>Status</th>
                 <th>Created At</th>
               </tr>
             </thead>
@@ -101,9 +102,30 @@ const Trips = () => {
               {getApi?.data?.data?.map((item: Item, i: number) => (
                 <tr key={i}>
                   <td>{item?.rider?.name}</td>
-                  <td>{item?.driver?.name}</td>
-                  <td>{item?.origin?.description}</td>
-                  <td>{item?.destination?.description}</td>
+                  <td>
+                    {item?.driver?.name || (
+                      <span className="badge bg-danger">Not Found</span>
+                    )}
+                  </td>
+                  <td>{item?.origin?.description?.slice(0, 30) + '...'}</td>
+                  <td>
+                    {item?.destination?.description?.slice(0, 30) + '...'}
+                  </td>
+                  {item?.status === 'pending' && (
+                    <td>
+                      <span className="badge bg-primary">{item?.status}</span>
+                    </td>
+                  )}
+                  {item?.status === 'completed' && (
+                    <td>
+                      <span className="badge bg-success">{item?.status}</span>
+                    </td>
+                  )}
+                  {item?.status === 'cancelled' && (
+                    <td>
+                      <span className="badge bg-danger">{item?.status}</span>
+                    </td>
+                  )}
                   <td>{moment(item?.createdAt).format('lll')}</td>
                 </tr>
               ))}

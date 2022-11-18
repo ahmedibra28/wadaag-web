@@ -161,7 +161,7 @@ export const eTemplate = (props: EmailProps) => {
                   align="center"
                 >
                   <a
-                    href="https://example.com"
+                    href="https://ahmedibra.com"
                     class="f-fallback email-masthead_name"
                     style="
                       color: #a8aaaf;

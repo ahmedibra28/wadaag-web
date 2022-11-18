@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "d": "nodemon server.js",
+    "server": "nodemon server.js",
     "lint": "next lint"
   },
   "dependencies": {
