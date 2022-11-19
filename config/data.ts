@@ -452,9 +452,18 @@ const permissions = [
   // Payment Transactions
   {
     description: 'Payment transactions',
-    route: '/api/payment-transactions',
+    route: '/api/payments',
     auth: true,
     name: 'Payment transactions',
+    method: 'GET',
+  },
+
+  // Driver Transactions
+  {
+    description: 'Driver transactions',
+    route: '/api/drivers',
+    auth: true,
+    name: 'Driver transactions',
     method: 'GET',
   },
 

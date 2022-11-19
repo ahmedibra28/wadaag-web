@@ -22,13 +22,13 @@ handler.post(
 
       if (sender && startDate && endDate) {
         query = await schemaName
-          .find({ sender, createdAt: { $gte: start, $lte: end } })
+          .find({ mobile: sender, createdAt: { $gte: start, $lte: end } })
           .lean()
       }
       if (sender && !startDate && !endDate) {
-        query = await schemaName.find({ sender }).lean()
+        query = await schemaName.find({ mobile: sender }).lean()
       }
-      if (startDate && endDate) {
+      if (!sender && startDate && endDate) {
         query = await schemaName
           .find({ createdAt: { $gte: start, $lte: end } })
           .lean()
