@@ -2,51 +2,51 @@ import nc from 'next-connect'
 import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
 import User from '../../../../models/User'
-import axios from 'axios'
+// import axios from 'axios'
 import Role from '../../../../models/Role'
 import UserRole from '../../../../models/UserRole'
 import autoIncrement from '../../../../utils/autoIncrement'
 
 const handler = nc()
 
-const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
-const username = MY_SMS_USERNAME
-const password = MY_SMS_API_KEY
-const grant_type = 'password'
-const tokenURL = `${MY_SMS_BASE_URL}/token`
-const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
+// const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
+// const username = MY_SMS_USERNAME
+// const password = MY_SMS_API_KEY
+// const grant_type = 'password'
+// const tokenURL = `${MY_SMS_BASE_URL}/token`
+// const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
 
-// get access token
-const getToken = async () => {
-  const { data } = await axios.post(
-    tokenURL,
-    `username=${username}&password=${password}&grant_type=${grant_type}`
-  )
-  return data
-}
+// // get access token
+// const getToken = async () => {
+//   const { data } = await axios.post(
+//     tokenURL,
+//     `username=${username}&password=${password}&grant_type=${grant_type}`
+//   )
+//   return data
+// }
 
-// send SMS
-const sendSMS = async ({
-  token,
-  mobile,
-  message,
-}: {
-  token: string
-  mobile: string
-  message: string
-}) => {
-  const { data } = await axios.post(
-    sendSMS_URL,
-    { mobile, message },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
-  return data
-}
+// // send SMS
+// const sendSMS = async ({
+//   token,
+//   mobile,
+//   message,
+// }: {
+//   token: string
+//   mobile: string
+//   message: string
+// }) => {
+//   const { data } = await axios.post(
+//     sendSMS_URL,
+//     { mobile, message },
+//     {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }
+//   )
+//   return data
+// }
 
 handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
