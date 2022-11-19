@@ -150,7 +150,7 @@ const Navigation = () => {
             width="40"
             height="40"
             src="/favicon.png"
-            className="img-fluid brand-logos"
+            className="img-fluid brand-logos rounded-pill"
             alt="logo"
           />
         </Link>

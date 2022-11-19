@@ -11,10 +11,10 @@ interface Props {
 const Meta = (props: Props) => {
   const { pathname } = useRouter()
 
-  const title = 'Next-ts-boilerplate | Ahmed Ibrahim'
+  const title = 'Wadaag'
   const description = `Next.js typescript boilerplate`
-  const image = 'https://www.ahmedibra.com/logo.png'
-  const url = `https://www.ahmedibra.com${pathname}`
+  const image = 'https://www.wadaag.app/logo.png'
+  const url = `https://www.wadaag.app${pathname}`
   const author = 'Ahmed Ibrahim'
 
   return (
@@ -39,7 +39,7 @@ const Meta = (props: Props) => {
 
       <meta
         name="keywords"
-        content="ahmedibra, ahmedibra.com, https://ahmedibra.com, https://github.com/ahmaat19, github.com/ahmaat19, next.js, next-ts, typescript, next-typescript, boilerplate, next-ts-boilerplate, next-boilerplate, next.js-boilerplate"
+        content="wadaag, wadaagapp, wadaag app, app, https://wadaaag.app, wadaag.app, ahmedibra, ahmedibra.com, https://ahmedibra.com, https://github.com/ahmaat19, github.com/ahmaat19, next.js, next-ts, typescript, next-typescript, boilerplate, next-ts-boilerplate, next-boilerplate, next.js-boilerplate"
       />
       <meta name="author" content={props?.author ? props?.author : author} />
       <meta name="publisher" content={props?.author ? props?.author : author} />
@@ -78,7 +78,7 @@ const Meta = (props: Props) => {
       />
       <meta
         itemProp="image"
-        content={props?.image ? `https://ahmedibra.com${props?.image}` : image}
+        content={props?.image ? `https://wadaag.app${props?.image}` : image}
         key="g:image"
       />
 
@@ -97,7 +97,7 @@ const Meta = (props: Props) => {
       />
       <meta
         property="og:image"
-        content={props?.image ? `https://ahmedibra.com${props?.image}` : image}
+        content={props?.image ? `https://wadaag.app${props?.image}` : image}
         key="og:image"
       />
 
@@ -115,7 +115,7 @@ const Meta = (props: Props) => {
       />
       <meta
         name="twitter:image"
-        content={props?.image ? `https://ahmedibra.com${props?.image}` : image}
+        content={props?.image ? `https://wadaag.app${props?.image}` : image}
         key="twitter:image"
       />
     </Head>

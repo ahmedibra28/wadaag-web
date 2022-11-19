@@ -10,7 +10,7 @@ const Footer = () => {
             Ahmed Ibrahim
           </a>
           <br />
-          <Image src="/logo.png" width="30" height="30" alt="logo" />
+          <Image src="/footer.png" width="30" height="30" alt="logo" />
         </div>
       </div>
     </footer>
