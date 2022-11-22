@@ -12,7 +12,6 @@ interface Item extends Omit<IProfile, 'user'> {
     _id: string
     email: string
     platform: string
-    shortCode: string
     mobile: string
   }
   image: string
@@ -94,7 +93,6 @@ const UserProfiles = () => {
                 <th>Mobile</th>
                 <th>Username</th>
                 <th>Platform</th>
-                <th>Short Code</th>
                 <th>Created At</th>
               </tr>
             </thead>
@@ -115,7 +113,6 @@ const UserProfiles = () => {
                   <td>{item?.mobile}</td>
                   <td>{item?.user?.email || item?.user?.mobile}</td>
                   <td>{item?.user?.platform?.toUpperCase()}</td>
-                  <td>{item?.user?.shortCode}</td>
 
                   <td>{moment(item?.createdAt).format('lll')}</td>
                 </tr>

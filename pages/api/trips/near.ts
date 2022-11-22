@@ -33,7 +33,7 @@ handler.post(
       if (isRiderPending)
         return res.status(400).json({ error: 'You have a uncompleted trip' })
 
-      const nearOrigin = await schemaName.aggregate([
+      const nearCurrentLocation = await schemaName.aggregate([
         {
           $geoNear: {
             near: {
@@ -46,10 +46,32 @@ handler.post(
               status: 'pending',
             },
             spherical: true,
-            key: 'origin.location',
+            key: 'currentLocation.location',
           },
         },
       ])
+
+      let nearOrigin = []
+
+      if (!nearCurrentLocation || nearCurrentLocation.length < 1) {
+        nearOrigin = await schemaName.aggregate([
+          {
+            $geoNear: {
+              near: {
+                type: 'Point',
+                coordinates: [origin?.location?.lat, origin?.location?.lng],
+              },
+              distanceField: 'calculatedDistance',
+              maxDistance: 1000,
+              query: {
+                status: 'pending',
+              },
+              spherical: true,
+              key: 'origin.location',
+            },
+          },
+        ])
+      }
 
       const nearDestination = await schemaName.aggregate([
         {
@@ -72,13 +94,20 @@ handler.post(
         },
       ])
 
-      if (nearOrigin.length === 0 || nearDestination.length === 0)
+      if (
+        (nearCurrentLocation.length === 0 && nearOrigin.length === 0) ||
+        nearDestination.length === 0
+      )
         return res
           .status(400)
           .json({ error: 'No riders found at your location' })
 
       // combine origin and destination
-      const combinedArrays = [...nearDestination, ...nearOrigin]
+      const combinedArrays = [
+        ...nearCurrentLocation,
+        ...nearDestination,
+        ...nearOrigin,
+      ]
 
       // get duplicates
       const duplicates = combinedArrays

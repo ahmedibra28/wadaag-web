@@ -16,7 +16,6 @@ export interface IUser {
   otp?: string
   otpExpire?: Date
   platform: 'web' | 'mobile'
-  shortCode: string
 }
 
 const userSchema = new Schema<IUser>(
@@ -24,7 +23,7 @@ const userSchema = new Schema<IUser>(
     platform: { type: String, enum: ['web', 'mobile'], default: 'web' },
     name: { type: String, required: true },
     email: { type: String, lowercase: true },
-    mobile: { type: Number, unique: true },
+    mobile: { type: Number },
     password: { type: String },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
@@ -32,7 +31,6 @@ const userSchema = new Schema<IUser>(
     otpExpire: Date,
     confirmed: { type: Boolean, default: false },
     blocked: { type: Boolean, default: false },
-    shortCode: { type: String, required: true },
   },
   { timestamps: true }
 )

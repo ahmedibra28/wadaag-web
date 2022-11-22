@@ -43,7 +43,6 @@ handler.get(
         password: users.password,
         confirmed: true,
         blocked: false,
-        shortCode: users.shortCode,
         platform: users.platform,
       })
 

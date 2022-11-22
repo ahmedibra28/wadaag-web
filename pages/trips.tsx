@@ -10,12 +10,10 @@ interface Item extends Omit<ITrip, 'rider' | 'driver'> {
   rider: {
     _id: string
     name: string
-    shortCode: string
   }
   driver: {
     _id: string
     name: string
-    shortCode: string
   }
   image: string
   name: string
@@ -80,7 +78,7 @@ const Trips = () => {
 
             <div className="col-auto">
               <Search
-                placeholder="Search by name"
+                placeholder="Search by mobile"
                 setQ={setQ}
                 q={q}
                 searchHandler={searchHandler}

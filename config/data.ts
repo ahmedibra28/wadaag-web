@@ -44,7 +44,6 @@ const users = {
   password: '123456',
   confirmed: true,
   blocked: false,
-  shortCode: 'W000001',
   platform: 'web',
 }
 
@@ -394,6 +393,13 @@ const permissions = [
     auth: true,
     name: 'Trips',
     method: 'POST',
+  },
+  {
+    description: 'Update Trip with Current Location',
+    route: '/api/trips/location/:id',
+    auth: true,
+    name: 'Trips',
+    method: 'PUT',
   },
 
   // Chat

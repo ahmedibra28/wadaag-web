@@ -15,7 +15,7 @@ handler.get(
     await db()
     try {
       const q = req.query && req.query.q
-      const user = await User.findOne({ shortCode: q })
+      const user = await User.findOne({ mobile: q })
 
       let query = schemaName.find(q ? { rider: user?._id } : {})
 
@@ -33,8 +33,8 @@ handler.get(
         .limit(pageSize)
         .sort({ createdAt: -1 })
         .lean()
-        .populate('rider', ['name', 'shortCode'])
-        .populate('driver', ['name', 'shortCode'])
+        .populate('rider', ['name'])
+        .populate('driver', ['name'])
 
       const result = await query
 
@@ -80,6 +80,11 @@ handler.post(
         return res.status(400).json({ error: 'You have a uncompleted trip' })
 
       const profile = await Profile.findOne({ plate: plate?.toUpperCase() })
+
+      if (!profile)
+        return res.status(400).json({
+          error: 'Incorrect plate number with this driver',
+        })
 
       const object = await schemaName.create({
         rider,

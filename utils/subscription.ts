@@ -16,8 +16,8 @@ export const subscription = async (mobile: number) => {
     )
     ?.reduce((acc, curr) => acc + curr + 1, 0)
 
-  return Number(expiresUntil)
-  // return Number('10')
+  // return Number(expiresUntil)
+  return Number('10')
 }
 
 export const userType = async (mobile: number) => {

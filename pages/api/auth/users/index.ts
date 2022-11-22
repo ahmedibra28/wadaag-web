@@ -3,7 +3,6 @@ import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
 import User from '../../../../models/User'
 import { isAuth } from '../../../../utils/auth'
-import autoIncrement from '../../../../utils/autoIncrement'
 
 const schemaName = User
 
@@ -56,24 +55,23 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const shortCode = await User.countDocuments({})
-
-      const object = await schemaName.create({
-        shortCode: autoIncrement(shortCode),
-        platform: 'web',
-        ...req.body,
-      })
-
       const user = await User.findOne({
         email: req.body?.email?.toLowerCase(),
       })
 
       if (user) return res.status(400).json({ error: 'Email already exists' })
 
+      const object = await schemaName.create({
+        platform: 'web',
+        ...req.body,
+      })
+
       await Profile.create({
         user: object._id,
         name: object.name,
         image: `https://ui-avatars.com/api/?uppercase=true&name=${object.name}&background=random&color=random&size=128`,
+        bio: '',
+        address: '',
       })
 
       res.status(200).send(object)

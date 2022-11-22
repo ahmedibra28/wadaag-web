@@ -6,13 +6,13 @@ export interface IProfile {
   name?: string
   image?: string
   address?: string
-  mobile?: string
+  mobile?: number
   bio?: string
   user: Schema.Types.ObjectId
   createdAt?: Date
   plate?: string
   license?: string
-  referral?: Schema.Types.ObjectId
+  district?: string
 }
 
 const profileSchema = new Schema<IProfile>(
@@ -20,7 +20,7 @@ const profileSchema = new Schema<IProfile>(
     name: String,
     image: String,
     address: String,
-    mobile: String,
+    mobile: Number,
     bio: String,
     user: {
       type: Schema.Types.ObjectId,
@@ -28,10 +28,7 @@ const profileSchema = new Schema<IProfile>(
     },
     plate: { type: String, uppercase: true, trim: true },
     license: String,
-    referral: {
-      type: Schema.Types.ObjectId,
-      ref: User,
-    },
+    district: String,
   },
   { timestamps: true }
 )

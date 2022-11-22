@@ -269,7 +269,6 @@ const Users = () => {
                 <th>Name</th>
                 <th>Username</th>
                 <th>Platform</th>
-                <th>Short Code</th>
                 <th>Confirmed</th>
                 <th>Blocked</th>
                 <th>Created At</th>
@@ -282,7 +281,6 @@ const Users = () => {
                   <td>{item?.name}</td>
                   <td>{item?.email || item?.mobile}</td>
                   <td>{item?.platform?.toUpperCase()}</td>
-                  <td>{item?.shortCode}</td>
                   <td>
                     {item?.confirmed ? (
                       <FaCheckCircle className="text-success" />

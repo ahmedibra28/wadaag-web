@@ -32,7 +32,7 @@ handler.get(
         .limit(pageSize)
         .sort({ createdAt: -1 })
         .lean()
-        .populate('user', ['email', 'platform', 'shortCode', 'mobile'])
+        .populate('user', ['email', 'platform', 'mobile'])
 
       const result = await query
 

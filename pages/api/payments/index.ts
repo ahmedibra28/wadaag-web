@@ -19,7 +19,7 @@ handler.get(
         .lean()
         .sort({ paidDate: -1 })
 
-      transactions = transactions && transactions.slice(0, 20)
+      transactions = transactions && transactions.slice(0, 24)
 
       const expirationDays = await subscription(mobile as number)
 

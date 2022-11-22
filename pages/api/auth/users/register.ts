@@ -5,7 +5,6 @@ import User from '../../../../models/User'
 // import axios from 'axios'
 import Role from '../../../../models/Role'
 import UserRole from '../../../../models/UserRole'
-import autoIncrement from '../../../../utils/autoIncrement'
 
 const handler = nc()
 
@@ -52,7 +51,7 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { name, plate, license, selected, referral } = req.body
+      const { name, plate, license, selected, district } = req.body
       let { mobile } = req.body
 
       if (!mobile || mobile.length !== 9)
@@ -78,15 +77,12 @@ handler.post(
           return res.status(400).json({ error: 'Plate already existed' })
       }
 
-      const shortCode = await User.countDocuments({})
-
       const userCreated = await User.create({
         name,
         mobile,
         blocked: false,
         confirmed: true,
         platform: 'mobile',
-        shortCode: autoIncrement(shortCode),
       })
 
       if (!userCreated)
@@ -102,18 +98,14 @@ handler.post(
 
       if (!userRole) return res.status(400).json({ error: 'Role not found' })
 
-      const checkReferral = await User.findOne({
-        shortCode: referral?.toUpperCase(),
-      })
-
       await Profile.create({
         user: userCreated._id,
         name: userCreated.name,
+        district,
         image: `https://ui-avatars.com/api/?uppercase=true&name=${userCreated.name}&background=random&color=random&size=128`,
         mobile: mobile,
         plate: selected === 'driver' ? plate : undefined,
         license: selected === 'driver' ? license : undefined,
-        referral: checkReferral ? checkReferral?._id : undefined,
       })
 
       await UserRole.create({

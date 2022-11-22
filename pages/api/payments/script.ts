@@ -7,6 +7,7 @@ import Transaction from '../../../models/Transaction'
 const schemaName = Transaction
 
 import Cors from 'cors'
+import { subscription, subscription } from '../../../utils/subscription'
 
 const handler = nc()
 handler.use(
@@ -76,6 +77,15 @@ handler.post(
       // checking body message if its received or sent
       if (body.startsWith('[-EVCPlus-] Waxaad ')) {
         const [amount, mobile] = body.match(/[0-9.]+/g)
+
+        if (Number(amount) !== 1)
+          return res.status(400).json({ error: 'Only you send $1' })
+
+        const remainingDays = await subscription(mobile)
+        if (remainingDays > 0)
+          return res
+            .status(400)
+            .json({ error: 'Subscription did not expired yet!' })
 
         const amountPerDay = 1 / 30
         const noOfDays = Math.round(Number(amount) / amountPerDay)
