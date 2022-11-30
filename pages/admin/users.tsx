@@ -271,6 +271,7 @@ const Users = () => {
                 <th>Platform</th>
                 <th>Confirmed</th>
                 <th>Blocked</th>
+                <th>Status</th>
                 <th>Created At</th>
                 <th>Actions</th>
               </tr>
@@ -293,6 +294,17 @@ const Users = () => {
                       <FaCheckCircle className="text-success" />
                     ) : (
                       <FaTimesCircle className="text-danger" />
+                    )}
+                  </td>
+                  <td>
+                    {item?.status === 'deleted' ? (
+                      <span className="badge bg-danger p-2">
+                        {item?.status?.toUpperCase()}
+                      </span>
+                    ) : (
+                      <span className="badge bg-success p-2">
+                        {item?.status?.toUpperCase()}
+                      </span>
                     )}
                   </td>
                   <td>{moment(item?.createdAt).format('lll')}</td>

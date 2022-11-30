@@ -16,6 +16,7 @@ export interface IUser {
   otp?: string
   otpExpire?: Date
   platform: 'web' | 'mobile'
+  status: 'active' | 'deleted'
 }
 
 const userSchema = new Schema<IUser>(
@@ -31,6 +32,7 @@ const userSchema = new Schema<IUser>(
     otpExpire: Date,
     confirmed: { type: Boolean, default: false },
     blocked: { type: Boolean, default: false },
+    status: { type: String, enum: ['active', 'deleted'], default: 'active' },
   },
   { timestamps: true }
 )

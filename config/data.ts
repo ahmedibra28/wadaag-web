@@ -473,6 +473,22 @@ const permissions = [
     method: 'GET',
   },
 
+  // Account Deletion
+  {
+    description: 'Request Account deletion',
+    route: '/api/accounts/request-deletion',
+    auth: true,
+    name: 'Account deletion',
+    method: 'POST',
+  },
+  {
+    description: 'Cancel Account deletion',
+    route: '/api/accounts/cancel-request-deletion',
+    auth: true,
+    name: 'Account deletion',
+    method: 'POST',
+  },
+
   // Report
   {
     description: 'Get Payment Transactions',
