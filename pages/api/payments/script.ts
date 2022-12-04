@@ -7,7 +7,7 @@ import Transaction from '../../../models/Transaction'
 const schemaName = Transaction
 
 import Cors from 'cors'
-import { subscription, subscription } from '../../../utils/subscription'
+import { subscription } from '../../../utils/subscription'
 
 const handler = nc()
 handler.use(
