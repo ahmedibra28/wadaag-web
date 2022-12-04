@@ -1,6 +1,6 @@
 import nc from 'next-connect'
 import db from '../../../config/db'
-import Profile from '../../../models/Profile'
+// import Profile from '../../../models/Profile'
 import Trip from '../../../models/Trip'
 import User from '../../../models/User'
 import { isAuth } from '../../../utils/auth'
@@ -57,7 +57,7 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { origin, destination, distance, duration, plate } = req.body
+      const { origin, destination, distance, duration } = req.body
       const { _id: rider, mobile } = req.user
 
       // return res.status(400).json({ error: 'ok' })
@@ -79,12 +79,12 @@ handler.post(
       if (isRiderPending)
         return res.status(400).json({ error: 'You have a uncompleted trip' })
 
-      const profile = await Profile.findOne({ plate: plate?.toUpperCase() })
+      // const profile = await Profile.findOne({ plate: plate?.toUpperCase() })
 
-      if (!profile)
-        return res.status(400).json({
-          error: 'Incorrect plate number with this driver',
-        })
+      // if (!profile)
+      //   return res.status(400).json({
+      //     error: 'Incorrect plate number with this driver',
+      //   })
 
       const object = await schemaName.create({
         rider,
@@ -92,7 +92,7 @@ handler.post(
         destination,
         distance,
         duration,
-        driver: profile?.user,
+        // driver: profile?.user,
         status: 'pending',
       })
       res.status(200).send(object)

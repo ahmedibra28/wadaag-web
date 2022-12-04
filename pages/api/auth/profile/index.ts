@@ -37,7 +37,7 @@ handler.post(
     await db()
     try {
       const { _id } = req.user
-      const { name, address, mobile, bio, image, password } = req.body
+      const { name, address, mobile, bio, image, password, district } = req.body
 
       const object = await schemaName.findOne({ user: _id }).populate('user')
       if (!object)
@@ -62,6 +62,7 @@ handler.post(
       object.name = name ? name : object.name
       object.mobile = mobile ? mobile : object.mobile
       object.address = address ? address : object.address
+      object.district = district ? district : object.district
       object.image = image ? image : object.image
       object.bio = bio ? bio : object.bio
       object.user = _id
