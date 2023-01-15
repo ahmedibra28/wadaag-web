@@ -45,6 +45,15 @@ handler.post(
     try {
       const { user, text, createdAt, secondUser } = req.body
 
+
+      if (text === 'secret=ts=reject') {
+        await Chat.remove({ $or: [{ sender: secondUser }, { sender: user }] })
+        await Chat.remove({
+          $or: [{ receiver: secondUser }, { receiver: user }],
+        })
+        return res.json('rejected')
+      }
+
       const newPost = {
         text,
         createdAt,

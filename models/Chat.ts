@@ -7,6 +7,7 @@ export interface IChat {
   sender: Schema.Types.ObjectId
   receiver: Schema.Types.ObjectId
   createdAt?: Date
+  status?: string
 }
 
 const chatSchema = new Schema<IChat>(
@@ -14,6 +15,7 @@ const chatSchema = new Schema<IChat>(
     text: String,
     sender: { type: Schema.Types.ObjectId, ref: User },
     receiver: { type: Schema.Types.ObjectId, ref: User },
+    status: String,
   },
   { timestamps: true }
 )

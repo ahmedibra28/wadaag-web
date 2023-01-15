@@ -24,7 +24,6 @@ handler.get(
       const userRole = await UserRole.findOne({ user: _id }).populate('role', [
         'type',
       ])
-      console.log({ ...objects, role: userRole.role.type })
       res.status(200).send({ ...objects, role: userRole.role.type })
     } catch (error: any) {
       res.status(500).json({ error: error.message })

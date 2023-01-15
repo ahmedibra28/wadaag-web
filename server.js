@@ -30,6 +30,11 @@ nextApp.prepare().then(async () => {
   io.on('connection', (socket) => {
     console.log('connection')
 
+    socket.on('locationTracking', (info) => {
+      console.log('location tracking: ', info)
+      io.emit('locationTracking', info)
+    })
+
     socket.on('message', (info) => {
       console.log(info)
       io.emit('message', info)

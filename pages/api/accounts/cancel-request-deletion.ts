@@ -9,7 +9,6 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      console.log('test')
       const { _id } = req.body
       const user = await User.findById(_id)
       if (!user) return res.status(404).json({ error: 'User not found' })

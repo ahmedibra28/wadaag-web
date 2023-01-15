@@ -41,9 +41,6 @@ handler.delete(
       const { id } = req.query
       const { status } = req.body
 
-      console.log(req.body)
-      console.log(req.query)
-
       return res.status(400).json({ error: 'error' })
 
       const object = await schemaName.findById(id)
