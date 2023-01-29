@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Chat from '../../../models/Chat'
 import { isAuth } from '../../../utils/auth'
+import Trip from '../../../models/Trip'
 
 const schemaName = Chat
 
@@ -45,6 +46,19 @@ handler.post(
     try {
       const { user, text, createdAt, secondUser } = req.body
 
+      const trip = await Trip.findOne({
+        $or: [{ rider: secondUser }, { rider: user }],
+        status: 'pending',
+      })
+
+      if (!trip) return res.status(404).json({ error: 'Trip not found' })
+
+      const chat = await schemaName.findOne({
+        users: { $all: [secondUser, user] },
+      })
+
+      if (text !== '.' && !chat)
+        return res.status(400).json({ error: 'Chat Error' })
 
       if (text === 'secret=ts=reject') {
         await Chat.remove({ $or: [{ sender: secondUser }, { sender: user }] })

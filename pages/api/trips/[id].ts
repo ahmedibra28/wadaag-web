@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Trip from '../../../models/Trip'
 import { isAuth } from '../../../utils/auth'
+import Chat from '../../../models/Chat'
 
 const schemaName = Trip
 const schemaNameString = 'Trip'
@@ -27,6 +28,11 @@ handler.put(
         object.status = 'completed'
         await object.save()
       }
+
+      await Chat.remove({
+        $or: [{ sender: req.user._id }, { receiver: req.user._id }],
+      })
+
       res.status(200).json({ message: `${schemaNameString} ${actionStatus}` })
     } catch (error: any) {
       res.status(500).json({ error: error.message })

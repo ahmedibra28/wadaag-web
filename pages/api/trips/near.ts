@@ -41,7 +41,7 @@ handler.post(
               coordinates: [origin?.location?.lat, origin?.location?.lng],
             },
             distanceField: 'calculatedDistance',
-            maxDistance: 1000,
+            maxDistance: 5000,
             query: {
               status: 'pending',
             },
@@ -62,7 +62,7 @@ handler.post(
                 coordinates: [origin?.location?.lat, origin?.location?.lng],
               },
               distanceField: 'calculatedDistance',
-              maxDistance: 1000,
+              maxDistance: 5000,
               query: {
                 status: 'pending',
               },
@@ -84,7 +84,7 @@ handler.post(
               ],
             },
             distanceField: 'calculatedDistance',
-            maxDistance: 1000,
+            maxDistance: 5000,
             query: {
               status: 'pending',
             },

@@ -3,6 +3,7 @@ import db from '../../../config/db'
 import Chat from '../../../models/Chat'
 import Profile from '../../../models/Profile'
 import { isAuth } from '../../../utils/auth'
+import Trip from '../../../models/Trip'
 
 const schemaName = Chat
 const schemaNameString = 'Chat'
@@ -16,6 +17,13 @@ handler.get(
     try {
       const sender = req.query.id
       const receiver = req.user._id
+
+      const trip = await Trip.findOne({
+        $or: [{ rider: sender }, { rider: receiver }],
+        status: 'pending',
+      })
+
+      if (!trip) return res.status(404).json({ error: 'Trip not found' })
 
       let chat = await schemaName
         .find({
@@ -71,6 +79,10 @@ handler.put(
       const chat = await schemaName.findOne({
         users: { $all: [currentUser, user] },
       })
+
+      if (text !== '.' && !chat)
+        return res.status(400).json({ error: 'Chat Error' })
+
       if (chat) {
         chat.messages.push({ text, user: currentUser, createdAt: Date.now() })
 
