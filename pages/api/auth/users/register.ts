@@ -116,14 +116,15 @@ handler.post(
       })
 
       const token = await getToken()
-      const sms = await sendSMS({
+      await sendSMS({
         token: token.access_token,
         mobile,
         message: `Your OTP is ${userCreated.otp}`,
       })
 
       const { otp, ...userData } = userCreated.toObject()
-      if (sms) return res.send(userData)
+      console.log(userData);
+      // if (sms) return res.send(userData)
 
       // Disable this line for the future update
 
@@ -133,6 +134,8 @@ handler.post(
         paidDate: moment().format(),
         expireDate: moment().add(Number(60), 'days').format(),
       }
+
+      console.log(data)
 
       await Transaction.create(data)
 
