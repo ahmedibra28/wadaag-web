@@ -35,7 +35,7 @@ handler.post(
       } = device
 
       const message = eTemplate({
-        url: `http://localhost:3000/auth/reset-password/${resetToken}`,
+        url: `https://wadaag.app/auth/reset-password/${resetToken}`,
         user: user?.name,
         clientType,
         clientName,
