@@ -78,8 +78,8 @@ handler.post(
       if (body.startsWith('[-EVCPlus-] Waxaad ')) {
         const [amount, mobile] = body.match(/[0-9.]+/g)
 
-        if (Number(amount) !== 1)
-          return res.status(400).json({ error: 'Only you send $1' })
+        if (Number(amount) < 1)
+          return res.status(400).json({ error: `Minimum valid amount is $1` })
 
         const remainingDays = await subscription(mobile)
         if (remainingDays > 0)

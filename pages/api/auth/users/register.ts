@@ -2,50 +2,52 @@ import nc from 'next-connect'
 import db from '../../../../config/db'
 import Profile from '../../../../models/Profile'
 import User from '../../../../models/User'
-// import axios from 'axios'
+import axios from 'axios'
 import Role from '../../../../models/Role'
 import UserRole from '../../../../models/UserRole'
+import Transaction from '../../../../models/Transaction'
+import moment from 'moment'
 
 const handler = nc()
 
-// const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
-// const username = MY_SMS_USERNAME
-// const password = MY_SMS_API_KEY
-// const grant_type = 'password'
-// const tokenURL = `${MY_SMS_BASE_URL}/token`
-// const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
+const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
+const username = MY_SMS_USERNAME
+const password = MY_SMS_API_KEY
+const grant_type = 'password'
+const tokenURL = `${MY_SMS_BASE_URL}/token`
+const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
 
-// // get access token
-// const getToken = async () => {
-//   const { data } = await axios.post(
-//     tokenURL,
-//     `username=${username}&password=${password}&grant_type=${grant_type}`
-//   )
-//   return data
-// }
+// get access token
+const getToken = async () => {
+  const { data } = await axios.post(
+    tokenURL,
+    `username=${username}&password=${password}&grant_type=${grant_type}`
+  )
+  return data
+}
 
-// // send SMS
-// const sendSMS = async ({
-//   token,
-//   mobile,
-//   message,
-// }: {
-//   token: string
-//   mobile: string
-//   message: string
-// }) => {
-//   const { data } = await axios.post(
-//     sendSMS_URL,
-//     { mobile, message },
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   )
-//   return data
-// }
+// send SMS
+const sendSMS = async ({
+  token,
+  mobile,
+  message,
+}: {
+  token: string
+  mobile: string
+  message: string
+}) => {
+  const { data } = await axios.post(
+    sendSMS_URL,
+    { mobile, message },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  return data
+}
 
 handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
@@ -113,21 +115,30 @@ handler.post(
         role: userRole._id,
       })
 
-      // const token = await getToken()
-      // const sms = await sendSMS({
-      //   token: token.access_token,
-      //   mobile,
-      //   message: `Your OTP is ${userCreated.otp}`,
-      // })
+      const token = await getToken()
+      const sms = await sendSMS({
+        token: token.access_token,
+        mobile,
+        message: `Your OTP is ${userCreated.otp}`,
+      })
 
-      // console.log({ sms })
+      const { otp, ...userData } = userCreated.toObject()
+      if (sms) return res.send(userData)
 
-      // const { otp, ...userData } = userCreated.toObject()
-      // if (sms) return res.send(userData)
+      // Disable this line for the future update
+
+      const data = {
+        mobile,
+        amount: 2,
+        paidDate: moment().format(),
+        expireDate: moment().add(Number(60), 'days').format(),
+      }
+
+      await Transaction.create(data)
 
       return res.status(200).send({
         _id: userCreated._id,
-        otp: userCreated.otp,
+        otp,
         mobile: userCreated.mobile,
         name: userCreated.name,
       })

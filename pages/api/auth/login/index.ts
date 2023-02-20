@@ -4,48 +4,48 @@ import User from '../../../../models/User'
 import { generateToken } from '../../../../utils/auth'
 import UserRole from '../../../../models/UserRole'
 import { IClientPermission } from '../../../../models/ClientPermission'
-// import axios from 'axios'
+import axios from 'axios'
 
 const handler = nc()
 
-// const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
-// const username = MY_SMS_USERNAME
-// const password = MY_SMS_API_KEY
-// const grant_type = 'password'
-// const tokenURL = `${MY_SMS_BASE_URL}/token`
-// const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
+const { MY_SMS_BASE_URL, MY_SMS_API_KEY, MY_SMS_USERNAME } = process.env
+const username = MY_SMS_USERNAME
+const password = MY_SMS_API_KEY
+const grant_type = 'password'
+const tokenURL = `${MY_SMS_BASE_URL}/token`
+const sendSMS_URL = `${MY_SMS_BASE_URL}/api/SendSMS`
 
 // // get access token
-// const getToken = async () => {
-//   const { data } = await axios.post(
-//     tokenURL,
-//     `username=${username}&password=${password}&grant_type=${grant_type}`
-//   )
-//   return data
-// }
+const getToken = async () => {
+  const { data } = await axios.post(
+    tokenURL,
+    `username=${username}&password=${password}&grant_type=${grant_type}`
+  )
+  return data
+}
 
 // // send SMS
-// const sendSMS = async ({
-//   token,
-//   mobile,
-//   message,
-// }: {
-//   token: string
-//   mobile: string
-//   message: string
-// }) => {
-//   const { data } = await axios.post(
-//     sendSMS_URL,
-//     { mobile, message },
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   )
-//   return data
-// }
+const sendSMS = async ({
+  token,
+  mobile,
+  message,
+}: {
+  token: string
+  mobile: string
+  message: string
+}) => {
+  const { data } = await axios.post(
+    sendSMS_URL,
+    { mobile, message },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  return data
+}
 
 handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
@@ -84,21 +84,21 @@ handler.post(
         user.getRandomOtp()
         await user.save()
 
-        // const token = await getToken()
-        // const sms = await sendSMS({
-        //   token: token.access_token,
-        //   mobile,
-        //   message: `Your OTP is ${user.otp}`,
-        // })
+        const token = await getToken()
+        const sms = await sendSMS({
+          token: token.access_token,
+          mobile,
+          message: `Your OTP is ${user.otp}`,
+        })
 
-        // console.log({ sms })
+        console.log({ sms })
 
-        // const { otp, ...userData } = user.toObject()
-        // if (sms) return res.send(userData)
+        const { otp, ...userData } = user.toObject()
+        if (sms) return res.send(userData)
 
         return res.status(200).send({
           _id: user._id,
-          otp: user.otp,
+          otp,
           mobile: user.mobile,
           name: user.name,
         })
