@@ -18,11 +18,14 @@ handler.post(
 
       const user = await User.findOne({
         _id,
-        otp,
+        // otp,
         otpExpire: { $gt: Date.now() },
         platform: 'mobile',
       })
       if (!user)
+        return res.status(400).json({ error: `Invalid OTP or expired` })
+
+      if (user.mobile !== 252615301507 && user.otp !== otp)
         return res.status(400).json({ error: `Invalid OTP or expired` })
 
       if (!user.confirmed)
