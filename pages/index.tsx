@@ -13,7 +13,7 @@ const Home = () => {
     <div className="hero">
       <div className="container">
         <div className="mx-auto text-center">
-          <div className="mb-5">
+          <div className="mb-5" style={{ marginTop: -100 }}>
             <Image
               src="/logo.png"
               className="img-fluid rounded-pill mb-3"
@@ -22,7 +22,7 @@ const Home = () => {
               height={150}
             />
 
-            <div className="display-6 fw-bold font-monospace text-light">
+            <div className="fs-4 fw-bold text-light">
               Download Wadaag App Now
             </div>
           </div>
@@ -31,8 +31,8 @@ const Home = () => {
             href="https://apps.apple.com/ke/app/wadaag/id6444431746"
             target="_blank"
             rel="noreferrer"
-            style={{ minWidth: 300 }}
-            className="my-3 mx-5 btn btn-light rounded-4 px-4"
+            style={{ minWidth: 265 }}
+            className="my-3 mx-3 btn btn-light rounded-4 px-4"
           >
             <div className="row px-2">
               <div className="col-auto my-auto text-start p-0">
@@ -52,8 +52,8 @@ const Home = () => {
             href="https://play.google.com/store/apps/details?id=com.wadaag"
             target="_blank"
             rel="noreferrer"
-            style={{ minWidth: 300 }}
-            className="my-3 mx-5 btn btn-light rounded-4 px-4"
+            style={{ minWidth: 265 }}
+            className="my-3 mx-3 btn btn-light rounded-4 px-4"
           >
             <div className="row px-2">
               <div className="col-auto my-auto text-start p-0">
@@ -69,6 +69,7 @@ const Home = () => {
             </div>
           </a>
         </div>
+
         <div className="text-light text-center mt-5">
           <hr className="text-light" />
           <a
