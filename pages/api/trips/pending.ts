@@ -13,6 +13,11 @@ handler.get(
     try {
       const { _id } = req.user
 
+      await schemaName.deleteMany({
+        status: 'pending',
+        createdAt: { $lte: new Date(Date.now() - 120 * 60 * 1000) },
+      })
+
       const trip = await schemaName
         .findOne({
           status: 'pending',

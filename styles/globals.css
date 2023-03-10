@@ -1,0 +1,16 @@
+.hero {
+  background-image: url('/headerImage.jpg');
+  background-color: #00000086;
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-primacy-color {
+  color: #5c1a67 !important;
+}

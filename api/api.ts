@@ -1,7 +1,13 @@
 import axios from 'axios'
 
-const baseUrl = 'https://wadaag.app/api'
-// const baseUrl = 'http://localhost:3000/api'
+let baseUrl = ''
+
+// check i'm in development mode or production mode
+if (process.env.NODE_ENV === 'development') {
+  baseUrl = 'http://localhost:3000/api'
+} else {
+  baseUrl = 'https://wadaag.app/api'
+}
 
 export const userInfo = () => {
   return {

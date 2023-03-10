@@ -1,84 +1,102 @@
+import Image from 'next/image'
 import React from 'react'
-import dynamic from 'next/dynamic'
-import Link from 'next/link'
-import withAuth from '../HoC/withAuth'
+import {
+  FaApple,
+  FaFacebook,
+  FaGooglePlay,
+  FaInstagram,
+  FaTiktok,
+} from 'react-icons/fa'
 
 const Home = () => {
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-6 mx-auto">
-          <h6 className="fw-bold text-uppercase mb-3">
-            Restricted Available Routes
-          </h6>
-          <ol>
-            <li className="fw-bold">Admin</li>
-            <ul>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/users"
-                >
-                  Users
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/roles"
-                >
-                  Roles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/permissions"
-                >
-                  Permissions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/client-permissions"
-                >
-                  Client permissions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/user-roles"
-                >
-                  User roles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/admin/user-profiles"
-                >
-                  User profiles
-                </Link>
-              </li>
-            </ul>
-            <li className="fw-bold">Username</li>
-            <ul>
-              <li>
-                <Link
-                  className="text-decoration-none text-muted"
-                  href="/account/profile"
-                >
-                  Profiles
-                </Link>
-              </li>
-            </ul>
-          </ol>
+    <div className="hero">
+      <div className="container">
+        <div className="mx-auto text-center">
+          <div className="mb-5">
+            <Image
+              src="/logo.png"
+              className="img-fluid rounded-pill mb-3"
+              alt="Wadaag Logo"
+              width={150}
+              height={150}
+            />
+
+            <div className="display-6 fw-bold font-monospace text-light">
+              Download Wadaag App Now
+            </div>
+          </div>
+
+          <a
+            href="https://apps.apple.com/ke/app/wadaag/id6444431746"
+            target="_blank"
+            rel="noreferrer"
+            style={{ minWidth: 300 }}
+            className="my-3 mx-5 btn btn-light rounded-4 px-4"
+          >
+            <div className="row px-2">
+              <div className="col-auto my-auto text-start p-0">
+                <FaApple
+                  className="mb-1 my-primacy-color"
+                  style={{ fontSize: '300%' }}
+                />
+              </div>
+              <div className="col-auto my-auto text-start p-0 ms-3">
+                <div className="fw-light">Download on the app</div>
+                <div className="fs-3 fw-bold">App Store</div>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://play.google.com/store/apps/details?id=com.wadaag"
+            target="_blank"
+            rel="noreferrer"
+            style={{ minWidth: 300 }}
+            className="my-3 mx-5 btn btn-light rounded-4 px-4"
+          >
+            <div className="row px-2">
+              <div className="col-auto my-auto text-start p-0">
+                <FaGooglePlay
+                  className="mb-1 my-primacy-color"
+                  style={{ fontSize: '300%' }}
+                />
+              </div>
+              <div className="col-auto my-auto text-start p-0 ms-3">
+                <div className="fw-light text-uppercase">Get It On</div>
+                <div className="fs-3 fw-bold">Google Play</div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div className="text-light text-center mt-5">
+          <hr className="text-light" />
+          <a
+            href="https://www.facebook.com/wadaagapp"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FaFacebook className="text-light fs-3" />
+          </a>
+          <a
+            className="mx-4"
+            href="https://www.instagram.com/wadaagapp"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FaInstagram className="text-light fs-3" />
+          </a>
+          <a
+            href="https://www.tiktok.com/@wadaagapp"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FaTiktok className="text-light fs-3" />
+          </a>
         </div>
       </div>
     </div>
   )
 }
 
-export default dynamic(() => Promise.resolve(withAuth(Home)), { ssr: false })
+export default Home
