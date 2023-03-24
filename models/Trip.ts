@@ -30,6 +30,7 @@ export interface ITrip {
   duration: string
   status: 'pending' | 'completed' | 'cancelled'
   createdAt?: Date
+  dealt: boolean
 }
 
 const tripSchema = new Schema<ITrip>(
@@ -64,6 +65,7 @@ const tripSchema = new Schema<ITrip>(
       enum: ['pending', 'completed', 'cancelled'],
       default: 'pending',
     },
+    dealt: { type: Boolean, default: false },
   },
   { timestamps: true }
 )

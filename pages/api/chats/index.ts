@@ -68,6 +68,10 @@ handler.post(
         return res.json('rejected')
       }
 
+      if (text === 'secret=ts=accept') {
+        await Trip.updateOne({ _id: trip._id }, { dealt: true })
+      }
+
       const newPost = {
         text,
         createdAt,
