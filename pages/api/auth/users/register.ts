@@ -133,10 +133,8 @@ handler.post(
         mobile,
         amount: 2,
         paidDate: moment().format(),
-        expireDate: moment().add(Number(60), 'days').format(),
+        expireDate: moment().add(Number(15), 'days').format(),
       }
-
-      console.log(data)
 
       await Transaction.create(data)
 
