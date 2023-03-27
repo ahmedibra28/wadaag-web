@@ -7,7 +7,7 @@ import { isAuth } from '../../../../utils/auth'
 const schemaName = User
 
 const handler = nc()
-handler.use(isAuth)
+// handler.use(isAuth)
 handler.get(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
@@ -31,19 +31,41 @@ handler.get(
         .skip(skip)
         .limit(pageSize)
         .sort({ createdAt: -1 })
-        .select('-password')
+        .select('-password -otp -otpExpire')
         .lean()
 
       const result = await query
 
+      const getUsersDistrictAndSex = Promise.all(
+        result.map(async (user: any) => {
+          const profile = await Profile.findOne({
+            user: user._id,
+          })
+            .select('district sex')
+            .lean()
+          return { ...user, district: profile?.district, sex: profile?.sex }
+        })
+      )
+
+      const profiles = await getUsersDistrictAndSex
+
+      const deletedUsers = await schemaName.countDocuments({
+        status: 'deleted',
+      })
+      const activeUsers = await schemaName.countDocuments({
+        status: 'active',
+      })
+
       res.status(200).json({
         startIndex: skip + 1,
-        endIndex: skip + result.length,
-        count: result.length,
+        endIndex: skip + profiles.length,
+        count: profiles.length,
         page,
         pages,
         total,
-        data: result,
+        data: profiles,
+        deletedUsers,
+        activeUsers,
       })
     } catch (error: any) {
       res.status(500).json({ error: error.message })

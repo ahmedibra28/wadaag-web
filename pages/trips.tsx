@@ -5,6 +5,8 @@ import { Spinner, Pagination, Message, Search, Meta } from '../components'
 import moment from 'moment'
 import apiHook from '../api'
 import { ITrip } from '../models/Trip'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import { FcExpired } from 'react-icons/fc'
 
 interface Item extends Omit<ITrip, 'rider' | 'driver'> {
   rider: {
@@ -83,6 +85,39 @@ const Trips = () => {
                 q={q}
                 searchHandler={searchHandler}
               />
+            </div>
+          </div>
+
+          <div className="row gy-3 my-3">
+            <div className="col-lg-3 col-md-4 col-6 mx-auto">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <FaCheckCircle className="mb-1 text-success me-2" />
+                  <span className="fw-bold text-uppercase">
+                    {getApi?.data?.completedRide | 0} Rides were completed
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-4 col-6 mx-auto">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <FaTimesCircle className="mb-1 text-danger me-2" />
+                  <span className="fw-bold text-uppercase">
+                    {getApi?.data?.cancelledRide | 0} Rides were cancelled
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-4 col-6 mx-auto">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <FcExpired className="mb-1 text-warning me-2" />
+                  <span className="fw-bold text-uppercase">
+                    {getApi?.data?.expiredRide | 0} Rides were expired
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           <table className="table table-sm table-border">

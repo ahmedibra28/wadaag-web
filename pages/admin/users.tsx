@@ -263,12 +263,37 @@ const Users = () => {
               />
             </div>
           </div>
+
+          <div className="row gy-3 my-3">
+            <div className="col-lg-3 col-md-4 col-6 mx-auto">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <FaCheckCircle className="mb-1 text-success me-2" />
+                  <span className="fw-bold text-uppercase">
+                    {getApi?.data?.activeUsers | 0} Active Users
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-4 col-6 mx-auto">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <FaTimesCircle className="mb-1 text-danger me-2" />
+                  <span className="fw-bold text-uppercase">
+                    {getApi?.data?.deletedUsers | 0} Deleted Users
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <table className="table table-sm table-border">
             <thead className="border-0">
               <tr>
                 <th>Name</th>
                 <th>Username</th>
                 <th>Platform</th>
+                <th>District</th>
                 <th>Confirmed</th>
                 <th>Blocked</th>
                 <th>Status</th>
@@ -282,6 +307,7 @@ const Users = () => {
                   <td>{item?.name}</td>
                   <td>{item?.email || item?.mobile}</td>
                   <td>{item?.platform?.toUpperCase()}</td>
+                  <td>{item?.district}</td>
                   <td>
                     {item?.confirmed ? (
                       <FaCheckCircle className="text-success" />

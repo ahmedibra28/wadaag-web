@@ -26,6 +26,18 @@ handler.get(
         q ? { rider: user?._id } : {}
       )
 
+      const completedRide = await schemaName.countDocuments({
+        status: 'completed',
+      })
+
+      const cancelledRide = await schemaName.countDocuments({
+        status: 'cancelled',
+      })
+
+      const expiredRide = await schemaName.countDocuments({
+        status: 'expired',
+      })
+
       const pages = Math.ceil(total / pageSize)
 
       query = query
@@ -46,6 +58,9 @@ handler.get(
         pages,
         total,
         data: result,
+        completedRide,
+        cancelledRide,
+        expiredRide,
       })
     } catch (error: any) {
       res.status(500).json({ error: error.message })
