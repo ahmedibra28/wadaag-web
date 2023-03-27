@@ -116,6 +116,8 @@ const Profile = () => {
       )}
 
       {getApi?.isLoading && <Spinner />}
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
       <form onSubmit={handleSubmit(submitHandler)}>
         {getApi?.data?.image && (
           <div className="d-flex justify-content-center">

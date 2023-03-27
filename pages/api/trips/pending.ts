@@ -13,10 +13,15 @@ handler.get(
     try {
       const { _id } = req.user
 
-      await schemaName.deleteMany({
-        status: 'pending',
-        createdAt: { $lte: new Date(Date.now() - 120 * 60 * 1000) },
-      })
+      await schemaName.updateMany(
+        {
+          status: 'pending',
+          createdAt: { $lte: new Date(Date.now() - 120 * 60 * 1000) },
+        },
+        {
+          $set: { status: 'expired' },
+        }
+      )
 
       const trip = await schemaName
         .findOne({

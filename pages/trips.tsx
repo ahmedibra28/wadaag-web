@@ -124,6 +124,13 @@ const Trips = () => {
                       <span className="badge bg-danger">{item?.status}</span>
                     </td>
                   )}
+                  {item?.status === 'expired' && (
+                    <td>
+                      <span className="badge bg-dark text-light">
+                        {item?.status}
+                      </span>
+                    </td>
+                  )}
                   <td>{moment(item?.createdAt).format('lll')}</td>
                 </tr>
               ))}

@@ -28,7 +28,7 @@ export interface ITrip {
   }
   distance: string
   duration: string
-  status: 'pending' | 'completed' | 'cancelled'
+  status: 'pending' | 'completed' | 'cancelled' | 'expired'
   createdAt?: Date
   dealt: boolean
 }
@@ -62,7 +62,7 @@ const tripSchema = new Schema<ITrip>(
     duration: { type: String, required: true },
     status: {
       type: String,
-      enum: ['pending', 'completed', 'cancelled'],
+      enum: ['pending', 'completed', 'cancelled', 'expired'],
       default: 'pending',
     },
     dealt: { type: Boolean, default: false },

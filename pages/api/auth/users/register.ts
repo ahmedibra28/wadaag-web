@@ -53,7 +53,7 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { name, plate, license, selected, district } = req.body
+      const { name, plate, license, selected, district, sex } = req.body
       let { mobile } = req.body
 
       if (!mobile || mobile.length !== 9)
@@ -104,6 +104,7 @@ handler.post(
         user: userCreated._id,
         name: userCreated.name,
         district,
+        sex,
         image: `https://ui-avatars.com/api/?uppercase=true&name=${userCreated.name}&background=random&color=random&size=128`,
         mobile: mobile,
         plate: selected === 'driver' ? plate : undefined,
@@ -123,7 +124,7 @@ handler.post(
       })
 
       const { otp, ...userData } = userCreated.toObject()
-      console.log(userData);
+      console.log(userData)
       // if (sms) return res.send(userData)
 
       // Disable this line for the future update
