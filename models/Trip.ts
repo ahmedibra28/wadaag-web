@@ -26,6 +26,14 @@ export interface ITrip {
       lng: number
     }
   }
+  finishedLocation: {
+    description: string
+    location: {
+      lat: number
+      lng: number
+    }
+  }
+  finishedDistance: string
   distance: string
   duration: string
   status: 'pending' | 'completed' | 'cancelled' | 'expired'
@@ -58,6 +66,14 @@ const tripSchema = new Schema<ITrip>(
         lng: Number,
       },
     },
+    finishedLocation: {
+      description: String,
+      location: {
+        lat: Number,
+        lng: Number,
+      },
+    },
+    finishedDistance: { type: String },
     distance: { type: String, required: true },
     duration: { type: String, required: true },
     status: {

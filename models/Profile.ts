@@ -9,10 +9,10 @@ export interface IProfile {
   mobile?: number
   bio?: string
   user: Schema.Types.ObjectId
-  sex: string
   createdAt?: Date
   plate?: string
   license?: string
+  sex: string
   district?: string
 }
 
@@ -23,13 +23,13 @@ const profileSchema = new Schema<IProfile>(
     address: String,
     mobile: Number,
     bio: String,
-    sex: String,
     user: {
       type: Schema.Types.ObjectId,
       ref: User,
     },
     plate: { type: String, uppercase: true, trim: true },
     license: String,
+    sex: String,
     district: String,
   },
   { timestamps: true }
