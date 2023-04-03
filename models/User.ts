@@ -17,6 +17,8 @@ export interface IUser {
   otpExpire?: Date
   platform: 'web' | 'mobile'
   status: 'active' | 'deleted'
+  district?: string
+  six?: string
 }
 
 const userSchema = new Schema<IUser>(

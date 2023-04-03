@@ -55,6 +55,9 @@ handler.post(
       let { mobile, email } = req.body
       email = email?.toLowerCase()
 
+      if (!['mobile', 'web'].includes(platform))
+        return res.status(400).json({ error: 'Invalid platform' })
+
       if (platform === 'mobile') {
         if (!mobile || mobile.length !== 9)
           return res.status(400).json({ error: 'Invalid mobile number' })
