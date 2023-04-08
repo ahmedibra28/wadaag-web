@@ -161,6 +161,13 @@ const clientPermissions = [
     sort: sort.report,
     description: 'Riders page',
   },
+  {
+    name: 'Notifications',
+    path: '/notifications',
+    menu: 'normal',
+    sort: sort.normal,
+    description: 'Notifications page',
+  },
 ]
 
 const permissions = [
@@ -516,6 +523,43 @@ const permissions = [
     route: '/api/reports/riders',
     auth: true,
     name: 'Report',
+    method: 'POST',
+  },
+
+  // notification
+  {
+    description: 'Get Notifications',
+    route: '/api/notifications',
+    auth: false,
+    name: 'Notifications',
+    method: 'GET',
+  },
+  {
+    description: 'Create Notification',
+    route: '/api/notifications',
+    auth: true,
+    name: 'Notifications',
+    method: 'POST',
+  },
+  {
+    description: 'Update Notification',
+    route: '/api/notifications/:id',
+    auth: true,
+    name: 'Notifications',
+    method: 'PUT',
+  },
+  {
+    description: 'Delete Notification',
+    route: '/api/notifications/:id',
+    auth: true,
+    name: 'Notifications',
+    method: 'DELETE',
+  },
+  {
+    description: 'Send Notification',
+    route: '/api/notifications/send',
+    auth: true,
+    name: 'Notifications',
     method: 'POST',
   },
 ]
