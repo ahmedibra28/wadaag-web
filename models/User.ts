@@ -19,6 +19,9 @@ export interface IUser {
   status: 'active' | 'deleted'
   district?: string
   six?: string
+
+  pushToken: string
+  allowsNotification: boolean
 }
 
 const userSchema = new Schema<IUser>(
@@ -35,6 +38,9 @@ const userSchema = new Schema<IUser>(
     confirmed: { type: Boolean, default: false },
     blocked: { type: Boolean, default: false },
     status: { type: String, enum: ['active', 'deleted'], default: 'active' },
+
+    pushToken: String,
+    allowsNotification: { type: Boolean, default: true },
   },
   { timestamps: true }
 )

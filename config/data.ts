@@ -562,6 +562,14 @@ const permissions = [
     name: 'Notifications',
     method: 'POST',
   },
+
+  {
+    description: 'Push Token',
+    route: '/api/notifications/push-token',
+    auth: true,
+    name: 'Push Token',
+    method: 'PUT',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }
