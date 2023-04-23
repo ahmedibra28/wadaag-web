@@ -19,13 +19,13 @@ handler.post(
     try {
       const object = await schemaName.findOne({ _id })
 
-      const tokens = await User.find(
-        { allowNotification: true },
-        { pushToken: 1 }
-      ).lean()
-
       if (!object)
         return res.status(404).json({ error: 'Not found notification' })
+
+      const tokens = await User.find(
+        { allowNotification: true, pushToken: { $exists: true } },
+        { pushToken: 1 }
+      ).lean()
 
       const messages = tokens.map((token) => ({
         to: token.pushToken,
