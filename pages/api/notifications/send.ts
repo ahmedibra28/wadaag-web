@@ -22,13 +22,17 @@ handler.post(
       if (!object)
         return res.status(404).json({ error: 'Not found notification' })
 
-      const tokens = await User.find(
+      let tokens = await User.find(
         { allowNotification: true, pushToken: { $exists: true } },
         { pushToken: 1 }
       ).lean()
 
+      tokens = tokens
+        .map((token) => token.pushToken !== '' && token.pushToken)
+        ?.filter(Boolean)
+
       const messages = tokens.map((token) => ({
-        to: token.pushToken,
+        to: token,
         title: object?.title,
         body: object?.body,
         data: {
@@ -37,14 +41,21 @@ handler.post(
         },
       }))
 
-      await axios.post(`https://exp.host/--/api/v2/push/send`, messages, {
-        headers: {
-          Host: 'exp.host',
-          Accept: 'application/json',
-          'Accept-Encoding': 'gzip, deflate',
-          'Content-Type': 'application/json',
-        },
-      })
+      const result = await axios.post(
+        `https://exp.host/--/api/v2/push/send`,
+        messages,
+        {
+          headers: {
+            Host: 'exp.host',
+            Accept: 'application/json',
+            'Accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      if (result.status !== 200)
+        return res.status(400).json({ error: 'Error send notification' })
 
       res.status(200).send(object)
     } catch (error: any) {
