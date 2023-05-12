@@ -570,6 +570,85 @@ const permissions = [
     name: 'Push Token',
     method: 'PUT',
   },
+
+  // mobile
+  {
+    description: 'Push Token',
+    route: '/api/mobile/notifications',
+    auth: true,
+    name: 'Notifications',
+    method: 'POST',
+  },
+  {
+    description: 'Get Notifications',
+    route: '/api/mobile/notifications',
+    auth: true,
+    name: 'Notifications',
+    method: 'GET',
+  },
+  {
+    description: 'Get Payments',
+    route: '/api/mobile/payments',
+    auth: true,
+    name: 'Payments',
+    method: 'GET',
+  },
+  {
+    description: 'Create Trip',
+    route: '/api/mobile/trips',
+    auth: true,
+    name: 'Trip',
+    method: 'POST',
+  },
+  {
+    description: 'Update Trip',
+    route: '/api/mobile/trips/:id',
+    auth: true,
+    name: 'Trip',
+    method: 'PUT',
+  },
+  {
+    description: 'Get Near Riders',
+    route: '/api/mobile/trips/near',
+    auth: true,
+    name: 'Trip',
+    method: 'POST',
+  },
+  {
+    description: 'Check Pending Trip',
+    route: '/api/mobile/trips/pending',
+    auth: true,
+    name: 'Trip',
+    method: 'GET',
+  },
+  {
+    description: 'Update Current Location',
+    route: '/api/mobile/trips/location/:id',
+    auth: true,
+    name: 'Trip',
+    method: 'PUT',
+  },
+  {
+    description: 'Start Trip with Rider Two',
+    route: '/api/mobile/trips/start-trip',
+    auth: true,
+    name: 'Trip',
+    method: 'POST',
+  },
+  {
+    description: 'Get Current Profile',
+    route: '/api/mobile/profile',
+    auth: true,
+    name: 'Profile',
+    method: 'GET',
+  },
+  {
+    description: 'Update Current Profile',
+    route: '/api/mobile/profile',
+    auth: true,
+    name: 'Profile',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

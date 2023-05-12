@@ -31,13 +31,18 @@ nextApp.prepare().then(async () => {
     console.log('connection')
 
     socket.on('locationTracking', (info) => {
-      console.log('location tracking: ', info)
+      // console.log('location tracking: ', info)
       io.emit('locationTracking', info)
     })
 
     socket.on('message', (info) => {
-      console.log(info)
+      // console.log(info)
       io.emit('message', info)
+    })
+
+    socket.on('riderScreen', (data) => {
+      // console.log(data)
+      io.emit('riderScreen', data)
     })
 
     socket.on('disconnect', () => {

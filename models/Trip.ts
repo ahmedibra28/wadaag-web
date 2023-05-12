@@ -26,19 +26,27 @@ export interface ITrip {
       lng: number
     }
   }
-  finishedLocation: {
+  finalDestination: {
     description: string
     location: {
       lat: number
       lng: number
     }
   }
-  finishedDistance: string
+  finalDistance: string
   distance: string
   duration: string
   status: 'pending' | 'completed' | 'cancelled' | 'expired'
   createdAt?: Date
   dealt: boolean
+  riderTwo?: Schema.Types.ObjectId
+  initialOrigin: {
+    description: string
+    location: {
+      lat: number
+      lng: number
+    }
+  }
 }
 
 const tripSchema = new Schema<ITrip>(
@@ -66,14 +74,14 @@ const tripSchema = new Schema<ITrip>(
         lng: Number,
       },
     },
-    finishedLocation: {
+    finalDestination: {
       description: String,
       location: {
         lat: Number,
         lng: Number,
       },
     },
-    finishedDistance: { type: String },
+    finalDistance: { type: String },
     distance: { type: String, required: true },
     duration: { type: String, required: true },
     status: {
@@ -82,6 +90,14 @@ const tripSchema = new Schema<ITrip>(
       default: 'pending',
     },
     dealt: { type: Boolean, default: false },
+    riderTwo: { type: Schema.Types.ObjectId, ref: User },
+    initialOrigin: {
+      description: { type: String },
+      location: {
+        lat: { type: Number },
+        lng: { type: Number },
+      },
+    },
   },
   { timestamps: true }
 )

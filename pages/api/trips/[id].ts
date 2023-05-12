@@ -14,7 +14,7 @@ handler.put(
     await db()
     try {
       const { id } = req.query
-      const { actionStatus, finishedLocation, finishedDistance } = req.body
+      const { actionStatus, finalDestination, finalDistance } = req.body
 
       const object = await schemaName.findById(id)
       if (!object)
@@ -27,8 +27,8 @@ handler.put(
       if (actionStatus === 'completed') {
         object.status = 'completed'
         // implement here the finished location and distance
-        object.finishedLocation = finishedLocation
-        object.finishedDistance = finishedDistance
+        object.finalDestination = finalDestination
+        object.finalDistance = finalDistance
         await object.save()
       }
 

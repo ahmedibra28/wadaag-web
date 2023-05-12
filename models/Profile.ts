@@ -10,8 +10,6 @@ export interface IProfile {
   bio?: string
   user: Schema.Types.ObjectId
   createdAt?: Date
-  plate?: string
-  license?: string
   sex: string
   district?: string
 }
@@ -27,8 +25,6 @@ const profileSchema = new Schema<IProfile>(
       type: Schema.Types.ObjectId,
       ref: User,
     },
-    plate: { type: String, uppercase: true, trim: true },
-    license: String,
     sex: String,
     district: String,
   },

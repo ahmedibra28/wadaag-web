@@ -17,9 +17,6 @@ export interface IUser {
   otpExpire?: Date
   platform: 'web' | 'mobile'
   status: 'active' | 'deleted'
-  district?: string
-  six?: string
-
   pushToken: string
   allowsNotification: boolean
 }
