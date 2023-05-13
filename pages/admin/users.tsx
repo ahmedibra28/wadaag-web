@@ -307,6 +307,8 @@ const Users = () => {
                   <td>{item?.name}</td>
                   <td>{item?.email || item?.mobile}</td>
                   <td>{item?.platform?.toUpperCase()}</td>
+                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                  {/* @ts-ignore */}
                   <td>{item?.district}</td>
                   <td>
                     {item?.confirmed ? (
