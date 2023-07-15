@@ -31,35 +31,55 @@ handler.post(
         .map((token) => token.pushToken !== '' && token.pushToken)
         ?.filter(Boolean)
 
-      const messages = tokens.map((token) => ({
-        to: token,
-        title: object?.title,
-        body: object?.body,
-        data: {
-          screen: object?.data?.screen,
-          param: object?.data?.param,
-        },
-      }))
-
-      const result = await axios.post(
-        `https://exp.host/--/api/v2/push/send`,
-        messages,
-        {
-          headers: {
-            Host: 'exp.host',
-            Accept: 'application/json',
-            'Accept-Encoding': 'gzip, deflate',
-            'Content-Type': 'application/json',
-          },
+      const splittedTokens = tokens.reduce((acc, curr, index) => {
+        const group = Math.floor(index / 50)
+        if (!acc[group]) {
+          acc[group] = []
         }
+        acc[group].push(curr)
+        return acc
+      }, [])
+
+      const notificationResults = await Promise.all(
+        splittedTokens.map(async (tokens: string[]) => {
+          const messages = tokens.map((token: string) => ({
+            to: token,
+            title: object?.title,
+            body: object?.body,
+            data: {
+              screen: object?.data?.screen,
+              param: object?.data?.param,
+            },
+          }))
+          const all = {
+            to: tokens,
+            body: object?.body,
+          }
+
+          const { data } = await axios.post(
+            'https://exp.host/--/api/v2/push/send',
+            [...messages, all],
+            {
+              headers: {
+                Host: 'exp.host',
+                Accept: 'application/json',
+                'Accept-Encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          return data
+        })
       )
 
-      if (result.status !== 200)
-        return res.status(400).json({ error: 'Error send notification' })
-
-      res.status(200).send(object)
+      res
+        .status(200)
+        .send(notificationResults?.map((item) => item?.data).flat())
     } catch (error: any) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({
+        error: error?.response?.data?.errors[0]?.message,
+        details: error?.response?.data?.errors,
+      })
     }
   }
 )
