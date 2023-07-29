@@ -47,7 +47,7 @@ handler.post(
             title: object?.title,
             body: object?.body,
             data: {
-              screen: `com.wadaag://Notification`,
+              screen: `wadaag://Notification`,
               param: object?.data?.param,
             },
           }))
