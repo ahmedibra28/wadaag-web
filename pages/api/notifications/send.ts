@@ -51,14 +51,14 @@ handler.post(
               param: object?.data?.param,
             },
           }))
-          const all = {
-            to: tokens,
-            body: object?.body,
-          }
+          // const all = {
+          //   to: tokens,
+          //   body: object?.body,
+          // }
 
           const { data } = await axios.post(
             'https://exp.host/--/api/v2/push/send',
-            [...messages, all],
+            messages,
             {
               headers: {
                 Host: 'exp.host',
