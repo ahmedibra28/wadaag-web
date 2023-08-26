@@ -59,7 +59,8 @@ handler.post(
       if (!mobile || mobile.length !== 9)
         return res.status(400).json({ error: 'Invalid mobile number' })
 
-      if (mobile.substring(0, 2) !== '61')
+      const key = mobile.substring(0, 2)
+      if (key !== '61' || key !== '77')
         return res.status(400).json({ error: 'Invalid mobile number' })
 
       mobile = `252${mobile}`
