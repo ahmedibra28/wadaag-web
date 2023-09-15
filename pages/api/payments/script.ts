@@ -88,13 +88,21 @@ handler.post(
             .json({ error: 'Subscription did not expired yet!' })
 
         const amountPerDay = 1 / 30
+        const amountPerRentDay = 7 / 30
         const noOfDays = Math.round(Number(amount) / amountPerDay)
+        const noOfRentDays = Math.round(Number(amount) / amountPerRentDay)
 
         const data = {
           mobile,
           amount,
           paidDate: moment(timestamp).format(),
-          expireDate: moment(timestamp).add(Number(noOfDays), 'days').format(),
+          expireDate: moment(timestamp)
+            .add(
+              Number(amount) === 7 ? Number(noOfRentDays) : Number(noOfDays),
+              'days'
+            )
+            .format(),
+          type: Number(amount) === 7 ? 'rent' : 'ride',
         }
 
         const obj = await schemaName.create(data)

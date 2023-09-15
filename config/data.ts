@@ -649,6 +649,43 @@ const permissions = [
     name: 'Profile',
     method: 'POST',
   },
+
+  // Rent
+  {
+    description: 'Create New Rent',
+    route: '/api/mobile/rents',
+    auth: true,
+    name: 'Rent',
+    method: 'POST',
+  },
+  {
+    description: 'Get Rents',
+    route: '/api/mobile/rents',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
+  },
+  {
+    description: 'Get Rent Details',
+    route: '/api/mobile/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
+  },
+  {
+    description: 'Get My Rents',
+    route: '/api/mobile/rents/me',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
+  },
+  {
+    description: 'Cancel or Delete Rent',
+    route: '/api/mobile/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'DELETE',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

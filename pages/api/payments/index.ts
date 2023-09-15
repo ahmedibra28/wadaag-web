@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Transaction from '../../../models/Transaction'
 import { isAuth } from '../../../utils/auth'
-import { subscription } from '../../../utils/subscription'
+import { rentSubscription, subscription } from '../../../utils/subscription'
 
 const schemaName = Transaction
 
@@ -22,8 +22,11 @@ handler.get(
       transactions = transactions && transactions.slice(0, 24)
 
       const expirationDays = await subscription(mobile as number)
+      const rentExpirationDays = await rentSubscription(mobile as number)
 
-      return res.status(200).json({ transactions, expirationDays })
+      return res
+        .status(200)
+        .json({ transactions, expirationDays, rentExpirationDays })
     } catch (error: any) {
       res.status(500).json({ error: error.message })
     }

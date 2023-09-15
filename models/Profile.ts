@@ -12,6 +12,10 @@ export interface IProfile {
   createdAt?: Date
   sex: string
   district?: string
+
+  type?: 'INDIVIDUAL' | 'COMPANY'
+  company?: string
+  license?: string
 }
 
 const profileSchema = new Schema<IProfile>(
@@ -27,6 +31,13 @@ const profileSchema = new Schema<IProfile>(
     },
     sex: String,
     district: String,
+
+    type: {
+      type: String,
+      enum: ['INDIVIDUAL', 'COMPANY'],
+    },
+    company: String,
+    license: String,
   },
   { timestamps: true }
 )

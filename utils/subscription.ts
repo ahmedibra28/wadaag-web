@@ -8,6 +8,24 @@ export const subscription = async (mobile: number) => {
   const payments = await Transaction.find({
     mobile,
     expireDate: { $gte: moment(currentDate).format() },
+    type: 'ride',
+  })
+
+  const expiresUntil = payments
+    ?.map((payment) =>
+      moment(payment?.expireDate).diff(moment(currentDate), 'days')
+    )
+    ?.reduce((acc, curr) => acc + curr + 1, 0)
+
+  return Number(expiresUntil)
+}
+
+export const rentSubscription = async (mobile: number) => {
+  const currentDate = new Date()
+  const payments = await Transaction.find({
+    mobile,
+    expireDate: { $gte: moment(currentDate).format() },
+    type: 'rent',
   })
 
   const expiresUntil = payments
