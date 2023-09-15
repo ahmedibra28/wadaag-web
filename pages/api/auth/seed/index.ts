@@ -25,7 +25,7 @@ handler.get(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      // return res.status(401).json({ error: 'Hello Hacker! 🤣' })
+      return res.status(401).json({ error: 'Hello Hacker! 🤣' })
 
       if (!req.query.secret || req.query.secret !== secret)
         return res.status(401).json({ error: 'Unauthorized' })
