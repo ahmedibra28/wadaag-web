@@ -25,6 +25,7 @@ export interface IRent {
 
 const rentSchema = new Schema<IRent>(
   {
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     region: { type: String, required: true },
     district: { type: String, required: true },
     type: { type: String, required: true },
@@ -37,7 +38,7 @@ const rentSchema = new Schema<IRent>(
     hasUpFront: { type: Boolean, required: true },
     images: [String],
     deposit: { type: Number, default: 0 },
-    description: [String],
+    description: String,
     contact: String,
     status: { type: String, enum: ['active', 'deleted'], default: 'active' },
   },

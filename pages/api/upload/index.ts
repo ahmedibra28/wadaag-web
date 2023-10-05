@@ -11,7 +11,7 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     // check if there is no files
     if (!req.files)
-      return res.status(400).json({ msg: 'No files were uploaded.' })
+      return res.status(400).json({ error: 'No files were uploaded.' })
 
     // check if files are in array format and return if not make it array
     const files = Array.isArray(req.files.file)
@@ -19,7 +19,16 @@ handler.post(
       : [req.files.file]
 
     // allowed image extensions
-    const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif']
+    const allowedImageExtensions = [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'JPG',
+      'JPEG',
+      'PNG',
+      'GIF',
+    ]
 
     // allowed file extensions
     const allowedFileExtensions = [
@@ -40,7 +49,7 @@ handler.post(
     // check if file type is allowed
     const isAllowedFileType = allowedFileTypes.includes(fileType)
     if (!isAllowedFileType)
-      return res.status(400).json({ msg: 'File type is not allowed.' })
+      return res.status(400).json({ error: 'File type is not allowed.' })
 
     // check if file is allowed
     const isAllowed = files.every((file) => {
@@ -53,7 +62,7 @@ handler.post(
     // stop all if one file is not allowed format
     if (!isAllowed)
       return res.status(400).json({
-        msg: `Allowed file formats are ${
+        error: `Allowed file formats are ${
           fileType === 'image'
             ? allowedImageExtensions
             : fileType === 'file' && allowedFileExtensions
@@ -74,7 +83,7 @@ handler.post(
       })
       filePaths.push({
         name: file.name,
-        path: `/uploads/${fileName}`,
+        path: `https://wadaag.app/uploads/${fileName}`,
       })
     })
     return res

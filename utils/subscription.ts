@@ -34,7 +34,7 @@ export const rentSubscription = async (mobile: number) => {
     )
     ?.reduce((acc, curr) => acc + curr + 1, 0)
 
-  return Number(expiresUntil)
+  return Number(expiresUntil || 10)
 }
 
 export const userType = async (mobile: number) => {

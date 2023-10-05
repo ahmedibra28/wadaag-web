@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../utils/auth'
 import db from '../../../../config/db'
 import Rent from '../../../../models/Rent'
+import Profile from '../../../../models/Profile'
 
 const handler = nc()
 handler.use(isAuth)
@@ -50,7 +51,21 @@ handler.get(
 
       query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 }).lean()
 
-      const result = await query
+      let result = await query
+
+      result = await Promise.all(
+        result.map(async (item) => {
+          const profile = await Profile.findOne({ user: item.user }).lean()
+          return {
+            ...item,
+            user: {
+              name: profile?.name,
+              mobile: profile?.mobile,
+              image: profile?.image,
+            },
+          }
+        })
+      )
 
       res.status(200).json({
         startIndex: skip + 1,

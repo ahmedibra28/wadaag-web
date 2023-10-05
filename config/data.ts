@@ -673,6 +673,13 @@ const permissions = [
     method: 'GET',
   },
   {
+    description: 'Update Rent',
+    route: '/api/mobile/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'PUT',
+  },
+  {
     description: 'Get My Rents',
     route: '/api/mobile/rents/me',
     auth: true,
