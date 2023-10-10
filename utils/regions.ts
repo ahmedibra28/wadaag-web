@@ -12,6 +12,7 @@ export const regions = [
     districts: [
       'Abdiaziz',
       'Bondhere',
+      'Daru Salam',
       'Daynile',
       'Dharkenley',
       'Hamar-Jajab',
@@ -20,6 +21,8 @@ export const regions = [
       'Howl-Wadag',
       'Huriwa',
       'Garasbaley',
+      'Gubadley',
+      'Gubta',
       'Karan',
       'Kaxda',
       'Shangani',
