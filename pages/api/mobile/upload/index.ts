@@ -1,94 +1,115 @@
 import nc from 'next-connect'
-import path from 'path'
 import fileUpload from 'express-fileupload'
 export const config = { api: { bodyParser: false } }
-const __dirname = path.resolve()
+
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import sharp from 'sharp'
 
 const handler = nc()
 handler.use(fileUpload())
 
+export function getEnvVariable(key: string): string {
+  const value = process.env[key]
+
+  if (!value || value.length === 0) {
+    console.log(`The environment variable ${key} is not set.`)
+    throw new Error(`The environment variable ${key} is not set.`)
+  }
+
+  return value
+}
+
+export const s3Client = new S3Client({
+  endpoint: getEnvVariable('AWS_DO_ENDPOINT'),
+  forcePathStyle: true,
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: getEnvVariable('AWS_DO_ACCESS_KEY_ID'),
+    secretAccessKey: getEnvVariable('AWS_DO_ACCESS_KEY'),
+  } as {
+    accessKeyId: string
+    secretAccessKey: string
+  },
+})
+
+const uploadObject = async (fileName: string, data: any) => {
+  const params = {
+    Bucket: 'wadaag',
+    Key: fileName,
+    Body: data,
+    ACL: 'public-read',
+    Metadata: {
+      'x-amz-meta-my-key': 'your-value',
+    },
+  }
+
+  try {
+    const data = await s3Client.send(new PutObjectCommand(params))
+
+    return data
+  } catch (err: any) {
+    console.log('Error', err?.message)
+    throw {
+      message: err?.message,
+      status: 500,
+    }
+  }
+}
+
 handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    // check if there is no files
-    if (!req.files)
-      return res.status(400).json({ error: 'No files were uploaded.' })
+    try {
+      const type = req.query.type
 
-    // check if files are in array format and return if not make it array
-    const files = Array.isArray(req.files.file)
-      ? req.files.file
-      : [req.files.file]
+      const files = Array.isArray(req.files.file)
+        ? req.files.file
+        : [req.files.file]
 
-    // allowed image extensions
-    const allowedImageExtensions = [
-      'jpg',
-      'jpeg',
-      'png',
-      'gif',
-      'JPG',
-      'JPEG',
-      'PNG',
-      'GIF',
-    ]
+      const allowedImageTypes = ['.png', '.jpg', '.jpeg', '.gif']
+      const allowedDocumentTypes = ['.pdf', '.doc', '.docx', '.txt']
+      const allowedTypes = ['document', 'image']
 
-    // allowed file extensions
-    const allowedFileExtensions = [
-      'pdf',
-      'doc',
-      'docx',
-      'xls',
-      'xlsx',
-      'ppt',
-      'pptx',
-      'txt',
-      'csv',
-    ]
+      if (!allowedTypes.includes(type as string))
+        return res.status(400).json({ error: 'Invalid file type' })
 
-    const fileType = req.query.type
-    const allowedFileTypes = ['image', 'file']
-
-    // check if file type is allowed
-    const isAllowedFileType = allowedFileTypes.includes(fileType)
-    if (!isAllowedFileType)
-      return res.status(400).json({ error: 'File type is not allowed.' })
-
-    // check if file is allowed
-    const isAllowed = files.every((file) => {
-      const fileExtension = path.extname(file.name).split('.')[1]
-      return fileType === 'image'
-        ? allowedImageExtensions.includes(fileExtension)
-        : fileType === 'file' && allowedFileExtensions.includes(fileExtension)
-    })
-
-    // stop all if one file is not allowed format
-    if (!isAllowed)
-      return res.status(400).json({
-        error: `Allowed file formats are ${
-          fileType === 'image'
-            ? allowedImageExtensions
-            : fileType === 'file' && allowedFileExtensions
-        }`,
+      const isAllowed = files.every((file) => {
+        const ext = file.name.split('.').pop()?.toLowerCase()
+        if (type === 'image') return allowedImageTypes.includes(`.${ext}`)
+        if (type === 'document') return allowedDocumentTypes.includes(`.${ext}`)
       })
 
-    // upload files passed the conditions
-    const filePaths: { name: string; path: string }[] = []
-    files.forEach((file) => {
-      const fileExtension = path.extname(file.name)
-      const baseName = path.basename(file.name, `${fileExtension}`)
-      const fileName = `${baseName}-${Date.now()}${fileExtension}`
+      if (!isAllowed)
+        return res.status(400).json({ error: 'Invalid file type' })
 
-      const filePath = path.join(__dirname, '/public/uploads', fileName)
+      const promises = files.map(async (file) => {
+        const ext = file.name.split('.').pop()?.toLowerCase()
+        const fileName = `${file.name.split('.')[0]}-${Date.now()}.${ext}`
 
-      file.mv(filePath, (err: string) => {
-        if (err) return res.status(500).json({ error: err })
+        let buffer = file.data
+
+        if (type === 'image') {
+          const size = Buffer.byteLength(Buffer.from(buffer))
+          if (size > 200000) {
+            buffer = await sharp(buffer).resize(400).toBuffer()
+          }
+        }
+
+        await uploadObject(fileName, buffer)
+        return fileName
       })
-      filePaths.push({
-        name: file.name,
-        path: `https://wadaag.app/uploads/${fileName}`,
+      const fileUrls = await Promise.all(promises)
+      return res.json({
+        message: 'File uploaded successfully',
+        data: fileUrls?.map((url) => ({
+          url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/farshaxan/wadaag/${url.replace(
+            /\s/g,
+            '%20'
+          )}`,
+        })),
       })
-    })
-    return res
-      .status(200)
-      .json({ message: 'File uploaded successfully', filePaths })
+    } catch ({ status = 500, message }: any) {
+      return res.status(status).json({ error: message })
+    }
   }
 )
 
