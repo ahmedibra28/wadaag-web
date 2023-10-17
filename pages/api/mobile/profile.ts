@@ -47,12 +47,18 @@ handler.post(
         type,
         company,
         license,
+        sex,
       } = req.body
 
       if (type && !['INDIVIDUAL', 'COMPANY'].includes(type))
         return res
           .status(400)
           .json({ error: 'Invalid type, must be INDIVIDUAL or COMPANY' })
+
+      if (sex && !['Male', 'Female'].includes(sex))
+        return res
+          .status(400)
+          .json({ error: 'Invalid sex, must be Male or Female' })
 
       const object = await schemaName.findOne({ user: _id }).populate('user')
       if (!object)
@@ -83,6 +89,7 @@ handler.post(
       object.type = type ? type : object.type
       object.company = company ? company : object.company
       object.license = license ? license : object.license
+      object.sex = sex ? sex : object.sex
       object.user = _id
       await object.save()
       res.send(object)

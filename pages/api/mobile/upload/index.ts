@@ -108,7 +108,7 @@ handler.post(
         })),
       })
     } catch ({ status = 500, message }: any) {
-      return res.status(status).json({ error: message })
+      return res.status(500).json({ error: message })
     }
   }
 )
