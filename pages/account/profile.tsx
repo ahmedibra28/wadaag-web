@@ -44,7 +44,7 @@ const Profile = () => {
   const updateApi = apiHook({
     key: ['upload'],
     method: 'UPLOAD',
-    url: `upload?type=image`,
+    url: `mobile/upload?type=image`,
   })?.upload
 
   useEffect(() => {
