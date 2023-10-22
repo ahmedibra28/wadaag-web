@@ -44,6 +44,8 @@ const uploadObject = async (fileName: string, data: any) => {
   }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const data = await s3Client.send(new PutObjectCommand(params))
 
     return data
@@ -101,7 +103,7 @@ handler.post(
       return res.json({
         message: 'File uploaded successfully ✅',
         data: fileUrls?.map((url) => ({
-          url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/farshaxan/wadaag/${url.replace(
+          url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/wadaag/${url.replace(
             /\s/g,
             '%20'
           )}`,
