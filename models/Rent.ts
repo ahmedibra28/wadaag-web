@@ -16,6 +16,7 @@ export interface IRent {
   hasBalcony: boolean
   hasDeposit: boolean
   hasUpFront: boolean
+  rentType?: string
   deposit?: number
   contact?: string
 
@@ -38,6 +39,7 @@ const rentSchema = new Schema<IRent>(
     hasUpFront: { type: Boolean, required: true },
     images: [String],
     deposit: { type: Number, default: 0 },
+    rentType: String,
     description: String,
     contact: String,
     status: { type: String, enum: ['active', 'deleted'], default: 'active' },

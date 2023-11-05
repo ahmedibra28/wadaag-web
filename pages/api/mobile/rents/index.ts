@@ -104,6 +104,7 @@ handler.post(
         deposit,
         contact,
         status,
+        rentType,
       } = req.body as IRent
 
       // check if user has paid the rent advertisement fee
@@ -139,6 +140,7 @@ handler.post(
         deposit,
         contact,
         status,
+        rentType,
       })
 
       return res.status(200).send(createObj)

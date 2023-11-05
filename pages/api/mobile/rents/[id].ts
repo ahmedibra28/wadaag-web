@@ -53,6 +53,7 @@ handler.put(
         deposit,
         contact,
         status,
+        rentType,
       } = req.body as IRent
 
       const { id } = req.query
@@ -92,6 +93,7 @@ handler.put(
           deposit,
           contact,
           status,
+          rentType,
         },
         {
           // return updated object
