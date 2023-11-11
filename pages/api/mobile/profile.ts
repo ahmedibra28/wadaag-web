@@ -48,6 +48,7 @@ handler.post(
         company,
         license,
         sex,
+        hasRentalProfile,
       } = req.body
 
       if (type && !['INDIVIDUAL', 'COMPANY'].includes(type))
@@ -90,6 +91,9 @@ handler.post(
       object.company = company ? company : object.company
       object.license = license ? license : object.license
       object.sex = sex ? sex : object.sex
+      object.hasRentalProfile = hasRentalProfile
+        ? hasRentalProfile
+        : object.hasRentalProfile
       object.user = _id
       await object.save()
       res.send(object)

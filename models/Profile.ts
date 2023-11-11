@@ -12,7 +12,7 @@ export interface IProfile {
   createdAt?: Date
   sex: string
   district?: string
-
+  hasRentalProfile?: boolean
   type?: 'INDIVIDUAL' | 'COMPANY'
   company?: string
   license?: string
@@ -35,6 +35,10 @@ const profileSchema = new Schema<IProfile>(
     type: {
       type: String,
       enum: ['INDIVIDUAL', 'COMPANY'],
+    },
+    hasRentalProfile: {
+      type: Boolean,
+      default: false,
     },
     company: String,
     license: String,
