@@ -101,7 +101,7 @@ handler.post(
       })
       const fileUrls = await Promise.all(promises)
       return res.json({
-        message: 'File uploaded successfully ✅',
+        message: 'File uploaded successfully',
         data: fileUrls?.map((url) => ({
           url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/wadaag/${url.replace(
             /\s/g,

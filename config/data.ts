@@ -693,6 +693,68 @@ const permissions = [
     name: 'Rent',
     method: 'DELETE',
   },
+
+  // Market
+
+  // Product
+  {
+    description: 'Create Product',
+    route: '/api/mobile/market/products',
+    auth: true,
+    name: 'Product',
+    method: 'POST',
+  },
+  {
+    description: 'Update Product',
+    route: '/api/mobile/market/products/:id',
+    auth: true,
+    name: 'Product',
+    method: 'PUT',
+  },
+  {
+    description: 'Get Products',
+    route: '/api/mobile/market/products',
+    auth: true,
+    name: 'Product',
+    method: 'GET',
+  },
+  {
+    description: 'Delete Product',
+    route: '/api/mobile/market/products/:id',
+    auth: true,
+    name: 'Product',
+    method: 'DELETE',
+  },
+  {
+    description: 'Create Bulk Product',
+    route: '/api/mobile/market/products/bulk',
+    auth: true,
+    name: 'Product',
+    method: 'POST',
+  },
+  {
+    description: 'Get My Products',
+    route: '/api/mobile/market/products/me',
+    auth: true,
+    name: 'Product',
+    method: 'GET',
+  },
+
+  // Order
+  {
+    description: 'Get Orders',
+    route: '/api/mobile/market/orders',
+    auth: true,
+    name: 'Order',
+    method: 'GET',
+  },
+  {
+    description: 'Create Orders',
+    route: '/api/mobile/market/orders',
+    auth: true,
+    name: 'Order',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

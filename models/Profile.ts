@@ -16,6 +16,8 @@ export interface IProfile {
   type?: 'INDIVIDUAL' | 'COMPANY'
   company?: string
   license?: string
+  hasStoreProfile?: boolean
+  email?: string
 }
 
 const profileSchema = new Schema<IProfile>(
@@ -42,6 +44,11 @@ const profileSchema = new Schema<IProfile>(
     },
     company: String,
     license: String,
+    hasStoreProfile: {
+      type: Boolean,
+      default: false,
+    },
+    email: String,
   },
   { timestamps: true }
 )
