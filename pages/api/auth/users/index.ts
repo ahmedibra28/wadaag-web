@@ -7,7 +7,7 @@ import { isAuth } from '../../../../utils/auth'
 const schemaName = User
 
 const handler = nc()
-// handler.use(isAuth)
+handler.use(isAuth)
 handler.get(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()

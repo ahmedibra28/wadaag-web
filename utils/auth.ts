@@ -9,7 +9,7 @@ interface JwtPayload {
 
 export const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '60d',
+    expiresIn: '360d',
   })
 }
 
@@ -28,75 +28,57 @@ export const isAuth = async (
     try {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
-      // req.user = await User.findById(decoded.id).select('-password')
       const userRole = await UserRole.findOne({ user: decoded.id }, { role: 1 })
         .populate({
           path: 'role',
+          select: 'permission type',
           populate: {
             path: 'permission',
+            select: ['method', 'route'],
           },
         })
-        .populate('user')
+        .populate('user', ['-password', '-createdAt', '-updatedAt'])
+        .lean()
 
-      req.user = userRole?.user
+      req.user = { ...userRole?.user, role: userRole?.role?.type }
 
       const permissions = userRole?.role?.permission?.map(
         (per: IPermission) => ({
           route: per?.route,
           method: per?.method,
-          auth: per?.auth,
         })
       )
 
-      let { url, method } = req
+      let { url } = req
 
-      const urlArray = url.split('/')
-      const lastIndex = urlArray.pop()
-
-      const queryValue: any =
-        Object.values(req.query)?.length > 0 && Object.values(req.query)[0]
-
-      if (queryValue?.length === 24 && !lastIndex.includes('q')) {
-        const queryKey = Object.keys(req.query)
-        url = urlArray.join('/') + '/' + `:${queryKey[0]}`
+      if (req.query.id) {
+        // api/path/:id
+        const removedIDFromURL = url.replace(req.query.id, ':id')
+        url = removedIDFromURL.split('?')?.[0]
       }
 
-      if (url.includes('page')) {
-        url = url.split('page')[0]
-
-        if (url.includes('?')) {
-          url = url.split('?')[0]
-        }
+      if (url.includes('?')) {
+        // api/path
+        url = url.split('?')?.[0]
       }
+
       if (
         permissions?.find(
           (permission: IPermission) =>
-            permission.route === url &&
-            permission.method === method &&
-            permission.auth === false
+            permission.route === url && permission.method === req.method
         )
       ) {
         return next()
       }
-      if (
-        !permissions.find(
-          (permission: IPermission) =>
-            permission.route === url &&
-            permission.method === method &&
-            permission.auth === true
-        )
-      ) {
-        return res
-          .status(403)
-          .send({ error: 'You do not have permission to access this route' })
-      }
 
-      next()
+      return res
+        .status(403)
+        .send({ error: 'You do not have permission to access this route' })
     } catch (error) {
       res.status(401).json({ error: 'Unauthorized' })
     }
   }
   if (!token) {
-    res.status(401).json({ error: 'Not authorized, no token provided' })
+    res.status(401).json({ error: 'No token provided' })
   }
 }

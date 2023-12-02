@@ -1,8 +1,8 @@
 import nc from 'next-connect'
-import { isAuth } from '../../../../../utils/auth'
-import db from '../../../../../config/db'
-import Product from '../../../../../models/Product'
-import Profile from '../../../../../models/Profile'
+import { isAuth } from '../../../../../../utils/auth'
+import db from '../../../../../../config/db'
+import Product from '../../../../../../models/Product'
+import Profile from '../../../../../../models/Profile'
 
 const handler = nc()
 handler.use(isAuth)
@@ -10,16 +10,21 @@ handler.get(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const q = req.query && req.query.q
+      const { q, category } = req.query
+      const { id } = req.query
 
       let query = Product.find(
-        q
+        q || category
           ? {
               name: { $regex: q, $options: 'i' },
               quantity: { $gt: 0 },
               status: 'active',
+              owner: id,
+              ...(category && {
+                category: { $regex: category, $options: 'i' },
+              }),
             }
-          : { quantity: { $gt: 0 }, status: 'active' }
+          : { quantity: { $gt: 0 }, status: 'active', owner: id }
       )
 
       const page = parseInt(req.query.page) || 1

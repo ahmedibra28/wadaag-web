@@ -2,9 +2,43 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Product from '../../../../../models/Product'
+import Profile from '../../../../../models/Profile'
 
 const handler = nc()
 handler.use(isAuth)
+handler.get(
+  async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    await db()
+    try {
+      const { id } = req.query
+      let product = await Product.findOne({
+        _id: id,
+        quantity: { $gt: 0 },
+        status: 'active',
+      }).lean()
+
+      if (!product) return res.status(400).json({ error: `Product not found` })
+
+      const profile = await Profile.findOne({ user: product.owner })
+        .lean()
+        .select('name image')
+
+      product = {
+        ...product,
+        owner: {
+          _id: product.owner,
+          name: profile?.name,
+          image: profile?.image,
+        },
+      }
+
+      return res.status(200).json(product)
+    } catch (error: any) {
+      res.status(500).json({ error: error.message })
+    }
+  }
+)
+
 handler.put(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
