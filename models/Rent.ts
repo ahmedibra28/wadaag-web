@@ -21,7 +21,7 @@ export interface IRent {
   contact?: string
 
   createdAt?: Date
-  status: 'active' | 'deleted'
+  status: 'active' | 'deleted' | 'pending'
 }
 
 const rentSchema = new Schema<IRent>(
@@ -42,7 +42,11 @@ const rentSchema = new Schema<IRent>(
     rentType: String,
     description: String,
     contact: String,
-    status: { type: String, enum: ['active', 'deleted'], default: 'active' },
+    status: {
+      type: String,
+      enum: ['active', 'deleted', 'pending'],
+      default: 'pending',
+    },
   },
   { timestamps: true }
 )

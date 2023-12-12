@@ -259,8 +259,15 @@ const Roles = () => {
               data:
                 uniquePermissions?.length > 0 &&
                 Object.values(g)[0]?.map(
-                  (item: { method: any; description: any; _id: any }) => ({
-                    name: `${item.method} - ${item.description}`,
+                  (item: {
+                    method: any
+                    description: any
+                    _id: any
+                    route: string
+                  }) => ({
+                    name: `${item.method} - ${item.description} - ${
+                      item.route?.includes('mobile') ? 'MOBILE' : 'WEB'
+                    }`,
                     _id: item._id,
                   })
                 ),

@@ -58,8 +58,10 @@ const sort = {
   hidden: 0,
   profile: 1,
   admin: 2,
-  report: 3,
-  normal: 4,
+  rent: 3,
+  market: 4,
+  report: 5,
+  normal: 6,
 }
 
 const clientPermissions = [
@@ -167,6 +169,51 @@ const clientPermissions = [
     menu: 'normal',
     sort: sort.normal,
     description: 'Notifications page',
+  },
+
+  // Rents
+  {
+    name: 'Rents',
+    path: '/rents',
+    menu: 'rent',
+    sort: sort.rent,
+    description: 'Rents page',
+  },
+  {
+    name: 'Rent Details',
+    path: '/rents/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Rent details page',
+  },
+
+  {
+    description: 'Get Rents',
+    route: '/api/rents/rents',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
+  },
+  {
+    description: 'Approve Rent',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'PUT',
+  },
+  {
+    description: 'Delete Rent',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'DELETE',
+  },
+  {
+    description: 'Get Rent Details',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
   },
 ]
 
@@ -562,13 +609,42 @@ const permissions = [
     name: 'Notifications',
     method: 'POST',
   },
-
   {
     description: 'Push Token',
     route: '/api/notifications/push-token',
     auth: true,
     name: 'Push Token',
     method: 'PUT',
+  },
+
+  // Rents
+  {
+    description: 'Get Rents',
+    route: '/api/rents/rents',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
+  },
+  {
+    description: 'Approve Rent',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'PUT',
+  },
+  {
+    description: 'Delete Rent',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'DELETE',
+  },
+  {
+    description: 'Get Rent Details',
+    route: '/api/rents/rents/:id',
+    auth: true,
+    name: 'Rent',
+    method: 'GET',
   },
 
   // mobile
