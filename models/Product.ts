@@ -11,7 +11,7 @@ export interface IProduct {
   category: string
   images: string[]
   description?: string
-  status: 'active' | 'deleted'
+  status: 'active' | 'deleted' | 'pending'
 
   createdAt?: Date
 }
@@ -26,7 +26,11 @@ const productSchema = new Schema<IProduct>(
     category: { type: String, required: true },
     images: [String],
     description: String,
-    status: { type: String, default: 'active', enum: ['active', 'deleted'] },
+    status: {
+      type: String,
+      default: 'pending',
+      enum: ['active', 'deleted', 'pending'],
+    },
   },
   { timestamps: true }
 )

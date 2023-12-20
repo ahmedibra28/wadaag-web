@@ -186,34 +186,41 @@ const clientPermissions = [
     sort: sort.hidden,
     description: 'Rent details page',
   },
-
+  // Market
   {
-    description: 'Get Rents',
-    route: '/api/rents/rents',
-    auth: true,
-    name: 'Rent',
-    method: 'GET',
+    name: 'Products',
+    path: '/markets/products',
+    menu: 'market',
+    sort: sort.market,
+    description: 'Products page',
   },
   {
-    description: 'Approve Rent',
-    route: '/api/rents/rents/:id',
-    auth: true,
-    name: 'Rent',
-    method: 'PUT',
+    name: 'Product Details',
+    path: '/markets/products/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Product details page',
   },
   {
-    description: 'Delete Rent',
-    route: '/api/rents/rents/:id',
-    auth: true,
-    name: 'Rent',
-    method: 'DELETE',
+    name: 'Orders',
+    path: '/markets/orders',
+    menu: 'market',
+    sort: sort.market,
+    description: 'Orders page',
   },
   {
-    description: 'Get Rent Details',
-    route: '/api/rents/rents/:id',
-    auth: true,
-    name: 'Rent',
-    method: 'GET',
+    name: 'Order Transactions',
+    path: '/markets/orders/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Order transactions page',
+  },
+  {
+    name: 'Stores',
+    path: '/markets/stores',
+    menu: 'market',
+    sort: sort.market,
+    description: 'Stores page',
   },
 ]
 
@@ -647,7 +654,75 @@ const permissions = [
     method: 'GET',
   },
 
-  // mobile
+  // Market
+  // Products
+  {
+    description: 'Get Products',
+    route: '/api/markets/products',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+  {
+    description: 'Get Product Details',
+    route: '/api/markets/products/:id',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+  {
+    description: 'Approve Product',
+    route: '/api/markets/products/:id',
+    auth: true,
+    name: 'Market',
+    method: 'PUT',
+  },
+  {
+    description: 'Remove Product',
+    route: '/api/markets/products/:id',
+    auth: true,
+    name: 'Market',
+    method: 'DELETE',
+  },
+  // Orders
+  {
+    description: 'Get Orders',
+    route: '/api/markets/orders',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+  {
+    description: 'Get Order Details',
+    route: '/api/markets/orders/:id',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+  {
+    description: 'Remove Order',
+    route: '/api/markets/orders/:id',
+    auth: true,
+    name: 'Market',
+    method: 'DELETE',
+  },
+  // Stores
+  {
+    description: 'Get Stores',
+    route: '/api/markets/stores',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+  {
+    description: 'Get Store Transactions',
+    route: '/api/markets/stores/:id',
+    auth: true,
+    name: 'Market',
+    method: 'GET',
+  },
+
+  // mobile -------------------------------------
   {
     description: 'Push Token',
     route: '/api/mobile/notifications',
