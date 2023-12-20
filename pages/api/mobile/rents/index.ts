@@ -39,9 +39,9 @@ handler.get(
             ...(noRooms && { rooms: Number(noRooms) }),
             ...(minPrice && { price: { $gte: Number(minPrice) } }),
             ...(maxPrice && { price: { $lte: Number(maxPrice) } }),
-            status: { $ne: 'deleted' },
+            status: { $eq: 'active' },
           }
-        : { status: { $ne: 'deleted' } }
+        : { status: { $eq: 'active' } }
       let query = Rent.find(filter)
 
       const page = parseInt(req.query.page) || 1
@@ -103,7 +103,6 @@ handler.post(
         hasUpFront,
         deposit,
         contact,
-        status,
         rentType,
       } = req.body as IRent
 
@@ -139,7 +138,7 @@ handler.post(
         hasUpFront,
         deposit,
         contact,
-        status,
+        status: 'pending',
         rentType,
       })
 
