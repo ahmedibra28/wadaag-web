@@ -1,12 +1,13 @@
 import nc from 'next-connect'
-import { regions } from '../../../../utils/regions'
+import { getDistricts } from '../../../../utils/banadirDistricts'
 
 const handler = nc()
 
 handler.get(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     try {
-      res.status(200).json(regions)
+      const districts = getDistricts()
+      res.status(200).json(districts)
     } catch (error: any) {
       res.status(500).json({ error: error?.message })
     }

@@ -3,8 +3,8 @@ import { isAuth } from '../../../../utils/auth'
 import Rent, { IRent } from '../../../../models/Rent'
 import db from '../../../../config/db'
 import { rentSubscription } from '../../../../utils/subscription'
-import { regions } from '../../../../utils/regions'
 import Profile from '../../../../models/Profile'
+import { getDistrictsByLabel } from '../../../../utils/banadirDistricts'
 
 const handler = nc()
 handler.use(isAuth)
@@ -68,10 +68,9 @@ handler.put(
           .status(400)
           .json({ error: 'Rent subscription has expired, please renew' })
 
-      const regionObj = regions.find((item) => item.name === region)
       if (!region) return res.status(400).json({ error: 'Region not found' })
 
-      if (!regionObj?.districts.includes(district))
+      if (!getDistrictsByLabel(district))
         return res.status(400).json({ error: 'District not found' })
 
       const updateObj = await Rent.findOneAndUpdate(

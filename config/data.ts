@@ -222,6 +222,13 @@ const clientPermissions = [
     sort: sort.market,
     description: 'Stores page',
   },
+  {
+    name: 'Advertisements',
+    path: '/markets/advertisements',
+    menu: 'normal',
+    sort: sort.normal,
+    description: 'Advertisements page',
+  },
 ]
 
 const permissions = [
@@ -721,6 +728,21 @@ const permissions = [
     name: 'Market',
     method: 'GET',
   },
+  // Advertisement
+  {
+    description: 'Get Advertisements',
+    route: '/api/advertisements',
+    auth: true,
+    name: 'Advertisement',
+    method: 'GET',
+  },
+  {
+    description: 'Update Advertisements',
+    route: '/api/advertisements/:id',
+    auth: true,
+    name: 'Advertisement',
+    method: 'PUT',
+  },
 
   // mobile -------------------------------------
   {
@@ -918,6 +940,22 @@ const permissions = [
     route: '/api/mobile/market/orders',
     auth: true,
     name: 'Order',
+    method: 'POST',
+  },
+
+  // Advertisement
+  {
+    description: 'Get Advertisements',
+    route: '/api/mobile/advertisements',
+    auth: true,
+    name: 'Advertisement',
+    method: 'GET',
+  },
+  {
+    description: 'Create Advertisement',
+    route: '/api/mobile/advertisements',
+    auth: true,
+    name: 'Advertisement',
     method: 'POST',
   },
 ]
