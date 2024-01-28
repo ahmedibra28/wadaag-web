@@ -36,7 +36,8 @@ handler.post(
         if (checkDup) {
           checkDup.cost = cost
           checkDup.price = price
-          checkDup.status = 'pending'
+          checkDup.status = 'active'
+          // checkDup.status = 'pending'
           checkDup.quantity = Number(checkDup.quantity) + Number(quantity)
           await checkDup.save()
         } else {
@@ -49,7 +50,8 @@ handler.post(
             category,
             images,
             description,
-            status: 'pending',
+            status: 'active',
+            // status: 'pending',
           })
 
           if (!product)
