@@ -64,6 +64,8 @@ handler.get(
               name: profile?.name,
               mobile: profile?.mobile,
               image: profile?.image,
+              contact: profile?.contact,
+              contact2: profile?.contact2,
             },
           }
         })

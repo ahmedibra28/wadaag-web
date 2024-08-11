@@ -40,6 +40,8 @@ handler.post(
         name,
         address,
         mobile,
+        contact,
+        contact2,
         bio,
         image,
         password,
@@ -85,6 +87,8 @@ handler.post(
 
       object.name = name ? name : object.name
       object.mobile = mobile ? mobile : object.mobile
+      object.contact = contact ? contact : object.contact
+      object.contact2 = contact2 ? contact2 : object.contact2
       object.address = address ? address : object.address
       object.district = district ? district : object.district
       object.image = image ? image : object.image
@@ -102,6 +106,7 @@ handler.post(
       object.email = email ? email : object.email
       object.user = _id
       await object.save()
+
       res.send(object)
     } catch (error: any) {
       res.status(500).json({ error: error.message })

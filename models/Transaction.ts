@@ -2,7 +2,7 @@ import { Schema, model, models } from 'mongoose'
 
 export interface ITransaction {
   _id: Schema.Types.ObjectId
-  type: 'ride' | 'rent'
+  type: 'rent' | 'market'
   mobile: number
   amount: number
   paidDate: Date
@@ -12,7 +12,7 @@ export interface ITransaction {
 
 const transactionSchema = new Schema<ITransaction>(
   {
-    type: { type: String, enum: ['ride', 'rent'], default: 'ride' },
+    type: { type: String, enum: ['rent', 'market'], required: true },
     mobile: { type: Number, required: true },
     amount: { type: Number, required: true },
     paidDate: { type: Date, required: true },

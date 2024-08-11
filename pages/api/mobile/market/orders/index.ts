@@ -4,6 +4,8 @@ import db from '../../../../../config/db'
 import Order from '../../../../../models/Order'
 import Profile from '../../../../../models/Profile'
 import Product from '../../../../../models/Product'
+import { initPayment } from '../../../../../utils/waafipay'
+import { getToken, sendSMS } from '../../../../../utils/sms'
 
 const handler = nc()
 handler.use(isAuth)
@@ -133,6 +135,14 @@ handler.post(
       // payment goes here
       console.log({ totalPrice })
 
+      // Waafi Pay
+      const payment = await initPayment({
+        amount: totalPrice,
+        mobile: `${req.user.mobile}`,
+      })
+
+      if (payment?.error) return { error: payment?.error }
+
       const result = await Order.insertMany(newOrders)
 
       if (!result)
@@ -146,6 +156,23 @@ handler.post(
           )
         })
       )
+
+      const token = await getToken()
+      await sendSMS({
+        token: token.access_token,
+        mobile: `${req.user.mobile}`,
+        message: `Your order has been placed successfully. We will contact you soon.`,
+      })
+
+      // notice the system admin about the order
+      const adminNotice = {
+        token: token.access_token,
+        message: `New order has been placed by ${req.user.mobile}`,
+      }
+
+      await sendSMS({ ...adminNotice, mobile: '252615301507' })
+      await sendSMS({ ...adminNotice, mobile: '252618237779' })
+      await sendSMS({ ...adminNotice, mobile: '2527716743951' })
 
       res.status(200).json(result)
     } catch (error: any) {

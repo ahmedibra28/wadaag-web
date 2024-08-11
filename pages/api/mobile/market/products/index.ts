@@ -85,14 +85,17 @@ handler.post(
           .json({ error: 'Invalid cost, price or quantity' })
       }
 
+      const newCost = Number(price)
+      const newPrice = newCost * 0.7 + 1.5
+
       const checkDup = await Product.findOne({
         name,
         owner,
       })
 
       if (checkDup) {
-        checkDup.cost = cost
-        checkDup.price = price
+        checkDup.cost = newCost
+        checkDup.price = newPrice
         // checkDup.status = 'pending'
         checkDup.status = 'active'
         checkDup.quantity = Number(checkDup.quantity) + Number(quantity)
@@ -103,8 +106,8 @@ handler.post(
       const product = await Product.create({
         owner,
         name,
-        cost,
-        price,
+        cost: newCost,
+        price: newPrice,
         quantity,
         category,
         images,
