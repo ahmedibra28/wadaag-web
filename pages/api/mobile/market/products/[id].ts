@@ -21,7 +21,7 @@ handler.get(
 
       const profile = await Profile.findOne({ user: product.owner })
         .lean()
-        .select('name image')
+        .select('name image company')
 
       product = {
         ...product,
@@ -29,6 +29,7 @@ handler.get(
           _id: product.owner,
           name: profile?.name,
           image: profile?.image,
+          company: profile?.company,
         },
       }
 

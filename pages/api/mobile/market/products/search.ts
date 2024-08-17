@@ -28,7 +28,7 @@ handler.get(
       const storeQuery = Profile.find(
         q
           ? {
-              name: { $regex: q, $options: 'i' },
+              company: { $regex: q, $options: 'i' },
               hasStoreProfile: true,
               user: { $ne: req.user._id },
             }

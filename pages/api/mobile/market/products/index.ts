@@ -40,13 +40,14 @@ handler.get(
         result.map(async (obj) => {
           const profile = await Profile.findOne({ user: obj.owner })
             .lean()
-            .select('name image')
+            .select('name image company')
           return {
             ...obj,
             owner: {
               _id: obj.owner,
               name: profile?.name,
               image: profile?.image,
+              company: profile?.company,
             },
           }
         })
@@ -86,7 +87,7 @@ handler.post(
       }
 
       const newCost = Number(price)
-      const newPrice = newCost * 0.7 + 1.5
+      const newPrice = newCost + newCost * 0.7 + 1.5
 
       const checkDup = await Product.findOne({
         name,
