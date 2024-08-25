@@ -138,7 +138,7 @@ handler.post(
       // Waafi Pay
       const payment = await initPayment({
         amount: totalPrice,
-        mobile: `${req.user.mobile}`,
+        mobile: `${req.body.paymentMobile}`,
       })
 
       if (payment?.error) return { error: payment?.error }
