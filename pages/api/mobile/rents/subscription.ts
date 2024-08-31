@@ -20,7 +20,7 @@ handler.post(
         mobile: `${mobile}`,
       })
 
-      if (payment?.error) return { error: payment?.error }
+      if (payment?.error) return res.status(400).json({ error: payment.error })
 
       const data = {
         mobile,

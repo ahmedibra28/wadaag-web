@@ -42,13 +42,14 @@ handler.get(
         products.map(async (obj) => {
           const profile = await Profile.findOne({ user: obj.owner })
             .lean()
-            .select('name image')
+            .select('name image company')
           return {
             ...obj,
             owner: {
               _id: obj.owner,
               name: profile?.name,
               image: profile?.image,
+              company: profile?.company,
             },
           }
         })

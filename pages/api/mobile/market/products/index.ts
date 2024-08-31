@@ -87,7 +87,7 @@ handler.post(
       }
 
       const newCost = Number(price)
-      const newPrice = newCost + newCost * 0.7 + 1.5
+      const newPrice = newCost + newCost * 0.11 + 1.5
 
       const checkDup = await Product.findOne({
         name,

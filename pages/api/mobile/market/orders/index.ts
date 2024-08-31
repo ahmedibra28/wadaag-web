@@ -88,11 +88,34 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { products } = req.body
+      const { products } = req.body as {
+        products: [
+          {
+            _id: string
+            owner: {
+              _id: string
+              name: string
+              image: string
+            }
+            name: string
+            cost: number
+            price: number
+            quantity: number
+            category: string
+            images: string[]
+            description: string
+            status: string
+            createdAt: string
+            updatedAt: string
+            color: string
+            size: string
+          }
+        ]
+      }
 
       const newProducts = products.reduce((acc: any, obj: any) => {
         const index = acc.findIndex(
-          (item: any) => item.product.toString() === obj.product.toString()
+          (item: any) => item._id.toString() === obj._id.toString()
         )
         if (index !== -1) {
           acc[index].quantity += obj.quantity
@@ -105,7 +128,7 @@ handler.post(
       const newOrders = await Promise.all(
         newProducts.map(async (obj: any) => {
           const checkProductWithQty = await Product.findOne({
-            _id: obj?.product,
+            _id: obj?._id,
             quantity: { $gte: Number(obj?.quantity) },
           }).lean()
 
@@ -141,7 +164,7 @@ handler.post(
         mobile: `${req.body.paymentMobile}`,
       })
 
-      if (payment?.error) return { error: payment?.error }
+      if (payment?.error) return res.status(400).json({ error: payment.error })
 
       const result = await Order.insertMany(newOrders)
 
