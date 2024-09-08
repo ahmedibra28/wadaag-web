@@ -38,9 +38,12 @@ handler.get(
             ...(minPrice && { price: { $gte: Number(minPrice) } }),
             ...(maxPrice && { price: { $lte: Number(maxPrice) } }),
             user: req.user._id,
-            status: { $eq: 'active' },
+            // status: { $eq: 'active' },
           }
-        : { user: req.user._id, status: { $eq: 'active' } }
+        : {
+            user: req.user._id,
+            // status: { $eq: 'active' }
+          }
       let query = Rent.find(filter)
 
       const page = parseInt(req.query.page) || 1
