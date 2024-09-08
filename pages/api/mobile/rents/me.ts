@@ -38,11 +38,11 @@ handler.get(
             ...(minPrice && { price: { $gte: Number(minPrice) } }),
             ...(maxPrice && { price: { $lte: Number(maxPrice) } }),
             user: req.user._id,
-            // status: { $eq: 'active' },
+            status: { $ne: 'deleted' },
           }
         : {
             user: req.user._id,
-            // status: { $eq: 'active' }
+            status: { $ne: 'deleted' },
           }
       let query = Rent.find(filter)
 
