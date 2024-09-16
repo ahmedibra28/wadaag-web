@@ -17,6 +17,17 @@ export const initPayment = async ({
   mobile: string
 }) => {
   try {
+    mobile = mobile.replace('+', '')
+    mobile = mobile.startsWith('0') ? mobile.slice(1) : mobile
+    mobile = mobile.startsWith('252') ? mobile.slice(3) : mobile
+
+    if (
+      mobile.length !== 9 &&
+      (!mobile.startsWith('6') || !mobile.startsWith('7'))
+    ) {
+      return { error: 'Invalid phone number' }
+    }
+
     const obj = {
       mobile,
       amount,
