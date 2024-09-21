@@ -102,7 +102,7 @@ handler.post(
               'days'
             )
             .format(),
-          type: Number(amount) === 7 ? 'rent' : 'ride',
+          type: Number(amount) === 7 ? 'rent' : 'authenticated',
         }
 
         const obj = await schemaName.create(data)

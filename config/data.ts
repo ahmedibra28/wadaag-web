@@ -31,11 +31,6 @@ const roles = [
     description: 'Default role given to driver user.',
     type: 'DRIVER',
   },
-  {
-    name: 'Rider',
-    description: 'Default role given to rider user.',
-    type: 'RIDER',
-  },
 ]
 
 const users = {
@@ -128,13 +123,6 @@ const clientPermissions = [
     sort: sort.normal,
     description: 'Trips page',
   },
-  // {
-  //   name: 'Chats',
-  //   path: '/chats',
-  //   menu: 'normal',
-  //   sort: sort.normal,
-  //   description: 'Chats page',
-  // },
   {
     name: 'Payments',
     path: '/reports/payments',
@@ -155,13 +143,6 @@ const clientPermissions = [
     menu: 'reports',
     sort: sort.report,
     description: 'Drivers page',
-  },
-  {
-    name: 'Riders',
-    path: '/reports/riders',
-    menu: 'reports',
-    sort: sort.report,
-    description: 'Riders page',
   },
   {
     name: 'Notifications',
@@ -470,50 +451,6 @@ const permissions = [
     method: 'PUT',
   },
 
-  // Chat
-  {
-    description: 'Get All Chats',
-    route: '/api/chats',
-    auth: true,
-    name: 'Chats',
-    method: 'GET',
-  },
-  {
-    description: 'Get Chat By Id',
-    route: '/api/chats/:id',
-    auth: true,
-    name: 'Chats',
-    method: 'GET',
-  },
-  {
-    description: 'Create Chat',
-    route: '/api/chats',
-    auth: true,
-    name: 'Chats',
-    method: 'POST',
-  },
-  {
-    description: 'Update Chat',
-    route: '/api/chats/:id',
-    auth: true,
-    name: 'Chats',
-    method: 'PUT',
-  },
-  {
-    description: 'Delete Chat',
-    route: '/api/chats/:id',
-    auth: true,
-    name: 'Chats',
-    method: 'DELETE',
-  },
-  {
-    description: 'Get Chat History By Id',
-    route: '/api/chats/histories',
-    auth: true,
-    name: 'Chats',
-    method: 'GET',
-  },
-
   // Plate
   {
     description: 'Check Existing Plate',
@@ -575,13 +512,6 @@ const permissions = [
   {
     description: 'Get Drivers',
     route: '/api/reports/drivers',
-    auth: true,
-    name: 'Report',
-    method: 'POST',
-  },
-  {
-    description: 'Get Riders',
-    route: '/api/reports/riders',
     auth: true,
     name: 'Report',
     method: 'POST',
@@ -781,13 +711,6 @@ const permissions = [
     method: 'PUT',
   },
   {
-    description: 'Get Near Riders',
-    route: '/api/mobile/trips/near',
-    auth: true,
-    name: 'Trip',
-    method: 'POST',
-  },
-  {
     description: 'Check Pending Trip',
     route: '/api/mobile/trips/pending',
     auth: true,
@@ -800,13 +723,6 @@ const permissions = [
     auth: true,
     name: 'Trip',
     method: 'PUT',
-  },
-  {
-    description: 'Start Trip with Rider Two',
-    route: '/api/mobile/trips/start-trip',
-    auth: true,
-    name: 'Trip',
-    method: 'POST',
   },
   {
     description: 'Get Current Profile',

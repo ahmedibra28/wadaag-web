@@ -84,7 +84,7 @@ handler.post(
       userCreated.getRandomOtp()
       await userCreated.save()
 
-      const userRole = await Role.findOne({ type: 'RIDER' }, { _id: 1 })
+      const userRole = await Role.findOne({ type: 'AUTHENTICATED' }, { _id: 1 })
 
       if (!userRole) return res.status(400).json({ error: 'Role not found' })
 
@@ -112,15 +112,15 @@ handler.post(
       const { otp, ...userData } = userCreated.toObject()
       userData
 
-      // Disable this line for the future update
-      const data = {
-        mobile,
-        amount: 2,
-        paidDate: moment().format(),
-        expireDate: moment().add(Number(15), 'days').format(),
-      }
+      // TODO: Disable this line for the future update
+      // const data = {
+      //   mobile,
+      //   amount: 2,
+      //   paidDate: moment().format(),
+      //   expireDate: moment().add(Number(15), 'days').format(),
+      // }
 
-      await Transaction.create(data)
+      // await Transaction.create(data)
 
       return res.status(200).send({
         _id: userCreated._id,
@@ -129,6 +129,7 @@ handler.post(
         name: userCreated.name,
       })
     } catch (error: any) {
+      console.log(error?.message)
       res.status(500).json({ error: error.message })
     }
   }

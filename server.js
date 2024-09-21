@@ -40,10 +40,7 @@ nextApp.prepare().then(async () => {
       io.emit('message', info)
     })
 
-    socket.on('riderScreen', (data) => {
-      // console.log(data)
-      io.emit('riderScreen', data)
-    })
+
 
     socket.on('disconnect', () => {
       console.log('client disconnected')

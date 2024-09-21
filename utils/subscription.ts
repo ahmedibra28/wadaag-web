@@ -8,7 +8,7 @@ export const subscription = async (mobile: number) => {
   const payments = await Transaction.find({
     mobile,
     expireDate: { $gte: moment(currentDate).format() },
-    type: 'ride',
+    type: 'authenticated',
   })
 
   const expiresUntil = payments
@@ -34,7 +34,8 @@ export const rentSubscription = async (mobile: number) => {
     )
     ?.reduce((acc, curr) => acc + curr + 1, 0)
 
-  return Number(expiresUntil || 10)
+  return Number(expiresUntil)
+  // return Number(expiresUntil || 10)
 }
 
 export const userType = async (mobile: number) => {

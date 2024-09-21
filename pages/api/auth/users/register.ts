@@ -93,10 +93,7 @@ handler.post(
       userCreated.getRandomOtp()
       await userCreated.save()
 
-      const userRole = await Role.findOne(
-        selected === 'driver' ? { type: 'DRIVER' } : { type: 'RIDER' },
-        { _id: 1 }
-      )
+      const userRole = await Role.findOne({ type: 'AUTHENTICATED' }, { _id: 1 })
 
       if (!userRole) return res.status(400).json({ error: 'Role not found' })
 
@@ -129,14 +126,14 @@ handler.post(
 
       // Disable this line for the future update
 
-      const data = {
-        mobile,
-        amount: 2,
-        paidDate: moment().format(),
-        expireDate: moment().add(Number(15), 'days').format(),
-      }
+      // const data = {
+      //   mobile,
+      //   amount: 2,
+      //   paidDate: moment().format(),
+      //   expireDate: moment().add(Number(15), 'days').format(),
+      // }
 
-      await Transaction.create(data)
+      // await Transaction.create(data)
 
       return res.status(200).send({
         _id: userCreated._id,

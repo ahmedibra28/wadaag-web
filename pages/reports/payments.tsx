@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { DynamicFormProps, inputDate, inputText } from '../../utils/dForms'
 import Image from 'next/image'
 
-interface Item extends Omit<ITransaction, 'rider' | 'driver'> {
+interface Item extends Omit<ITransaction, 'authenticated'> {
   image: string
   name: string
 }

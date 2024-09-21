@@ -4,6 +4,9 @@ import Profile from '../../../models/Profile'
 import User from '../../../models/User'
 import UserRole from '../../../models/UserRole'
 import { isAuth } from '../../../utils/auth'
+import { initPayment } from '../../../utils/waafipay'
+import moment from 'moment'
+import Transaction from '../../../models/Transaction'
 
 const schemaName = Profile
 const schemaNameString = 'Profile'
@@ -85,6 +88,32 @@ handler.post(
         )
       }
 
+      if (!object?.hasRentalProfile && hasRentalProfile) {
+        // Waafi Pay
+        const payment = await initPayment({
+          amount: 6,
+          mobile: `${req.user?.mobile}`,
+        })
+
+        if (payment?.error)
+          return res.status(400).json({ error: payment.error })
+
+        const data = {
+          mobile: req.user?.mobile,
+          amount: 6,
+          paidDate: moment().format(),
+          expireDate: moment().add(30, 'days').format(),
+          type: 'rent',
+          transactionId: payment?.transactionId,
+        }
+
+        const obj = await Transaction.create(data)
+        if (!obj)
+          return res
+            .status(400)
+            .json({ error: 'No transaction has been created.' })
+      }
+
       object.name = name ? name : object.name
       object.mobile = mobile ? mobile : object.mobile
       object.contact = contact ? contact : object.contact
@@ -109,6 +138,7 @@ handler.post(
 
       res.send(object)
     } catch (error: any) {
+      console.log(error)
       res.status(500).json({ error: error.message })
     }
   }

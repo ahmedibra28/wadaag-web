@@ -193,7 +193,6 @@ handler.post(
         message: `New order has been placed by ${req.user.mobile}`,
       }
 
-      await sendSMS({ ...adminNotice, mobile: '252615301507' })
       await sendSMS({ ...adminNotice, mobile: '252618237779' })
       await sendSMS({ ...adminNotice, mobile: '2527716743951' })
 
