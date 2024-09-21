@@ -7,12 +7,11 @@ import { initPayment } from '../../../../utils/waafipay'
 
 const handler = nc()
 
-handler.use(isAuth)
 handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { mobile, type } = req.user as any
+      const { mobile, type } = req.body as any
 
       // Waafi Pay
       const payment = await initPayment({

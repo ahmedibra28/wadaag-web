@@ -89,11 +89,18 @@ handler.post(
       }
 
       if (!object?.hasRentalProfile && hasRentalProfile) {
+        let payment
         // Waafi Pay
-        const payment = await initPayment({
-          amount: 6,
-          mobile: `${req.user?.mobile}`,
-        })
+        if (process.env.NODE_ENV === 'production') {
+          payment = await initPayment({
+            amount: 6,
+            mobile: `${req.user?.mobile}`,
+          })
+        } else {
+          payment = {
+            transactionId: '1234567890',
+          }
+        }
 
         if (payment?.error)
           return res.status(400).json({ error: payment.error })
