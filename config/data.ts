@@ -26,11 +26,6 @@ const roles = [
     description: 'Default role given to authenticated user.',
     type: 'AUTHENTICATED',
   },
-  {
-    name: 'Driver',
-    description: 'Default role given to driver user.',
-    type: 'DRIVER',
-  },
 ]
 
 const users = {
@@ -117,32 +112,11 @@ const clientPermissions = [
     description: 'User Profiles page',
   },
   {
-    name: 'Trips',
-    path: '/trips',
-    menu: 'normal',
-    sort: sort.normal,
-    description: 'Trips page',
-  },
-  {
     name: 'Payments',
     path: '/reports/payments',
     menu: 'reports',
     sort: sort.report,
     description: 'Payments page',
-  },
-  {
-    name: 'Trips',
-    path: '/reports/trips',
-    menu: 'reports',
-    sort: sort.report,
-    description: 'Trips page',
-  },
-  {
-    name: 'Drivers',
-    path: '/reports/drivers',
-    menu: 'reports',
-    sort: sort.report,
-    description: 'Drivers page',
   },
   {
     name: 'Notifications',
@@ -400,57 +374,6 @@ const permissions = [
     method: 'DELETE',
   },
 
-  //   Trip
-  {
-    description: 'Get All Trips',
-    route: '/api/trips',
-    auth: true,
-    name: 'Trips',
-    method: 'GET',
-  },
-  {
-    description: 'Create Trip',
-    route: '/api/trips',
-    auth: true,
-    name: 'Trips',
-    method: 'POST',
-  },
-  {
-    description: 'Update Trip',
-    route: '/api/trips/:id',
-    auth: true,
-    name: 'Trips',
-    method: 'PUT',
-  },
-  {
-    description: 'Delete Trip',
-    route: '/api/trips/:id',
-    auth: true,
-    name: 'Trips',
-    method: 'DELETE',
-  },
-  {
-    description: 'Get Pending Trips',
-    route: '/api/trips/pending',
-    auth: true,
-    name: 'Trips',
-    method: 'GET',
-  },
-  {
-    description: 'Get Near Trips',
-    route: '/api/trips/near',
-    auth: true,
-    name: 'Trips',
-    method: 'POST',
-  },
-  {
-    description: 'Update Trip with Current Location',
-    route: '/api/trips/location/:id',
-    auth: true,
-    name: 'Trips',
-    method: 'PUT',
-  },
-
   // Plate
   {
     description: 'Check Existing Plate',
@@ -466,15 +389,6 @@ const permissions = [
     route: '/api/payments',
     auth: true,
     name: 'Payment transactions',
-    method: 'GET',
-  },
-
-  // Driver Transactions
-  {
-    description: 'Driver transactions',
-    route: '/api/drivers',
-    auth: true,
-    name: 'Driver transactions',
     method: 'GET',
   },
 
@@ -498,20 +412,6 @@ const permissions = [
   {
     description: 'Get Payment Transactions',
     route: '/api/reports/payments',
-    auth: true,
-    name: 'Report',
-    method: 'POST',
-  },
-  {
-    description: 'Get Trips',
-    route: '/api/reports/trips',
-    auth: true,
-    name: 'Report',
-    method: 'POST',
-  },
-  {
-    description: 'Get Drivers',
-    route: '/api/reports/drivers',
     auth: true,
     name: 'Report',
     method: 'POST',
@@ -695,34 +595,6 @@ const permissions = [
     auth: true,
     name: 'Payments',
     method: 'GET',
-  },
-  {
-    description: 'Create Trip',
-    route: '/api/mobile/trips',
-    auth: true,
-    name: 'Trip',
-    method: 'POST',
-  },
-  {
-    description: 'Update Trip',
-    route: '/api/mobile/trips/:id',
-    auth: true,
-    name: 'Trip',
-    method: 'PUT',
-  },
-  {
-    description: 'Check Pending Trip',
-    route: '/api/mobile/trips/pending',
-    auth: true,
-    name: 'Trip',
-    method: 'GET',
-  },
-  {
-    description: 'Update Current Location',
-    route: '/api/mobile/trips/location/:id',
-    auth: true,
-    name: 'Trip',
-    method: 'PUT',
   },
   {
     description: 'Get Current Profile',

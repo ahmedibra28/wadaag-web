@@ -70,15 +70,6 @@ handler.post(
 
       if (user) return res.status(400).json({ error: 'Mobile already exists' })
 
-      if (selected === 'driver') {
-        const profile = await Profile.findOne({
-          plate: plate.toUpperCase(),
-        })
-
-        if (profile)
-          return res.status(400).json({ error: 'Plate already existed' })
-      }
-
       const userCreated = await User.create({
         name,
         mobile,
@@ -104,8 +95,8 @@ handler.post(
         sex,
         image: `https://ui-avatars.com/api/?uppercase=true&name=${userCreated.name}&background=random&color=random&size=128`,
         mobile: mobile,
-        plate: selected === 'driver' ? plate : undefined,
-        license: selected === 'driver' ? license : undefined,
+        plate: undefined,
+        license: undefined,
       })
 
       await UserRole.create({

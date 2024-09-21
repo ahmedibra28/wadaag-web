@@ -43,20 +43,6 @@ handler.post(
       const userRole = await UserRole.findOne({ user: user._id })
       const role = await Role.findById(userRole.role)
 
-      if (role?.type === 'DRIVER') {
-        return res.status(200).send({
-          _id: user._id,
-          name: user.name,
-          mobile: user.mobile,
-          avatar: profile.image,
-          role: role?.type,
-          plate: profile?.plate,
-          license: profile?.license,
-          platform: user.platform,
-          token: generateToken(user._id),
-        })
-      }
-
       res.status(200).send({
         _id: user._id,
         name: user.name,
