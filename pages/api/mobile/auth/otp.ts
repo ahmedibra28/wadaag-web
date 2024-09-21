@@ -41,15 +41,13 @@ handler.post(
       await user.save()
 
       const profile = await Profile.findOne({ user: user._id })
-      const userRole = await UserRole.findOne({ user: user._id })
-      const role = await Role.findById(userRole.role)
 
       res.status(200).send({
         _id: user._id,
         name: user.name,
         mobile: user.mobile,
         avatar: profile.image,
-        role: role?.type,
+        role: 'AUTHENTICATED',
         token: generateToken(user._id),
       })
     } catch (error: any) {
