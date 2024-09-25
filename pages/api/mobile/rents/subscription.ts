@@ -4,6 +4,7 @@ import db from '../../../../config/db'
 import moment from 'moment'
 import Transaction from '../../../../models/Transaction'
 import { initPayment } from '../../../../utils/waafipay'
+import RentUser from '../../../../models/RentUser'
 
 const handler = nc()
 
@@ -11,11 +12,17 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { mobile, type } = req.body as any
+      const { mobile, type, _id } = req.body as any
+
+      console.log(req.body)
+
+      const user = await RentUser.findOne({ user: _id })
+      if (!user)
+        return res.status(400).json({ error: 'Rent profile not found' })
 
       // Waafi Pay
       const payment = await initPayment({
-        amount: 6,
+        amount: 6.12,
         mobile: `${mobile}`,
       })
 
@@ -28,6 +35,9 @@ handler.post(
         expireDate: moment().add(30, 'days').format(),
         type,
       }
+
+      user.expiredAt = moment().add(30, 'days').format()
+      await user.save()
 
       const obj = await Transaction.create(data)
       if (!obj)

@@ -746,6 +746,29 @@ const permissions = [
     name: 'Advertisement',
     method: 'POST',
   },
+
+  // Rental User
+  {
+    description: 'Get Rental User',
+    route: '/api/mobile/rents/user',
+    auth: true,
+    name: 'Rental User',
+    method: 'GET',
+  },
+  {
+    description: 'Update Rental User',
+    route: '/api/mobile/rents/user/:id',
+    auth: true,
+    name: 'Rental User',
+    method: 'PUT',
+  },
+  {
+    description: 'Create Rental User',
+    route: '/api/mobile/rents/user',
+    auth: true,
+    name: 'Rental User',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }
