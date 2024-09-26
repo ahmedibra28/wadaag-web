@@ -1,5 +1,4 @@
 import nc from 'next-connect'
-import { isAuth } from '../../../../utils/auth'
 import db from '../../../../config/db'
 import moment from 'moment'
 import Transaction from '../../../../models/Transaction'
@@ -13,8 +12,6 @@ handler.post(
     await db()
     try {
       const { mobile, type, _id } = req.body as any
-
-      console.log(req.body)
 
       const user = await RentUser.findOne({ user: _id })
       if (!user)

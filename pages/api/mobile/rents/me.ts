@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../utils/auth'
 import db from '../../../../config/db'
 import Rent from '../../../../models/Rent'
-import Profile from '../../../../models/Profile'
+import RentUser from '../../../../models/RentUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -19,6 +19,12 @@ handler.get(
           minPrice?: string
           maxPrice?: string
         }
+
+      const user = await RentUser.findOne({ user: req.user._id })
+      if (!user)
+        return res.status(400).json({
+          error: 'You do not have a rental profile, please create one',
+        })
 
       const hasFilter =
         region || district || type || noRooms || minPrice || maxPrice
@@ -37,11 +43,11 @@ handler.get(
             ...(noRooms && { rooms: Number(noRooms) }),
             ...(minPrice && { price: { $gte: Number(minPrice) } }),
             ...(maxPrice && { price: { $lte: Number(maxPrice) } }),
-            user: req.user._id,
+            user: user.rentUser,
             status: { $ne: 'deleted' },
           }
         : {
-            user: req.user._id,
+            user: user.rentUser,
             status: { $ne: 'deleted' },
           }
       let query = Rent.find(filter)
@@ -59,14 +65,12 @@ handler.get(
 
       result = await Promise.all(
         result.map(async (item) => {
-          const profile = await Profile.findOne({ user: item.user }).lean()
+          const rentUser = await RentUser.findOne({
+            user: item.rentUser,
+          }).lean()
           return {
             ...item,
-            user: {
-              name: profile?.name,
-              mobile: profile?.mobile,
-              image: profile?.image,
-            },
+            user: rentUser,
           }
         })
       )

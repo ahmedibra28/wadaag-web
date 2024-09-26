@@ -2,9 +2,9 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../utils/auth'
 import Rent, { IRent } from '../../../../models/Rent'
 import db from '../../../../config/db'
-import { rentSubscription } from '../../../../utils/subscription'
-import Profile from '../../../../models/Profile'
 import { getDistrictsByLabel } from '../../../../utils/banadirDistricts'
+import RentUser from '../../../../models/RentUser'
+import moment from 'moment'
 
 const handler = nc()
 handler.use(isAuth)
@@ -17,15 +17,11 @@ handler.get(
         _id: req.query.id,
       }).lean()
 
-      const profile = await Profile.findOne({ user: obj.user }).lean()
+      const rentUser = await RentUser.findOne({ user: obj.rentUser }).lean()
 
       res.status(200).send({
         ...obj,
-        user: {
-          name: profile?.name,
-          mobile: profile?.mobile,
-          image: profile?.image,
-        },
+        user: rentUser,
       })
     } catch (error: any) {
       res.status(500).json({ error: error.message })
@@ -58,12 +54,11 @@ handler.put(
 
       const { id } = req.query
 
-      // check if user has paid the rent advertisement fee
-      const rentExpirationDays = await rentSubscription(
-        req.user.mobile as number
-      )
+      const rentUser = await RentUser.findOne({ user: req.user._id })
+      const remainingDays =
+        moment(rentUser?.expiredAt).diff(moment(), 'days') || 0
 
-      if (Number(rentExpirationDays) <= 0)
+      if (Number(remainingDays) <= 0)
         return res
           .status(400)
           .json({ error: 'Rent subscription has expired, please renew' })
@@ -76,7 +71,6 @@ handler.put(
       const updateObj = await Rent.findOneAndUpdate(
         { _id: id },
         {
-          user: req.user._id,
           region,
           district,
           type,

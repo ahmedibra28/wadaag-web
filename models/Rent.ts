@@ -1,9 +1,9 @@
 import { Schema, model, models } from 'mongoose'
-import { IUser } from './User'
+import RentUser, { IRentUser } from './RentUser'
 
 export interface IRent {
   _id: Schema.Types.ObjectId
-  user: IUser
+  rentUser: IRentUser
   region: string
   district: string
   type: string
@@ -26,7 +26,7 @@ export interface IRent {
 
 const rentSchema = new Schema<IRent>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    rentUser: { type: Schema.Types.ObjectId, ref: RentUser, required: true },
     region: { type: String, required: true },
     district: { type: String, required: true },
     type: { type: String, required: true },
