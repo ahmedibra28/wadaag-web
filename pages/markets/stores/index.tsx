@@ -4,7 +4,7 @@ import withAuth from '../../../HoC/withAuth'
 import { Spinner, Pagination, Message, Search, Meta } from '../../../components'
 import { FaInfoCircle } from 'react-icons/fa'
 import apiHook from '../../../api'
-import { IProfile } from '../../../models/Profile'
+import { IMarketUser } from '../../../models/MarketUser'
 import Link from 'next/link'
 
 const Orders = () => {
@@ -16,6 +16,12 @@ const Orders = () => {
     method: 'GET',
     url: `markets/stores?page=${page}&q=${q}&limit=${25}`,
   })?.get
+
+  const updateApi = apiHook({
+    key: ['stores', 'update'],
+    method: 'PUT',
+    url: `markets/stores`,
+  })?.put
 
   useEffect(() => {
     getApi?.refetch()
@@ -35,6 +41,14 @@ const Orders = () => {
 
   const name = 'Stores List'
 
+  const handleApprove = (item: any) => {
+    console.log(item)
+    updateApi
+      ?.mutateAsync({ id: item._id, _id: item._id })
+      .then(() => getApi?.refetch())
+      .catch((error) => console.log(error))
+  }
+
   return (
     <>
       <Meta title="Stores" />
@@ -42,6 +56,14 @@ const Orders = () => {
       <div className="ms-auto text-end">
         <Pagination data={getApi?.data} setPage={setPage} />
       </div>
+
+      {updateApi?.isError && (
+        <Message variant="danger" value={updateApi?.error || 'error'} />
+      )}
+
+      {updateApi?.isSuccess && (
+        <Message variant="success" value="Successfully updated" />
+      )}
 
       {getApi?.isLoading ? (
         <Spinner />
@@ -69,18 +91,16 @@ const Orders = () => {
               <tr>
                 <th>Image</th>
                 <th>Owner</th>
-                <th>Address</th>
                 <th>Mobile</th>
-                <th>Email</th>
+                <th>District</th>
                 <th>Type</th>
-                <th>Company</th>
-                <th>License</th>
+                <th>Is Approved?</th>
                 <th>Created At</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {getApi?.data?.data?.map((item: IProfile, i: number) => (
+              {getApi?.data?.data?.map((item: IMarketUser, i: number) => (
                 <tr key={i}>
                   <td style={{ height: 30 }}>
                     <img
@@ -91,13 +111,29 @@ const Orders = () => {
                     />{' '}
                   </td>
                   <td>{item?.name}</td>
-                  <td>{item?.address}</td>
                   <td>{item?.mobile}</td>
-                  <td>{item?.email}</td>
-                  <td>{item?.type}</td>
-                  <td>{item?.company}</td>
-                  <td>{item?.license}</td>
-                  <td>{item?.company}</td>
+                  <td>{item?.district}</td>
+                  <td>
+                    {item?.type === 'individual' ? 'Individual' : 'Company'}
+                  </td>
+                  <td>
+                    {item?.isApproved ? (
+                      <button
+                        onClick={() => handleApprove(item)}
+                        className="btn btn-danger rounded-2 py-1 btn-sm"
+                      >
+                        Block
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleApprove(item)}
+                        className="btn btn-success rounded-2 py-1 btn-sm"
+                      >
+                        Approve
+                      </button>
+                    )}
+                  </td>
+                  <td>{item?.createdAt?.slice(0, 10)}</td>
                   <td>
                     <div className="btn-group">
                       <Link

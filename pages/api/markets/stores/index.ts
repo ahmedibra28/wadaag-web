@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import { isAuth } from '../../../../utils/auth'
 import db from '../../../../config/db'
-import Profile from '../../../../models/Profile'
+import MarketUser from '../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -11,25 +11,23 @@ handler.get(
     try {
       const q = req.query && req.query.q
 
-      let query = Profile.find(
+      let query = MarketUser.find(
         q
           ? {
               name: { $regex: q, $options: 'i' },
-              hasStoreProfile: true,
             }
-          : { hasStoreProfile: true }
+          : {}
       )
 
       const page = parseInt(req.query.page) || 1
       const pageSize = parseInt(req.query.limit) || 25
       const skip = (page - 1) * pageSize
-      const total = await Profile.countDocuments(
+      const total = await MarketUser.countDocuments(
         q
           ? {
               name: { $regex: q, $options: 'i' },
-              hasStoreProfile: true,
             }
-          : { hasStoreProfile: true }
+          : {}
       )
 
       const pages = Math.ceil(total / pageSize)

@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import Order from '../../../../models/Order'
 import { isAuth } from '../../../../utils/auth'
 import db from '../../../../config/db'
+import MarketUser from '../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -54,6 +55,27 @@ handler.get(
         total,
         data: result,
       })
+    } catch (error: any) {
+      res.status(500).json({ error: error.message })
+    }
+  }
+)
+
+handler.put(
+  async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    await db()
+    try {
+      const { id } = req.query
+      console.log(id)
+      const market = await MarketUser.findById(id)
+      if (!market) {
+        return res.status(404).json({ error: 'Market not found' })
+      }
+      const store = await MarketUser.findByIdAndUpdate(id, {
+        isApproved: !market.isApproved,
+      })
+
+      res.status(200).json(store)
     } catch (error: any) {
       res.status(500).json({ error: error.message })
     }
