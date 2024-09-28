@@ -5,8 +5,6 @@ import User from '../../../../models/User'
 import axios from 'axios'
 import Role from '../../../../models/Role'
 import UserRole from '../../../../models/UserRole'
-import Transaction from '../../../../models/Transaction'
-import moment from 'moment'
 
 const handler = nc()
 
@@ -111,16 +109,6 @@ handler.post(
 
       const { otp, ...userData } = userCreated.toObject()
       userData
-
-      // TODO: Disable this line for the future update
-      // const data = {
-      //   mobile,
-      //   amount: 2,
-      //   paidDate: moment().format(),
-      //   expireDate: moment().add(Number(15), 'days').format(),
-      // }
-
-      // await Transaction.create(data)
 
       return res.status(200).send({
         _id: userCreated._id,

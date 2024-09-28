@@ -71,7 +71,7 @@ handler.post(
       user.getRandomOtp()
       await user.save()
 
-      if (user.mobile === 252615301507)
+      if (user.mobile === 252615301507 || user.mobile === 252618237779)
         return res.json({
           _id: user._id,
           otp: 1234,

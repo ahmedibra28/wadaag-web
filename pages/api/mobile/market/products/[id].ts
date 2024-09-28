@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Product from '../../../../../models/Product'
-import Profile from '../../../../../models/Profile'
+import MarketUser from '../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -19,18 +19,13 @@ handler.get(
 
       if (!product) return res.status(400).json({ error: `Product not found` })
 
-      const profile = await Profile.findOne({ user: product.owner })
+      const marketUser = await MarketUser.findOne({ user: product.owner })
         .lean()
         .select('name image company')
 
       product = {
         ...product,
-        owner: {
-          _id: product.owner,
-          name: profile?.name,
-          image: profile?.image,
-          company: profile?.company,
-        },
+        owner: marketUser,
       }
 
       return res.status(200).json(product)
@@ -58,16 +53,23 @@ handler.put(
           .json({ error: 'Invalid cost, price or quantity' })
       }
 
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+
+      if (!marketUser.isApproved)
+        return res.status(400).json({ error: 'Your store is not approved yet' })
+
       const object = await Product.findOne({
         _id: id,
         status: 'active',
-        owner: req.user._id,
+        owner: marketUser._id,
       })
       if (!object) return res.status(400).json({ error: `Product not found` })
 
       const checkDup = await Product.findOne({
         name,
-        owner: req.user._id,
+        owner: marketUser._id,
         status: 'active',
         _id: { $ne: id },
       })
@@ -105,9 +107,14 @@ handler.delete(
     await db()
     try {
       const { id } = req.query
+
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+
       const object = await Product.findOne({
         _id: id,
-        owner: req.user._id,
+        owner: marketUser._id,
         status: 'active',
       })
       if (!object) return res.status(400).json({ error: `Product not found` })

@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../../utils/auth'
 import db from '../../../../../../config/db'
 import Product from '../../../../../../models/Product'
-import Profile from '../../../../../../models/Profile'
+import MarketUser from '../../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -42,16 +42,12 @@ handler.get(
 
       result = await Promise.all(
         result.map(async (obj) => {
-          const profile = await Profile.findOne({ user: obj.owner })
+          const marketUser = await MarketUser.findOne({ _id: obj.owner })
             .lean()
             .select('name image')
           return {
             ...obj,
-            owner: {
-              _id: obj.owner,
-              name: profile?.name,
-              image: profile?.image,
-            },
+            owner: marketUser,
           }
         })
       )

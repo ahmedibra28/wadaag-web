@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Product from '../../../../../models/Product'
-import Profile from '../../../../../models/Profile'
+import MarketUser from '../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -12,15 +12,19 @@ handler.get(
     try {
       const q = req.query && req.query.q
 
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+
       let query = Product.find(
         q
           ? {
               name: { $regex: q, $options: 'i' },
               quantity: { $gt: 0 },
               status: 'active',
-              owner: req.user._id,
+              owner: marketUser._id,
             }
-          : { quantity: { $gt: 0 }, status: 'active', owner: req.user._id }
+          : { quantity: { $gt: 0 }, status: 'active', owner: marketUser._id }
       )
 
       const page = parseInt(req.query.page) || 1
@@ -38,17 +42,13 @@ handler.get(
 
       result = await Promise.all(
         result.map(async (obj) => {
-          const profile = await Profile.findOne({ user: obj.owner })
+          const marketUser = await MarketUser.findOne({ _id: obj.owner })
             .lean()
             .select('name image company')
+
           return {
             ...obj,
-            owner: {
-              _id: obj.owner,
-              name: profile?.name,
-              image: profile?.image,
-              company: profile?.company,
-            },
+            owner: marketUser,
           }
         })
       )
@@ -74,7 +74,13 @@ handler.post(
     try {
       const { name, cost, price, quantity, category, images, description } =
         req.body
-      const owner = req.user._id
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+      const owner = marketUser._id
+
+      if (!marketUser.isApproved)
+        return res.status(400).json({ error: 'Your store is not approved yet' })
 
       if (
         Number(cost) > Number(price) ||

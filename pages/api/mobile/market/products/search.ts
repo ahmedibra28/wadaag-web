@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Product from '../../../../../models/Product'
-import Profile from '../../../../../models/Profile'
+import MarketUser from '../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -11,6 +11,10 @@ handler.get(
     await db()
     try {
       const { q, category } = req.query
+
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
 
       const productQuery = Product.find(
         q || category
@@ -25,14 +29,13 @@ handler.get(
           : { quantity: { $gt: 0 }, status: 'active' }
       )
 
-      const storeQuery = Profile.find(
+      const storeQuery = MarketUser.find(
         q
           ? {
-              company: { $regex: q, $options: 'i' },
-              hasStoreProfile: true,
-              user: { $ne: req.user._id },
+              name: { $regex: q, $options: 'i' },
+              user: { $ne: marketUser._id },
             }
-          : { hasStoreProfile: true, user: { $ne: req.user._id } }
+          : { user: { $ne: marketUser._id } }
       )
 
       let products = await productQuery.lean().limit(25).sort({ createdAt: -1 })
@@ -40,24 +43,23 @@ handler.get(
 
       products = await Promise.all(
         products.map(async (obj) => {
-          const profile = await Profile.findOne({ user: obj.owner })
+          const marketUser = await MarketUser.findOne({ _id: obj.owner })
             .lean()
             .select('name image company')
+
           return {
             ...obj,
-            owner: {
-              _id: obj.owner,
-              name: profile?.name,
-              image: profile?.image,
-              company: profile?.company,
-            },
+            owner: marketUser,
           }
         })
       )
 
       res.status(200).json({
         products,
-        stores,
+        stores: stores.map((store) => ({
+          ...store,
+          isStore: true,
+        })),
       })
     } catch (error: any) {
       res.status(500).json({ error: error.message })

@@ -12,13 +12,6 @@ export interface IProfile {
   createdAt?: Date
   sex: string
   district?: string
-  hasRentalProfile?: boolean
-  contact?: string
-  contact2?: string
-  type?: 'INDIVIDUAL' | 'COMPANY'
-  company?: string
-  license?: string
-  hasStoreProfile?: boolean
   email?: string
 }
 
@@ -35,23 +28,6 @@ const profileSchema = new Schema<IProfile>(
     },
     sex: String,
     district: String,
-
-    type: {
-      type: String,
-      enum: ['INDIVIDUAL', 'COMPANY'],
-    },
-    hasRentalProfile: {
-      type: Boolean,
-      default: false,
-    },
-    contact: String,
-    contact2: String,
-    company: String,
-    license: String,
-    hasStoreProfile: {
-      type: Boolean,
-      default: false,
-    },
     email: String,
   },
   { timestamps: true }

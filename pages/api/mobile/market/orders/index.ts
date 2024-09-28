@@ -2,10 +2,10 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Order from '../../../../../models/Order'
-import Profile from '../../../../../models/Profile'
 import Product from '../../../../../models/Product'
 import { initPayment } from '../../../../../utils/waafipay'
 import { getToken, sendSMS } from '../../../../../utils/sms'
+import MarketUser from '../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -46,20 +46,16 @@ handler.get(
 
       result = await Promise.all(
         result.map(async (obj) => {
-          const profile = await Profile.findOne({ user: obj.owner })
+          const marketUser = await MarketUser.findOne({ _id: obj.owner })
             .lean()
             .select('name image')
 
-          const customer = await Profile.findOne({ user: obj.customer })
-            .lean()
+          const customer = await MarketUser.findOne({ user: obj.customer })
             .select('name image')
+            .lean()
           return {
             ...obj,
-            owner: {
-              _id: obj.owner,
-              name: profile?.name,
-              image: profile?.image,
-            },
+            owner: marketUser,
             customer: {
               _id: obj.customer,
               name: customer?.name,
@@ -194,7 +190,7 @@ handler.post(
       }
 
       await sendSMS({ ...adminNotice, mobile: '252618237779' })
-      await sendSMS({ ...adminNotice, mobile: '2527716743951' })
+      await sendSMS({ ...adminNotice, mobile: '252771674395' })
 
       res.status(200).json(result)
     } catch (error: any) {

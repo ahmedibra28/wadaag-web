@@ -1,9 +1,9 @@
 import { Schema, model, models } from 'mongoose'
-import User, { IUser } from './User'
+import MarketUser, { IMarketUser } from './MarketUser'
 
 export interface IProduct {
   _id: Schema.Types.ObjectId
-  owner: IUser
+  owner: IMarketUser
   name: string
   cost: number
   price: number
@@ -18,7 +18,7 @@ export interface IProduct {
 
 const productSchema = new Schema<IProduct>(
   {
-    owner: { type: Schema.Types.ObjectId, ref: User },
+    owner: { type: Schema.Types.ObjectId, ref: MarketUser },
     name: { type: String, required: true },
     cost: { type: Number, required: true },
     price: { type: Number, required: true },

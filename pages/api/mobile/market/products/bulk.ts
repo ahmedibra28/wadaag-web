@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import { isAuth } from '../../../../../utils/auth'
 import db from '../../../../../config/db'
 import Product from '../../../../../models/Product'
+import MarketUser from '../../../../../models/MarketUser'
 
 const handler = nc()
 handler.use(isAuth)
@@ -10,7 +11,14 @@ handler.post(
     await db()
     try {
       const products = req.body
-      const owner = req.user._id
+
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+      const owner = marketUser._id
+
+      if (!marketUser.isApproved)
+        return res.status(400).json({ error: 'Your store is not approved yet' })
 
       for (const product of products) {
         const { cost, price, quantity } = product

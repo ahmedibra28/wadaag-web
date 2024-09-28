@@ -769,6 +769,51 @@ const permissions = [
     name: 'Rental User',
     method: 'POST',
   },
+
+  // Market User
+  {
+    description: 'Get Market User',
+    route: '/api/mobile/market/user',
+    auth: true,
+    name: 'Market User',
+    method: 'GET',
+  },
+  {
+    description: 'Update Market User',
+    route: '/api/mobile/market/user/:id',
+    auth: true,
+    name: 'Market User',
+    method: 'PUT',
+  },
+  {
+    description: 'Create Market User',
+    route: '/api/mobile/market/user',
+    auth: true,
+    name: 'Market User',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }
+
+// db.permissions.insertMany([{
+//   description: 'Get Market User',
+//   route: '/api/mobile/market/user',
+//   auth: true,
+//   name: 'Market User',
+//   method: 'GET',
+// },
+// {
+//   description: 'Update Market User',
+//   route: '/api/mobile/market/user/:id',
+//   auth: true,
+//   name: 'Market User',
+//   method: 'PUT',
+// },
+// {
+//   description: 'Create Market User',
+//   route: '/api/mobile/market/user',
+//   auth: true,
+//   name: 'Market User',
+//   method: 'POST',
+// }])
