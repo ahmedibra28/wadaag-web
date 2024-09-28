@@ -145,7 +145,7 @@ const Rents = () => {
                       className="img-fluid rounded-pill"
                     />
                   </td>
-                  <td>{item?.user?.name}</td>
+                  <td>{item?.rentUser?.name}</td>
                   <td>{item?.district}</td>
                   <td>{item?.type}</td>
                   <td>{`R-${item?.rooms} K-${item?.kitchen} T-${item?.toilet}`}</td>

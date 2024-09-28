@@ -27,7 +27,7 @@ handler.get(
         .limit(pageSize)
         .sort({ createdAt: -1 })
         .lean()
-        .populate('user', 'name email')
+        .populate('rentUser', 'name email')
 
       const result = await query
 

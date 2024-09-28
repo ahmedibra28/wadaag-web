@@ -133,7 +133,7 @@ const Orders = () => {
                       </button>
                     )}
                   </td>
-                  <td>{item?.createdAt?.slice(0, 10)}</td>
+                  <td>{item?.createdAt?.toString()?.slice(0, 10)}</td>
                   <td>
                     <div className="btn-group">
                       <Link
