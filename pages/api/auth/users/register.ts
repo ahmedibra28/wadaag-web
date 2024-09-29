@@ -53,13 +53,13 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { name, plate, license, selected, district, sex } = req.body
+      const { name, district, sex } = req.body
       let { mobile } = req.body
 
       if (!mobile || mobile.length !== 9)
         return res.status(400).json({ error: 'Invalid mobile number' })
 
-      const key = ['61', '77'].includes(mobile.substring(0, 2))
+      const key = ['61', '77', '68'].includes(mobile.substring(0, 2))
       if (!key) return res.status(400).json({ error: 'Invalid mobile number' })
 
       mobile = `252${mobile}`
