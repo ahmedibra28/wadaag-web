@@ -5,6 +5,7 @@ export interface IProduct {
   _id: Schema.Types.ObjectId
   owner: IMarketUser
   name: string
+  variants: { color?: string; size?: string; quantity: number }[]
   cost: number
   price: number
   quantity: number
@@ -20,6 +21,7 @@ const productSchema = new Schema<IProduct>(
   {
     owner: { type: Schema.Types.ObjectId, ref: MarketUser },
     name: { type: String, required: true },
+    variants: [{ color: String, size: String, quantity: Number }],
     cost: { type: Number, required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, required: true },

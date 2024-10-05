@@ -11,22 +11,28 @@ export interface IOrder {
   product: IProduct
   transaction: ITransaction
   name: string
+  color?: string
+  size?: string
   cost: number
   price: number
   quantity: number
   createdAt?: Date
+  transactionId?: string
 }
 
 const orderSchema = new Schema<IOrder>(
   {
-    customer: { type: Schema.Types.ObjectId, ref: User },
-    owner: { type: Schema.Types.ObjectId, ref: MarketUser },
-    product: { type: Schema.Types.ObjectId, ref: Product },
+    customer: { type: Schema.Types.ObjectId, ref: User, required: true },
+    owner: { type: Schema.Types.ObjectId, ref: MarketUser, required: true },
+    product: { type: Schema.Types.ObjectId, ref: Product, required: true },
     transaction: { type: Schema.Types.ObjectId, ref: Transaction },
     name: String,
+    color: String,
+    size: String,
     cost: Number,
     price: Number,
     quantity: Number,
+    transactionId: String,
   },
   { timestamps: true }
 )

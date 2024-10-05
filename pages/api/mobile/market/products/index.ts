@@ -72,8 +72,16 @@ handler.post(
   async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     await db()
     try {
-      const { name, cost, price, quantity, category, images, description } =
-        req.body
+      const {
+        name,
+        cost,
+        price,
+        quantity,
+        category,
+        images,
+        description,
+        variants,
+      } = req.body
       const marketUser = await MarketUser.findOne({ user: req.user._id })
       if (!marketUser)
         return res.status(400).json({ error: 'Store user not found' })
@@ -110,9 +118,25 @@ handler.post(
         return res.status(200).json(checkDup)
       }
 
+      // check if variants has duplcate then sum the quantity
+      const newVariants = variants?.map((v: any) => {
+        const dup = variants.filter(
+          (x: any) => x.color === v.color && x.size === v.size
+        )
+        if (dup.length > 1) {
+          const quantity = dup.reduce(
+            (acc: any, curr: any) => acc + Number(curr.quantity),
+            0
+          )
+          return { ...v, quantity: Number(quantity) }
+        }
+        return { ...v, quantity: Number(v.quantity) }
+      })
+
       const product = await Product.create({
         owner,
         name,
+        variants: (variants && newVariants) || [],
         cost: newCost,
         price: newPrice,
         quantity,
