@@ -21,7 +21,7 @@ handler.get(
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
       const orders = await Order.find({
-        owner: _id,
+        owner: object?._id,
         createdAt: { $gte: yesterday, $lte: today },
       }).lean()
 
@@ -29,11 +29,11 @@ handler.get(
 
       // count all products belong this current user
       const products = (await Product.find({
-        owner: _id,
+        owner: object?._id,
       }).lean()) as IProduct[]
 
       let totalQuantity = 0
-      products.forEach((product) => {
+      products?.forEach((product) => {
         if (product.variants?.length > 0) {
           product.variants.forEach((variant) => {
             totalQuantity += variant.quantity || 0
