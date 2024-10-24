@@ -2,6 +2,8 @@ import nc from 'next-connect'
 import MarketUser from '../../../../../models/MarketUser'
 import db from '../../../../../config/db'
 import { isAuth } from '../../../../../utils/auth'
+import Order from '../../../../../models/Order'
+import Product, { IProduct } from '../../../../../models/Product'
 
 const handler = nc()
 handler.use(isAuth)
@@ -10,9 +12,42 @@ handler.get(
     await db()
     try {
       const { _id } = req.user
-      const objects = await MarketUser.findOne({ user: _id }).lean()
+      const object = await MarketUser.findOne({ user: _id }).lean()
 
-      res.status(200).send(objects)
+      if (!object) return res.json(null)
+
+      // get total amount of today's orders
+      const today = new Date()
+      const yesterday = new Date(today)
+      yesterday.setDate(yesterday.getDate() - 1)
+      const orders = await Order.find({
+        owner: _id,
+        createdAt: { $gte: yesterday, $lte: today },
+      }).lean()
+
+      const totalAmount = orders?.map((order) => order.price * order.quantity)
+
+      // count all products belong this current user
+      const products = (await Product.find({
+        owner: _id,
+      }).lean()) as IProduct[]
+
+      let totalQuantity = 0
+      products.forEach((product) => {
+        if (product.variants?.length > 0) {
+          product.variants.forEach((variant) => {
+            totalQuantity += variant.quantity || 0
+          })
+        } else {
+          totalQuantity += product.quantity || 0
+        }
+      })
+
+      res.status(200).send({
+        ...object,
+        totalAmount: totalAmount?.reduce((acc, curr) => acc + curr, 0),
+        totalQuantity,
+      })
     } catch (error: any) {
       res.status(500).json({ error: error.message })
     }

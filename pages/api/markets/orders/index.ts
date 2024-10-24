@@ -24,6 +24,9 @@ handler.get(
                 {
                   'customer.name': { $regex: q, $options: 'i' },
                 },
+                {
+                  'transaction.mobile': { $regex: q, $options: 'i' },
+                },
               ],
             }
           : {}
