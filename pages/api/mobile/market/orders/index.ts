@@ -182,7 +182,7 @@ handler.post(
 
       // Waafi Pay
       const payment = await initPayment({
-        amount: totalPrice,
+        amount: totalPrice + 1.5,
         mobile: `${req.body.paymentMobile}`,
       })
 
