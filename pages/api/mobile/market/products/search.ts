@@ -12,11 +12,11 @@ handler.get(
     try {
       const { q, category } = req.query
 
-      const marketUser = await MarketUser.findOne({ user: req.user._id })
-      if (!marketUser)
-        return res.status(400).json({ error: 'Store user not found' })
+      const page = parseInt(req.query.page) || 1
+      const pageSize = parseInt(req.query.limit) || 10
+      const skip = (page - 1) * pageSize
 
-      const productQuery = Product.find(
+      const query =
         q || category
           ? {
               name: { $regex: q, $options: 'i' },
@@ -27,7 +27,15 @@ handler.get(
               }),
             }
           : { quantity: { $gt: 0 }, status: 'active' }
-      )
+      const total = await Product.countDocuments(query)
+
+      const pages = Math.ceil(total / pageSize)
+
+      const marketUser = await MarketUser.findOne({ user: req.user._id })
+      if (!marketUser)
+        return res.status(400).json({ error: 'Store user not found' })
+
+      const productQuery = Product.find(query).skip(skip).limit(pageSize)
 
       const storeQuery = MarketUser.find(
         q
@@ -38,7 +46,10 @@ handler.get(
           : { user: { $ne: marketUser._id } }
       )
 
-      let products = await productQuery.lean().limit(25).sort({ createdAt: -1 })
+      let products = await productQuery
+        .lean()
+        .limit(pageSize)
+        .sort({ createdAt: -1 })
       const stores = await storeQuery.lean().limit(5).sort({ createdAt: -1 })
 
       products = await Promise.all(
@@ -56,6 +67,7 @@ handler.get(
 
       res.status(200).json({
         products,
+        pages,
         stores: stores.map((store) => ({
           ...store,
           isStore: true,
