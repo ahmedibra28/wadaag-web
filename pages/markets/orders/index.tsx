@@ -135,7 +135,22 @@ const Orders = () => {
                 <tr key={i}>
                   <td>{item?.customer?.name}</td>
                   <td>{item?.owner?.name}</td>
-                  <td>{item?.name}</td>
+                  <td>
+                    <span>{item?.name}</span> <br />
+                    {item?.variants?.map((v, i) => {
+                      return (
+                        <div key={i}>
+                          <span
+                            className="text-muted"
+                            style={{ fontSize: '12px' }}
+                          >
+                            {v.color} - {v.size}
+                          </span>
+                          <br />
+                        </div>
+                      )
+                    })}
+                  </td>
                   <td>{item?.product?.category}</td>
                   <td>{item?.quantity}</td>
                   <td>{currency(item?.cost, 2)}</td>

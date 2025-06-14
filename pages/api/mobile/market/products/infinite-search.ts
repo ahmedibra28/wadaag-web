@@ -17,7 +17,7 @@ handler.get(
       }
 
       const page = parseInt(req.query.page) || 1
-      const pageSize = parseInt(req.query.limit) || 4
+      const pageSize = parseInt(req.query.limit) || 24
       const skip = (page - 1) * pageSize
 
       const queryRequest =

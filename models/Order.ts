@@ -18,6 +18,7 @@ export interface IOrder {
   quantity: number
   createdAt?: Date
   transactionId?: string
+  variants?: { color?: string; size?: string }[]
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -33,6 +34,7 @@ const orderSchema = new Schema<IOrder>(
     price: Number,
     quantity: Number,
     transactionId: String,
+    variants: [{ color: String, size: String }],
   },
   { timestamps: true }
 )
