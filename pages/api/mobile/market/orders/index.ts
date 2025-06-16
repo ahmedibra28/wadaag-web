@@ -21,9 +21,9 @@ handler.get(
               name: { $regex: q, $options: 'i' },
               quantity: { $gt: 0 },
               // status: 'active',
-              owner: req.user._id,
+              user: req.user._id,
             }
-          : { quantity: { $gt: 0 }, owner: req.user._id }
+          : { quantity: { $gt: 0 }, user: req.user._id }
       )
 
       const page = parseInt(req.query.page) || 1
