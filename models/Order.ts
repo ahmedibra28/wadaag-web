@@ -20,6 +20,7 @@ export interface IOrder {
   transactionId?: string
   variants?: { color?: string; size?: string }[]
   status: 'pending' | 'confirmed' | 'preparing' | 'delivered'
+  address?: string
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -41,6 +42,7 @@ const orderSchema = new Schema<IOrder>(
       default: 'pending',
       enum: ['pending', 'confirmed', 'preparing', 'delivered'],
     },
+    address: String,
   },
   { timestamps: true }
 )

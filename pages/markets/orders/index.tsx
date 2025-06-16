@@ -139,7 +139,17 @@ const Orders = () => {
             <tbody>
               {getApi?.data?.data?.map((item: IOrder, i: number) => (
                 <tr key={i}>
-                  <td>{item?.customer?.name}</td>
+                  <td>
+                    <span>{item?.customer?.name}</span> <br />
+                    <span className="text-muted" style={{ fontSize: '12px' }}>
+                      {item?.customer?.mobile}
+                    </span>
+                    <br />
+                    <span className="text-muted" style={{ fontSize: '12px' }}>
+                      {item?.address}
+                    </span>
+                    <br />
+                  </td>
                   <td>{item?.owner?.name}</td>
                   <td>
                     <span>{item?.name}</span> <br />

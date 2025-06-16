@@ -191,6 +191,7 @@ handler.post(
       const orders = newOrders.map((obj: any) => ({
         ...obj,
         transactionId: payment.transactionId,
+        address: req.body?.address,
       }))
 
       const result = await Order.insertMany(orders)
