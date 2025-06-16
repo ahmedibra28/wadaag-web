@@ -537,6 +537,13 @@ const permissions = [
     method: 'GET',
   },
   {
+    description: 'Update Order Status',
+    route: '/api/markets/orders/:id',
+    auth: true,
+    name: 'Market',
+    method: 'PUT',
+  },
+  {
     description: 'Remove Order',
     route: '/api/markets/orders/:id',
     auth: true,

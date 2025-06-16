@@ -55,14 +55,20 @@ const Orders = () => {
     // eslint-disable-next-line
   }, [q])
 
+  const updateStatusHandler = (_id: any, status: any) => {
+    if (status === 'cancelled') {
+      confirmAlert(Confirm(() => deleteApi?.mutateAsync(_id)))
+    } else {
+      confirmAlert(
+        Confirm(() => updateApi?.mutateAsync({ _id, status }), status)
+      )
+    }
+  }
+
   const searchHandler = (e: FormEvent) => {
     e.preventDefault()
     getApi?.refetch()
     setPage(1)
-  }
-
-  const deleteHandler = (id: any) => {
-    confirmAlert(Confirm(() => deleteApi?.mutateAsync(id)))
   }
 
   const name = 'Orders List'
@@ -158,19 +164,36 @@ const Orders = () => {
                   <td>{moment(item?.createdAt).format('lll')}</td>
                   <td>
                     <div className="btn-group">
-                      <button
-                        className="btn btn-danger btn-sm ms-1 rounded-pill"
-                        onClick={() => deleteHandler(item._id)}
-                        disabled={deleteApi?.isLoading}
-                      >
-                        {deleteApi?.isLoading ? (
-                          <span className="spinner-border spinner-border-sm" />
-                        ) : (
-                          <span>
-                            <FaTrash />
-                          </span>
-                        )}
-                      </button>
+                      {[
+                        'pending',
+                        'confirmed',
+                        'preparing',
+                        'delivered',
+                        'cancelled',
+                      ].map((status) => (
+                        <button
+                          key={status}
+                          className={`btn ${
+                            status === item?.status
+                              ? 'btn-success'
+                              : 'btn-outline-primary'
+                          } btn-sm ms-1 rounded-pill`}
+                          onClick={() => updateStatusHandler(item._id, status)}
+                          disabled={
+                            deleteApi?.isLoading || updateApi?.isLoading
+                          }
+                        >
+                          {deleteApi?.isLoading || updateApi?.isLoading ? (
+                            <span className="spinner-border spinner-border-sm" />
+                          ) : (
+                            <span>
+                              {(
+                                status.charAt(0).toUpperCase() + status.slice(1)
+                              ).slice(0, 4)}
+                            </span>
+                          )}
+                        </button>
+                      ))}
                     </div>
                   </td>
                 </tr>
