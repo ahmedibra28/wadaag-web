@@ -15,15 +15,20 @@ handler.get(
     try {
       const q = req.query && req.query.q
 
+      const marketUser = await MarketUser.findOne({ user: req.user._id }).lean()
+
+      if (!marketUser)
+        return res.status(400).json({ error: 'Market user not found' })
+
       let query = Order.find(
         q
           ? {
               name: { $regex: q, $options: 'i' },
               quantity: { $gt: 0 },
               // status: 'active',
-              user: req.user._id,
+              owner: marketUser._id,
             }
-          : { quantity: { $gt: 0 }, user: req.user._id }
+          : { quantity: { $gt: 0 }, owner: marketUser._id }
       )
 
       const page = parseInt(req.query.page) || 1
