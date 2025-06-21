@@ -2,9 +2,7 @@ import nc from 'next-connect'
 import db from '../../../../config/db'
 import User from '../../../../models/User'
 import { generateToken } from '../../../../utils/auth'
-import UserRole from '../../../../models/UserRole'
 import Profile from '../../../../models/Profile'
-import Role from '../../../../models/Role'
 
 const handler = nc()
 
@@ -25,7 +23,7 @@ handler.post(
       if (!user)
         return res.status(400).json({ error: `Invalid OTP or expired` })
 
-      if (user.mobile !== 252615301507 && user.mobile !== 252618237779) {
+      if (![252615301507, 252618237779, 252610937744].includes(user.mobile)) {
         if (!user.otp || user.otp !== otp) {
           return res.status(400).json({ error: `Invalid OTP or expired` })
         }

@@ -17,13 +17,16 @@ handler.post(
       if (!user)
         return res.status(400).json({ error: 'Rent profile not found' })
 
-      // Waafi Pay
-      const payment = await initPayment({
-        amount: 6.12,
-        mobile: `${mobile}`,
-      })
+      if (Number(mobile) !== 252610937744) {
+        // Waafi Pay
+        const payment = await initPayment({
+          amount: 6.12,
+          mobile: `${mobile}`,
+        })
 
-      if (payment?.error) return res.status(400).json({ error: payment.error })
+        if (payment?.error)
+          return res.status(400).json({ error: payment.error })
+      }
 
       const data = {
         mobile,
