@@ -2,8 +2,8 @@ import nc from 'next-connect'
 import db from '../../../config/db'
 import Notification from '../../../models/Notification'
 import { isAuth } from '../../../utils/auth'
-import axios from 'axios'
 import User from '../../../models/User'
+import { sendPushNotification } from '../../../utils/sendPushNotification'
 
 const schemaName = Notification
 
@@ -31,50 +31,16 @@ handler.post(
         .map((token) => token.pushToken !== '' && token.pushToken)
         ?.filter(Boolean)
 
-      const splittedTokens = tokens.reduce((acc, curr, index) => {
-        const group = Math.floor(index / 50)
-        if (!acc[group]) {
-          acc[group] = []
-        }
-        acc[group].push(curr)
-        return acc
-      }, [])
+      await sendPushNotification({
+        tokens: tokens as any[],
+        message: object.body,
+        title: object.title,
+        data: {
+          url: '/(tabs)',
+        },
+      })
 
-      const notificationResults = await Promise.all(
-        splittedTokens.map(async (tokens: string[]) => {
-          const messages = tokens.map((token: string) => ({
-            to: token,
-            title: object?.title,
-            body: object?.body,
-            data: {
-              screen: `wadaag://Notification`,
-              param: object?.data?.param,
-            },
-          }))
-          // const all = {
-          //   to: tokens,
-          //   body: object?.body,
-          // }
-
-          const { data } = await axios.post(
-            'https://exp.host/--/api/v2/push/send',
-            messages,
-            {
-              headers: {
-                Host: 'exp.host',
-                Accept: 'application/json',
-                'Accept-Encoding': 'gzip, deflate',
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          return data
-        })
-      )
-
-      res
-        .status(200)
-        .send(notificationResults?.map((item) => item?.data).flat())
+      res.status(200).json({ message: 'Notification sent successfully' })
     } catch (error: any) {
       res.status(500).json({
         error: error?.response?.data?.errors[0]?.message,
