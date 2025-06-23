@@ -66,7 +66,7 @@ handler.get(
       result = await Promise.all(
         result.map(async (item) => {
           const rentUser = await RentUser.findOne({
-            user: item.rentUser,
+            _id: item.rentUser,
           }).lean()
           return {
             ...item,

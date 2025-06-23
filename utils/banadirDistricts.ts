@@ -6,6 +6,7 @@ const districts = [
   { label: 'Dharkeynleey', value: 'Dharkeynleey' },
   { label: 'Wadajir', value: 'Wadajir' },
   { label: 'Waaberi', value: 'Waaberi' },
+  { label: 'Daarusalaam', value: 'Daarusalaam' },
   { label: 'Hodan', value: 'Hodan' },
   { label: 'Hawlwadaag', value: 'Hawlwadaag' },
   { label: 'Xamar Jajab', value: 'Xamar Jajab' },
