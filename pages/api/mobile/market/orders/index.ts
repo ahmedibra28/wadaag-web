@@ -183,11 +183,19 @@ handler.post(
         0
       )
 
-      console.log({ totalPrice })
+      const amountToPay = (Number(Number(totalPrice).toFixed(2)) + 1.5).toFixed(
+        2
+      )
+
+      // console.log({ totalPrice })
+      // console.log({ newPrice: Number(Number(totalPrice).toFixed(2)) + 1.5 })
+
+      // console.log({ amountToPay })
+      console.log(Number(amountToPay))
 
       // Waafi Pay
       const payment = await initPayment({
-        amount: totalPrice + 1.5,
+        amount: Number(amountToPay),
         mobile: `${req.body.paymentMobile}`,
       })
 
