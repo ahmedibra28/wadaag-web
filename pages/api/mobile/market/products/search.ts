@@ -42,8 +42,9 @@ handler.get(
           ? {
               name: { $regex: q, $options: 'i' },
               user: { $ne: marketUser._id },
+              isApproved: true,
             }
-          : { user: { $ne: marketUser._id } }
+          : { user: { $ne: marketUser._id }, isApproved: true }
       )
 
       let products = await productQuery
@@ -54,7 +55,10 @@ handler.get(
 
       products = await Promise.all(
         products.map(async (obj) => {
-          const marketUser = await MarketUser.findOne({ _id: obj.owner })
+          const marketUser = await MarketUser.findOne({
+            _id: obj.owner,
+            isApproved: true,
+          })
             .lean()
             .select('name image company')
 
